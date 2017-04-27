@@ -4,9 +4,14 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import db.configuration.ConnectionConfiguration;
+import db.configuration.ModelVariables;
+import model.Sentence;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ercan on 26.04.2017.
@@ -18,6 +23,25 @@ public class SentenceLoader {
     public SentenceLoader(int sentenceCount){
         buildSession();
         this.sentenceCount = sentenceCount;
+    }
+
+    public List<Sentence> getQuestionsForSentences() {
+        String questionsQuery;
+        if(sentenceCount == 0){
+            questionsQuery = "SELECT original_sentence, questions FROM sentence";
+        } else {
+            questionsQuery = "SELECT original_sentence, questions FROM sentence LIMIT " + sentenceCount;
+        }
+        session = ConnectionConfiguration.getCLuster().connect(ModelVariables.KEYSPACE);
+        ResultSet resultSet = session.execute(questionsQuery);
+        List<Sentence> sentenceList = new ArrayList<Sentence>();
+
+        for(Row row: resultSet) {
+            Sentence sentence = new Sentence(row.getString(0), row.getSet(1, String.class));
+            sentenceList.add(sentence);
+        }
+
+        return sentenceList;
     }
 
     public List<List<String>> getStemListsForSentences(){
