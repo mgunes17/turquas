@@ -1,11 +1,11 @@
-package db;
+package db.configuration;
 
 import com.datastax.driver.core.Cluster;
 
 /**
  * Created by mustafa on 26.04.2017.
  */
-public class CassandraConfiguration {
+public class ConnectionConfiguration {
     private static Cluster cluster = null;
 
     public static Cluster getCLuster() {

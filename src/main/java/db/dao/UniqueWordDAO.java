@@ -1,7 +1,8 @@
 package db.dao;
 
 import com.datastax.driver.core.*;
-import db.CassandraConfiguration;
+import db.configuration.ConnectionConfiguration;
+import db.configuration.ModelVariables;
 import model.UniqueWord;
 
 import java.util.HashSet;
@@ -13,17 +14,23 @@ import java.util.Set;
 public class UniqueWordDAO {
     private Session session;
     private PreparedStatement preparedStatement;
+    private String keyspace;
+    private String tableName;
 
+    public UniqueWordDAO(){
+        this.keyspace = ModelVariables.KEYSPACE;
+        this.tableName = ModelVariables.UNIQUE_WORD_TABLE_NAME;
+    }
 
     public Set<UniqueWord> getAllWords() {
         String query = "SELECT * FROM unique_word";
-        session = CassandraConfiguration.getCLuster().connect("turquas");
+        session = ConnectionConfiguration.getCLuster().connect("turquas");
         ResultSet result = session.execute(query);
         Set<UniqueWord> uniqueWordSet = new HashSet<UniqueWord>();
 
         for(Row row: result) {
             UniqueWord uniqueWord = new UniqueWord(row.getString(0));
-            uniqueWord.setSourceSet(row.getSet(1, String.class));
+            uniqueWord.setDocumentSet(row.getSet(1, String.class));
             uniqueWordSet.add(uniqueWord);
         }
 
@@ -35,8 +42,7 @@ public class UniqueWordDAO {
         try{
             BatchStatement batch = new BatchStatement();
             prepareForUpdate();
-            session = CassandraConfiguration.getCLuster().connect("turquas");
-
+            session = ConnectionConfiguration.getCLuster().connect("turquas");
 
             for(UniqueWord uniqueWord: uniqueWordSet){
                 BoundStatement bound = preparedStatement.bind(uniqueWord.getValueMap(), uniqueWord.getWord());
@@ -56,5 +62,41 @@ public class UniqueWordDAO {
     public void prepareForUpdate(){
         preparedStatement = session.prepare(
                 "UPDATE unique_word SET value = ? WHERE word = ?");
+    }
+
+    public void insert(UniqueWord uniqueWord){
+        try{
+            BoundStatement bound = preparedStatement.bind(
+                    uniqueWord.getWord(), uniqueWord.getDocumentSet());
+            session.execute(bound);
+        } catch(Exception ex){
+        }
+    }
+
+    public void update(UniqueWord uniqueWord){
+        try{
+            BoundStatement bound = preparedStatement.bind(
+                    uniqueWord.getDocumentSet(), uniqueWord.getWord());
+            session.execute(bound);
+        } catch(Exception ex){
+        }
+    }
+
+    public void delete(UniqueWord uniqueWord){
+        try{
+            BoundStatement bound = preparedStatement.bind(uniqueWord.getWord());
+            session.execute(bound);
+        } catch(Exception ex){
+        }
+    }
+
+    public void prepareForInsert(){
+        preparedStatement = session.prepare(
+                "INSERT INTO " + tableName + " (word, documents) values (?, ?)");
+    }
+
+    public void prepareForDelete(){
+        preparedStatement = session.prepare(
+                "DELETE FROM " + tableName + " WHERE word=?");
     }
 }
