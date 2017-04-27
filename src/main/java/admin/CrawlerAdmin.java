@@ -12,7 +12,6 @@ import java.util.Map;
  * Created by mustafa on 27.04.2017.
  */
 public class CrawlerAdmin extends Admin {
-    private CommandSet commandSet;
     public static WebCrawler crawler;
     public static Processor processor;
     public static DBSaver dbSaver;
@@ -29,10 +28,7 @@ public class CrawlerAdmin extends Admin {
     }
 
     public CrawlerAdmin(CommandSet commandSet) {
-        this.commandSet = commandSet;
+        super(commandSet);
     }
 
-    public boolean run(String inputCommand) {
-        return commandSet.run(inputCommand);
-    }
 }

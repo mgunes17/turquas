@@ -1,4 +1,4 @@
-package component.w2v_creator.creator;
+package component.w2v_creator.sentence_file_creator;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ResultSet;
@@ -9,9 +9,7 @@ import db.configuration.ModelVariables;
 import model.Sentence;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ercan on 26.04.2017.

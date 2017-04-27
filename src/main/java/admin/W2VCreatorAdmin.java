@@ -10,7 +10,6 @@ import java.util.Map;
  * Created by ercan on 27.04.2017.
  */
 public class W2VCreatorAdmin extends Admin {
-    private CommandSet commandSet;
     public static Map<String, Integer> w2vParameterMap;
     public static Map<String, String> filenameMap;
     public static Map<String, List<Double>> wordVectorMap;
@@ -31,10 +30,7 @@ public class W2VCreatorAdmin extends Admin {
     }
 
     public W2VCreatorAdmin(CommandSet commandSet){
-        this.commandSet = commandSet;
+        super(commandSet);
     }
 
-    public boolean run(String inputCommand) {
-        return commandSet.run(inputCommand);
-    }
 }

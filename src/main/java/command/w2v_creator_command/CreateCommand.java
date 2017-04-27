@@ -1,10 +1,10 @@
 package command.w2v_creator_command;
 
 import command.Command;
-import component.w2v_creator.creator.DefaultCreator;
-import component.w2v_creator.creator.LetterLimitedCreator;
-import component.w2v_creator.creator.SentenceLoader;
-import component.w2v_creator.creator.StemmedCreator;
+import component.w2v_creator.sentence_file_creator.DefaultSenteceFileCreator;
+import component.w2v_creator.sentence_file_creator.LetterLimitedSenteceFileCreator;
+import component.w2v_creator.sentence_file_creator.SentenceLoader;
+import component.w2v_creator.sentence_file_creator.StemmedSenteceFileCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,14 +21,14 @@ public class CreateCommand implements Command {
             SentenceLoader sentenceLoader = new SentenceLoader(sentenceCount);
 
             if(parameterLength == 2){ // kelimelerin direk kendisini al
-                DefaultCreator defaultCreator = new DefaultCreator(sentenceLoader);
+                DefaultSenteceFileCreator defaultCreator = new DefaultSenteceFileCreator(sentenceLoader);
                 defaultCreator.createFile();
             } else if(parameterLength == 3 && parameter[2].equals("stem")){ // kelimelerin stemlerini al
-                StemmedCreator stemmedCreator = new StemmedCreator(sentenceLoader);
+                StemmedSenteceFileCreator stemmedCreator = new StemmedSenteceFileCreator(sentenceLoader);
                 stemmedCreator.createFile();
             } else if(parameterLength == 4 && parameter[2].equals("first")){ // kelimelerin ilk N harfini al
                 int letterCount = Integer.parseInt(parameter[3]);
-                LetterLimitedCreator letterLimitedCreator = new LetterLimitedCreator(sentenceLoader, letterCount);
+                LetterLimitedSenteceFileCreator letterLimitedCreator = new LetterLimitedSenteceFileCreator(sentenceLoader, letterCount);
                 letterLimitedCreator.createFile();
             }
 

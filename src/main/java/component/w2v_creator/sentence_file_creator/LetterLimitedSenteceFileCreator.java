@@ -1,4 +1,4 @@
-package component.w2v_creator.creator;
+package component.w2v_creator.sentence_file_creator;
 
 import admin.W2VCreatorAdmin;
 
@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * Created by ercan on 26.04.2017.
  */
-public class LetterLimitedCreator extends Creator {
+public class LetterLimitedSenteceFileCreator extends SenteceFileCreator {
     private int letterLimit;
     private String forbiddenChars = "oO1234567890";
 
-    public LetterLimitedCreator(SentenceLoader sentenceLoader, int letterLimit){
+    public LetterLimitedSenteceFileCreator(SentenceLoader sentenceLoader, int letterLimit){
         this.sentenceLoader = sentenceLoader;
         this.letterLimit = letterLimit;
     }
