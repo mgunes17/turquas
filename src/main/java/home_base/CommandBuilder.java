@@ -10,6 +10,7 @@ import command.db_updater_command.MorphologicCommand;
 import command.db_updater_command.TfidfCommand;
 import command.w2v_creator_command.ConvertCommand;
 import command.w2v_creator_command.CreateCommand;
+import command.w2v_creator_command.Input4DLCommand;
 import db.dao.TokenDAO;
 import nlp_tool.itu.LabelMorph;
 
@@ -47,6 +48,7 @@ public class CommandBuilder {
         commandMap.put("set", new command.w2v_creator_command.SetCommand());
         commandMap.put("create", new CreateCommand());
         commandMap.put("convert", new ConvertCommand());
+        commandMap.put("input4dl", new Input4DLCommand());
         return new CommandSet(commandMap);
     }
 

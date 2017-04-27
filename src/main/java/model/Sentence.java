@@ -18,8 +18,9 @@ public class Sentence {
         this.originalSentence = sentence;
     }
 
-    public Sentence(){
-        // non-args
+    public Sentence(String sentence, Set<String> questions){
+        this.originalSentence = sentence;
+        this.questions = questions;
     }
 
     // getters and setters

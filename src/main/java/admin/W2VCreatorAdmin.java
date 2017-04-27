@@ -3,6 +3,7 @@ package admin;
 import command.CommandSet;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,6 +13,7 @@ public class W2VCreatorAdmin extends Admin {
     private CommandSet commandSet;
     public static Map<String, Integer> w2vParameterMap;
     public static Map<String, String> filenameMap;
+    public static Map<String, List<Double>> wordVectorMap;
 
     static {
         w2vParameterMap = new HashMap<String, Integer>();
@@ -23,6 +25,9 @@ public class W2VCreatorAdmin extends Admin {
         filenameMap = new HashMap<String, String>();
         filenameMap.put("target_file", "target.txt");
         filenameMap.put("source_file", "source.txt");
+        filenameMap.put("input4dl_file", "input4dl.txt");
+        wordVectorMap = new HashMap<String, List<Double>>();
+
     }
 
     public W2VCreatorAdmin(CommandSet commandSet){
