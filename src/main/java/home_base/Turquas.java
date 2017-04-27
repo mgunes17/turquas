@@ -1,9 +1,6 @@
 package home_base;
 
-import admin.Admin;
-import admin.CrawlerAdmin;
-import admin.DBUpdaterAdmin;
-import admin.QuestionGeneratorAdmin;
+import admin.*;
 import command.Command;
 import command.CommandSet;
 import command.turquas_command.TurquasGetNSCommand;
@@ -27,6 +24,7 @@ public class Turquas {
         adminMap.put("crawler", new CrawlerAdmin(CommandBuilder.getCrawlerCommandSet()));
         adminMap.put("qgenerator", new QuestionGeneratorAdmin(CommandBuilder.getQuestionGeneratorCommandSet()));
         adminMap.put("updater", new DBUpdaterAdmin(CommandBuilder.getUpdaterCommandSet()));
+        adminMap.put("w2v", new W2VCreatorAdmin(CommandBuilder.getW2VCreatorAdminCommandSet()));
 
         Map<String, Command> commandMap = new HashMap<String, Command>();
         commandMap.put("help", new TurquasHelpCommand());

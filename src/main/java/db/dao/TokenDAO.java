@@ -1,7 +1,7 @@
 package db.dao;
 
 import com.datastax.driver.core.*;
-import db.CassandraConfiguration;
+import db.configuration.ConnectionConfiguration;
 import model.Token;
 
 import java.util.HashSet;
@@ -16,7 +16,7 @@ public class TokenDAO {
 
     public Set<Token> getUnlabeledToken(int count) {
         String query = "SELECT token_name FROM token_morph_analysis WHERE isanalysisnull = true LIMIT " + count;
-        session = CassandraConfiguration.getCLuster().connect("turquas");
+        session = ConnectionConfiguration.getCLuster().connect("turquas");
         ResultSet result = session.execute(query);
         Set<Token> tokenSet = new HashSet<Token>();
 
@@ -33,8 +33,7 @@ public class TokenDAO {
         try{
             BatchStatement batch = new BatchStatement();
             prepareForInsert();
-            session = CassandraConfiguration.getCLuster().connect("turquas");
-
+            session = ConnectionConfiguration.getCLuster().connect("turquas");
 
             for(Token token: tokenSet){
                 BoundStatement bound = preparedStatement.bind( token.getToken(), token.getAnalysisSet());

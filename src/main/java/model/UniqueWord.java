@@ -9,7 +9,7 @@ import java.util.Set;
 public class UniqueWord {
     private String word;
     private Map<String, Double> valueMap;
-    private Set<String> sourceSet;
+    private Set<String> documentSet;
 
     public UniqueWord(String word) {
         this.word = word;
@@ -32,11 +32,11 @@ public class UniqueWord {
         this.valueMap = valueMap;
     }
 
-    public Set<String> getSourceSet() {
-        return sourceSet;
+    public Set<String> getDocumentSet() {
+        return documentSet;
     }
 
-    public void setSourceSet(Set<String> sourceSet) {
-        this.sourceSet = sourceSet;
+    public void setDocumentSet(Set<String> documentSet) {
+        this.documentSet = documentSet;
     }
 }
