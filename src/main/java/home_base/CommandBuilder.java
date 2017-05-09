@@ -8,6 +8,7 @@ import command.crawler_command.StartCommand;
 import command.db_updater_command.ExitCommand;
 import command.db_updater_command.MorphologicCommand;
 import command.db_updater_command.TfidfCommand;
+import command.db_updater_command.W2VTokenCommand;
 import command.question_generator_command.AskCommand;
 import command.question_generator_command.ChangeCommand;
 import command.question_generator_command.SaveCommand;
@@ -29,6 +30,7 @@ public class CommandBuilder {
         commandMap.put("exit", new ExitCommand());
         commandMap.put("morpha", new MorphologicCommand(new TokenDAO(), new LabelMorph()));
         commandMap.put("tfidf", new TfidfCommand());
+        commandMap.put("w2vtoken", new W2VTokenCommand());
         return new CommandSet(commandMap);
     }
 
