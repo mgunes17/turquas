@@ -3,7 +3,6 @@ package component.crawler;
 import admin.CrawlerAdmin;
 import component.crawler.content.UrlContent;
 import component.crawler.processor.Processor;
-import home_base.GlobalParameter;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
@@ -45,7 +44,8 @@ public class WebCrawler {
                     webPageQueue.offer(webPage);
                     updateUnvisitedPageUrls();
 
-                    logger.info("Succesfully connected to: " + url);
+                    System.out.println("Succesfully connected to: " + url);
+                    //logger.info("Succesfully connected to: " + url);
                     i++;
 
                     if(isSessionReady(i)){

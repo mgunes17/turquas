@@ -28,8 +28,8 @@ public class Turquas {
 
         Map<String, Command> commandMap = new HashMap<String, Command>();
         commandMap.put("help", new TurquasHelpCommand());
-        commandMap.put("set", new TurquasSetNSCommand());
-        commandMap.put("get", new TurquasGetNSCommand());
+        commandMap.put("set-ns", new TurquasSetNSCommand());
+        commandMap.put("get-ns", new TurquasGetNSCommand());
 
         commandSet = new CommandSet(commandMap);
     }

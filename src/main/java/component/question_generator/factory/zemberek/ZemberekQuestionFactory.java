@@ -37,7 +37,7 @@ public class ZemberekQuestionFactory extends QuestionFactory {
     }
 
     public Sentence getQuestionList() {
-        List<Question> generatedList = new ArrayList<Question>();
+        Set<Question> generatedList = new HashSet<Question>();
         Set<String> secondaryPosTags = new HashSet<String>();
         Map<String, QuestionType> tagMap = new HashMap<String, QuestionType>();
         tagMap.put("Time", new TimeQuestion());

@@ -1,10 +1,10 @@
 package command.w2v_creator_command;
 
 import command.Command;
-import component.w2v_creator.sentence_file_creator.SentenceLoader;
 import component.w2v_creator.input_creator.AllWordsInputCreator;
 import component.w2v_creator.input_creator.VectorLoader;
 import component.w2v_creator.input_creator.WordsAverageInputCreator;
+import component.w2v_creator.sentence_file_creator.SentenceLoader;
 
 /**
  * Created by ercan on 27.04.2017.

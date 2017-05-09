@@ -1,11 +1,14 @@
 package db.dao;
 
 import com.datastax.driver.core.*;
+import component.question_generator.generate.MainGenerator;
+import db.configuration.ConnectionConfiguration;
 import db.configuration.ModelVariables;
 import model.Sentence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +25,19 @@ public class SentenceDAO {
         this.keyspace = ModelVariables.KEYSPACE;
         this.tableName = ModelVariables.SENTENCE_TABLE_NAME;
         session = createSession();
+    }
+
+    public List<Sentence> readForGenerateQuestions(int count) {
+        List<Sentence> sentenceList = new ArrayList<Sentence>();
+        String query = "SELECT original_sentence, questions FROM sentence;";
+        session = ConnectionConfiguration.getCLuster().connect("turquas");
+        ResultSet result = session.execute(query);
+
+        for(Row row: result) {
+            sentenceList.add(new Sentence(row.get(0, String.class), row.getSet(1, String.class)));
+        }
+
+        return sentenceList;
     }
 
     public void insert(Sentence sentence){
@@ -44,6 +60,24 @@ public class SentenceDAO {
             logger.info("SentenceDAO update başarıyla tamamlandı.");
         } catch(Exception ex){
             logger.warn("SentenceDAO update hata verdi.");
+        }
+    }
+
+    public boolean updateQuestions(List<Sentence> sentenceList){
+        try {
+            BatchStatement batch = new BatchStatement();
+            prepareForQuestionUpdate();
+
+            for(Sentence sentence: sentenceList) {
+                BoundStatement bound = preparedStatement.bind(sentence.getQuestions(), sentence.getOriginalSentence());
+                batch.add(bound);
+            }
+            session.execute(batch);
+            System.out.println(("SentenceDAO insertBatch başarıyla tamamlandı."));
+            return true;
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            return false;
         }
     }
 
@@ -86,6 +120,12 @@ public class SentenceDAO {
     public void prepareForUpdate(){
         preparedStatement = session.prepare("UPDATE " + tableName +" " +
                 "SET source_name=? questions= ?, stemmed_words_list=?, tags=?, token_list=?" +
+                "WHERE original_sentence=?");
+    }
+
+    public void prepareForQuestionUpdate(){
+        preparedStatement = session.prepare("UPDATE " + tableName +" " +
+                "SET questions= ?" +
                 "WHERE original_sentence=?");
     }
 

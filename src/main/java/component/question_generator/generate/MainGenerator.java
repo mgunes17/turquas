@@ -2,67 +2,48 @@ package component.question_generator.generate;
 
 import component.question_generator.factory.QuestionFactory;
 import component.question_generator.factory.itu.ItuQuestionFactory;
-import component.question_generator.save.FileSave;
-import component.question_generator.save.SaveType;
 import component.question_generator.word.Question;
 import component.question_generator.word.Sentence;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Created by mustafa on 22.03.2017.
  */
 public class MainGenerator {
     private QuestionFactory factory;
-    private final String EXIT = "exit";
-    private final String ASK = "ask";
-    private final String SAVE = "save";
-    private final String CHANGE = "change";
     private Scanner in = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
-        MainGenerator generator = new MainGenerator();
+        /*MainGenerator generator = new MainGenerator();
         //ZemberekSentenceAnalyzer.getSentenceAnalyzer();
-        generator.run();
+        generator.run();*/
     }
 
-    private void run() {
-        System.out.print("command=>");
-        String command = in.nextLine();
+    public Set<String> convertQuestions(String sentence) {
+        //factory = new ZemberekQuestionFactory(sentence);
+        factory = new ItuQuestionFactory(sentence);
+        Sentence sentence1 = factory.getQuestionList();
+        Set<Question> questions = sentence1.getQuestionList();
+        Set<String> questionSentence = new HashSet<String>();
 
-        while(!command.equals(EXIT)) {
-            if(command.equals(SAVE)) {
-                boolean result = save();
-                if(result)
-                    System.out.println("Dosya oluşturuldu");
-                else
-                    System.out.println("Bir hata meydana geldi");
-            } else if(command.equals(ASK)) {
-                ask();
-            } else {
-                System.out.println("Command not found");
-            }
+        if(questions.size() == 0)
+            System.out.println("Soru üretilemedi :(");
 
-            System.out.print("command=>");
-            command = in.nextLine();
+        for(Question question: questions) {
+            System.out.println(question.getQuestionSentence());
+            System.out.println(question.getAnswer());
+            questionSentence.add(question.getQuestionSentence());
         }
+
+        return questionSentence;
     }
 
-    private void ask() {
-        System.out.print("sentence=>");
-        String sentence = in.nextLine();
-
-        while(!sentence.equals("change")) {
-            convertQuestions(sentence);
-            System.out.print("sentence=>");
-            sentence = in.nextLine();
-        }
-    }
-
-    private boolean save() {
+    /*private boolean save() {
         List<String> sentenceList = new ArrayList<String>();
         sentenceList.add("Türkiye'nin başkenti Ankara'dır .");
         sentenceList.add("Yarın sabah İstanbul' dan dönecek .");
@@ -88,19 +69,5 @@ public class MainGenerator {
 
         SaveType saveType = new FileSave();
         return saveType.save(savedSentences);
-    }
-
-    private List<Question> convertQuestions(String sentence) {
-        //factory = new ZemberekQuestionFactory(sentence);
-        factory = new ItuQuestionFactory(sentence);
-        Sentence sentence1 = factory.getQuestionList();
-        List<Question> questions = sentence1.getQuestionList();
-
-        for(Question question: questions) {
-            System.out.println(question.getQuestionSentence());
-            System.out.println(question.getAnswer());
-        }
-
-        return questions;
-    }
+    }*/
 }

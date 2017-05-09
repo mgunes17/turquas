@@ -1,13 +1,17 @@
 package command.crawler_command;
 
 import admin.CrawlerAdmin;
+import command.AbstractCommand;
 import command.Command;
 
 /**
  * Created by mustafa on 24.04.2017.
  */
-public class SetCommand implements Command {
+public class SetCommand extends AbstractCommand implements Command {
     public boolean execute(String[] parameter) {
+        if(!validateParameter(parameter))
+            return false;
+
         if(CrawlerAdmin.crawlerParameterMap.get(parameter[1]) == null) {
             System.out.println(parameter[1] + " isimli parametre yok");
         } else {
@@ -22,5 +26,12 @@ public class SetCommand implements Command {
         }
 
         return true;
+    }
+
+    protected boolean validateParameter(String[] parameter) {
+        if(parameter.length != 1)
+            return false;
+        else
+            return true;
     }
 }

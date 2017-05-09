@@ -6,7 +6,9 @@ import component.question_generator.word.Question;
 import component.question_generator.word.Sentence;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mustafa on 09.04.2017.
@@ -19,7 +21,7 @@ public class ItuQuestionFactory extends QuestionFactory {
     }
 
     public Sentence getQuestionList() {
-        List<Question> generatedList = new ArrayList<Question>();
+        Set<Question> generatedList = new HashSet<Question>();
 
         //ner sorularını üret
         NerQuestion nerQuestion = new NerQuestion();

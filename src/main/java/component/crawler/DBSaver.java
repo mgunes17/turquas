@@ -19,6 +19,7 @@ public class DBSaver {
     private final static int batchSize = 20;
     private SentenceDAO sentenceDAO;
     private SourceDAO sourceDAO;
+
     public DBSaver() {
         sentenceDAO = new SentenceDAO();
         sourceDAO = new SourceDAO();
