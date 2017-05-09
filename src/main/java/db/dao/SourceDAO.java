@@ -77,28 +77,32 @@ public class SourceDAO {
 
     public void insertBatch(List<Source> sourceList){
         try{
+            ConnectionConfiguration.getCLuster().connect("turquas");
             BatchStatement batch = new BatchStatement();
             prepareForInsert();
 
             for(Source source: sourceList){
                 BoundStatement bound = preparedStatement.bind(
-                        source.getSourceName(), source.getBestWords(),
+                        source.getSourceName(),
                         new Timestamp(System.currentTimeMillis()), source.getWordCountMap());
                 batch.add(bound);
             }
 
             session.execute(batch);
-            logger.info("SourceDAO insertBatch başarıyla tamamlandı.");
+            System.out.println("SourceDAO insertBatch başarıyla tamamlandı.");
+            session.close();
         } catch(Exception ex){
-            logger.warn("SourceDAO insertBatch hata verdi.");
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+            System.out.println(("SourceDAO insertBatch hata verdi."));
         }
 
     }
 
     public void prepareForInsert(){
         preparedStatement = session.prepare(
-                "INSERT INTO " + tableName + " (source_name, best_words, " +
-                        "last_updated_date, word_count_map) values (?, ?, ?, ?)");
+                "INSERT INTO " + tableName + " (source_name, " +
+                        "last_updated_date, word_count_map) values (?, ?, ?)");
     }
 
     public void prepareForUpdate(){

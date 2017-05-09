@@ -2,12 +2,12 @@ package component.question_generator.generate;
 
 import component.question_generator.factory.QuestionFactory;
 import component.question_generator.factory.itu.ItuQuestionFactory;
+import component.question_generator.factory.zemberek.ZemberekQuestionFactory;
 import component.question_generator.word.Question;
 import component.question_generator.word.Sentence;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -25,11 +25,19 @@ public class MainGenerator {
     }
 
     public Set<String> convertQuestions(String sentence) {
-        //factory = new ZemberekQuestionFactory(sentence);
+        QuestionFactory factoryZemberek = new ZemberekQuestionFactory(sentence);
         factory = new ItuQuestionFactory(sentence);
+        Set<String> questionSentence = new HashSet<String>();
+
+        runFactory(factoryZemberek, questionSentence);
+        runFactory(factory, questionSentence);
+
+        return questionSentence;
+    }
+
+    protected void runFactory(QuestionFactory factory, Set<String> questionSentence) {
         Sentence sentence1 = factory.getQuestionList();
         Set<Question> questions = sentence1.getQuestionList();
-        Set<String> questionSentence = new HashSet<String>();
 
         if(questions.size() == 0)
             System.out.println("Soru üretilemedi :(");
@@ -39,8 +47,6 @@ public class MainGenerator {
             System.out.println(question.getAnswer());
             questionSentence.add(question.getQuestionSentence());
         }
-
-        return questionSentence;
     }
 
     /*private boolean save() {

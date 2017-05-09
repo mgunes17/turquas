@@ -3,12 +3,8 @@ package command.question_generator_command;
 import command.AbstractCommand;
 import command.Command;
 import component.question_generator.factory.QuestionFactory;
-import component.question_generator.factory.itu.ItuQuestionFactory;
 import component.question_generator.generate.MainGenerator;
-import component.question_generator.word.Question;
-import component.question_generator.word.Sentence;
 
-import java.util.List;
 import java.util.Scanner;
 
 /**

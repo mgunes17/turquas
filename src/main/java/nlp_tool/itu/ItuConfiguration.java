@@ -66,7 +66,9 @@ public class ItuConfiguration {
             return EntityUtils.toString(resp.getEntity());
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
-            return null;
+            return "hata";
+        } catch (Exception ex) {
+            return "hata";
         }
     }
 }

@@ -10,6 +10,15 @@ public class W2VToken {
     private boolean isStem;
     private List<Float> value;
 
+    public W2VToken() {
+        //non - args
+    }
+
+    public W2VToken(String tokenName, List<Float> value) {
+        this.tokenName = tokenName;
+        this.value = value;
+    }
+
     //getter - setter
     public String getTokenName() {
         return tokenName;

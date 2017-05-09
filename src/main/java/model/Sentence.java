@@ -23,6 +23,12 @@ public class Sentence {
         this.questions = questions;
     }
 
+    public Sentence(String sentence, Set<String> questions, List<String> stemmedWordsList){
+        this.originalSentence = sentence;
+        this.questions = questions;
+        this.stemmedWordsList = stemmedWordsList;
+    }
+
     // getters and setters
 
     public String getOriginalSentence() {

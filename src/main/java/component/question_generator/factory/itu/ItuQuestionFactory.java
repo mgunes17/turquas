@@ -5,9 +5,7 @@ import component.question_generator.factory.itu.type.NerQuestion;
 import component.question_generator.word.Question;
 import component.question_generator.word.Sentence;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**

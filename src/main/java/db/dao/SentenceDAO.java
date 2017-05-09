@@ -1,7 +1,6 @@
 package db.dao;
 
 import com.datastax.driver.core.*;
-import component.question_generator.generate.MainGenerator;
 import db.configuration.ConnectionConfiguration;
 import db.configuration.ModelVariables;
 import model.Sentence;
@@ -24,7 +23,6 @@ public class SentenceDAO {
     public SentenceDAO(){
         this.keyspace = ModelVariables.KEYSPACE;
         this.tableName = ModelVariables.SENTENCE_TABLE_NAME;
-        session = createSession();
     }
 
     public List<Sentence> readForGenerateQuestions(int count) {
@@ -37,6 +35,22 @@ public class SentenceDAO {
             sentenceList.add(new Sentence(row.get(0, String.class), row.getSet(1, String.class)));
         }
 
+        session.close();
+        return sentenceList;
+    }
+
+    public List<Sentence> getAllSentences() {
+        List<Sentence> sentenceList = new ArrayList<Sentence>();
+        String query = "select original_sentence, questions, stemmed_words_list from sentence ;";
+        session = ConnectionConfiguration.getCLuster().connect("turquas");
+        ResultSet result = session.execute(query);
+
+        for(Row row: result) {
+            sentenceList.add(new Sentence(
+                    row.get(0, String.class), row.getSet(1, String.class), row.getList(2, String.class)));
+        }
+
+        session.close();
         return sentenceList;
     }
 
@@ -65,6 +79,7 @@ public class SentenceDAO {
 
     public boolean updateQuestions(List<Sentence> sentenceList){
         try {
+            session = ConnectionConfiguration.getCLuster().connect("turquas");
             BatchStatement batch = new BatchStatement();
             prepareForQuestionUpdate();
 
@@ -74,6 +89,7 @@ public class SentenceDAO {
             }
             session.execute(batch);
             System.out.println(("SentenceDAO insertBatch başarıyla tamamlandı."));
+            session.close();
             return true;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
@@ -83,16 +99,20 @@ public class SentenceDAO {
 
     public void delete(Sentence sentence){
         try{
+            session = ConnectionConfiguration.getCLuster().connect("turquas");
             BoundStatement bound = preparedStatement.bind(sentence.getOriginalSentence());
             session.execute(bound);
             logger.info("SentenceDAO delete başarıyla tamamlandı.");
         } catch(Exception ex){
             logger.warn("SentenceDAO delete hata verdi.");
+        } finally {
+            session.close();
         }
     }
 
     public void insertBatch(List<Sentence> sentenceList){
         try{
+            session = ConnectionConfiguration.getCLuster().connect("turquas");
             BatchStatement batch = new BatchStatement();
             prepareForInsert();
 
@@ -107,6 +127,8 @@ public class SentenceDAO {
             logger.info("SentenceDAO insertBatch başarıyla tamamlandı.");
         } catch(Exception ex){
             logger.warn("SentenceDAO insertBatch hata verdi.");
+        } finally {
+            session.close();
         }
 
     }
@@ -134,11 +156,10 @@ public class SentenceDAO {
                 "DELETE FROM " + tableName + " WHERE original_sentence=?");
     }
 
-    private Session createSession(){
+    /*private Session createSession(){
         Cluster.Builder clusterBuilder = Cluster.builder();
         Cluster cluster = clusterBuilder.addContactPoint("127.0.0.1").build();
 
         return cluster.connect(keyspace);
-    }
-
+    }*/
 }
