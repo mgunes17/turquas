@@ -25,16 +25,24 @@ public class W2VTokenDAO {
             BatchStatement batch = new BatchStatement();
             prepareForInsert();
 
+            int count = 0;
             for(W2VToken w2VToken: tokens){
+                count++;
                 BoundStatement bound = preparedStatement.bind(
                         w2VToken.getTokenName(), w2VToken.isStem(), w2VToken.getValue());
                 batch.add(bound);
+
+                if(count % 10 == 0){
+                    session.execute(batch);
+                    batch = new BatchStatement();
+                }
             }
 
             session.execute(batch);
             session.close();
         } catch(Exception ex){
             System.out.println(ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
 

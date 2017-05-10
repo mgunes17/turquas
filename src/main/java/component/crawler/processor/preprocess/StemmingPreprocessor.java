@@ -1,10 +1,12 @@
 package component.crawler.processor.preprocess;
+
 import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
 import org.antlr.v4.runtime.Token;
 import zemberek.morphology.analysis.SentenceAnalysis;
 import zemberek.morphology.analysis.WordAnalysis;
 import zemberek.morphology.analysis.tr.TurkishSentenceAnalyzer;
 import zemberek.tokenization.TurkishTokenizer;
+
 import java.util.ArrayList;
 import java.util.List;
 
