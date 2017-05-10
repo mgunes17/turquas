@@ -77,7 +77,7 @@ public class SourceDAO {
 
     public void insertBatch(List<Source> sourceList){
         try{
-            ConnectionConfiguration.getCLuster().connect("turquas");
+            session = ConnectionConfiguration.getCLuster().connect("turquas");
             BatchStatement batch = new BatchStatement();
             prepareForInsert();
 
