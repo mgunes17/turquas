@@ -5,21 +5,23 @@ package component.crawler.processor.validation;
  */
 public abstract class Validator {
     private Validator nextValidator;
+
     abstract public boolean validate(String sentence);
 
-    public Validator(Validator nextValidator) {
-        this.nextValidator = nextValidator;
+    boolean isValid(boolean valid, String sentence) {
+        //System.out.println("word count validation passed.");
+        return valid && (getNextValidator() == null || getNextValidator().validate(sentence));
     }
 
-    public Validator() {
+    Validator() {
         //non-arg
     }
 
-    public Validator getNextValidator() {
+    private Validator getNextValidator() {
         return nextValidator;
     }
 
-    public void setNextValidator(Validator nextValidator) {
+    void setNextValidator(Validator nextValidator) {
         this.nextValidator = nextValidator;
     }
 }

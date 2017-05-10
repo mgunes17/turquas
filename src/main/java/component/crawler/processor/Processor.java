@@ -33,12 +33,12 @@ public class Processor {
         validationHandler = new ValidationHandler();
     }
 
-    public void process(Queue<Page> webPageQueue) {
-        Page webPage;
+    public void process(Queue<Page> pageQueue) {
+        Page page;
         logger.trace("Processor running..");
 
-        while((webPage = webPageQueue.poll()) != null) {
-            Source source = buildSource(webPage.getAddressName(), webPage.getContent());
+        while((page = pageQueue.poll()) != null) {
+            Source source = buildSource(page.getAddressName(), page.getContent());
             logger.trace("Processor " + source.getSourceName());
 
             if(isSourceWorthy(source)) { //doküman kayda değer mi ona bakılacak

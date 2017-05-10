@@ -12,16 +12,6 @@ public class QuestionableValidator extends Validator{
             isValid = true;
         }
 
-        if(isValid) {
-            //System.out.println("questionable validation passed.");
-            if(getNextValidator() != null) {
-                return getNextValidator().validate(sentence);
-            }
-            else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+        return isValid(isValid, sentence);
     }
 }

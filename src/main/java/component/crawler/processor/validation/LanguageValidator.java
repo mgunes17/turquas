@@ -22,16 +22,6 @@ public class LanguageValidator extends Validator {
             e.printStackTrace();
         }
 
-        if(isValid) {
-            //System.out.println("language validation passed.");
-            if(getNextValidator() != null) {
-                return getNextValidator().validate(sentence);
-            }
-            else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+        return isValid(isValid, sentence);
     }
 }

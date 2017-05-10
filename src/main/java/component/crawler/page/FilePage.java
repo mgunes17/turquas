@@ -4,17 +4,17 @@ package component.crawler.page;
  * Created by mustafa on 10.05.2017.
  */
 public class FilePage extends Page {
-    private String fileAddress;
+    private String filePath;
 
     public String getAddressName() {
-        return fileAddress;
+        return filePath;
     }
 
-    public String getFileAddress() {
-        return fileAddress;
+    public String getFilePath() {
+        return filePath;
     }
 
-    public void setFileAddress(String fileAddress) {
-        this.fileAddress = fileAddress;
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
