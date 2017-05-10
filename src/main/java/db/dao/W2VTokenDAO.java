@@ -54,7 +54,7 @@ public class W2VTokenDAO {
         return w2VTokens;
     }
 
-    protected void prepareForInsert(){
+    private void prepareForInsert(){
         preparedStatement = session.prepare(
                 "INSERT INTO w2v_token (token_name, is_stem, value) values (?, ?, ?)");
     }

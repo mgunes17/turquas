@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by mustafa on 27.04.2017.
  */
 public class CommandBuilder {
-    public static CommandSet getUpdaterCommandSet() {
+    static CommandSet getUpdaterCommandSet() {
         Map<String, Command> commandMap = new HashMap<String, Command>();
         commandMap.put("exit", new ExitCommand());
         commandMap.put("morpha", new MorphologicCommand(new TokenDAO(), new LabelMorph()));
@@ -35,7 +35,7 @@ public class CommandBuilder {
         return new CommandSet(commandMap);
     }
 
-    public static CommandSet getCrawlerCommandSet() {
+    static CommandSet getCrawlerCommandSet() {
         Map<String, Command> commandMap = new HashMap<String, Command>();
         commandMap.put("add", new AddCommand());
         commandMap.put("set", new SetCommand());
@@ -43,7 +43,7 @@ public class CommandBuilder {
         return new CommandSet(commandMap);
     }
 
-    public static CommandSet getQuestionGeneratorCommandSet() {
+    static CommandSet getQuestionGeneratorCommandSet() {
         Map<String, Command> commandMap = new HashMap<String, Command>();
         commandMap.put("ask", new AskCommand());
         commandMap.put("change", new ChangeCommand());
@@ -52,7 +52,7 @@ public class CommandBuilder {
         return new CommandSet(commandMap);
     }
 
-    public static CommandSet getW2VCreatorAdminCommandSet(){
+    static CommandSet getW2VCreatorAdminCommandSet(){
         Map<String, Command> commandMap = new HashMap<String, Command>();
         commandMap.put("set", new command.w2v_creator_command.SetCommand());
         commandMap.put("create", new CreateCommand());

@@ -10,7 +10,7 @@ public class WebPage {
     private String content;
     private Set<String> sentences;
 
-    public WebPage(String url){
+    WebPage(String url){
         this.url = url;
     }
 

@@ -1,5 +1,6 @@
 package command.question_generator_command;
 
+import admin.QuestionGeneratorAdmin;
 import command.AbstractCommand;
 import command.Command;
 import component.question_generator.generate.MainGenerator;
@@ -20,12 +21,12 @@ public class SaveCommand extends AbstractCommand implements Command {
         if(!validateParameter(parameter))
             return false;
 
+        int sessionSize = QuestionGeneratorAdmin.questionGEneratorParameterMap.get("session_size");
         mainGenerator = new MainGenerator();
         SentenceDAO dao = new SentenceDAO();
         List<Sentence> sentenceList = dao.readForGenerateQuestions(recordCount);
         List<Sentence> newSentenceList = new ArrayList<Sentence>();
 
-        //şuan sadece itu aracı kullanılıyor, zemberek eklenecek
         //bir cümle seti için factory 1 kere verilsin
         for(int i = 0; i < recordCount; i++) {
             Sentence sentence = sentenceList.get(i);
@@ -36,6 +37,12 @@ public class SaveCommand extends AbstractCommand implements Command {
                         mainGenerator.convertQuestions(sentence.getOriginalSentence()
                         )));
             }
+
+            if(i % sessionSize == 0){
+                System.out.println("Seans başlıyor... " + i);
+                dao.updateQuestions(newSentenceList);
+                System.out.println("Seans bitti... " + i);
+            }
         }
 
         dao.updateQuestions(newSentenceList);
@@ -43,13 +50,10 @@ public class SaveCommand extends AbstractCommand implements Command {
     }
 
     protected boolean validateParameter(String[] parameter) {
-        if(parameter.length != 2 || !parseRecordCount(parameter[1]))
-            return false;
-        else
-            return true;
+        return !(parameter.length != 2 || !parseRecordCount(parameter[1]));
     }
 
-    protected boolean parseRecordCount(String count) {
+    private boolean parseRecordCount(String count) {
         try {
             recordCount = Integer.parseInt(count);
 

@@ -33,6 +33,7 @@ public class WebCrawler {
     public void crawl(int count) {
         WebPage webPage;
         String url = unvisitedPageUrls.poll();
+        visitedUrls.add(url);
         int i = 0;
 
         while (i < count && url != null) { //count, toplam deneme sayısı? toplam başarılı deneme sayısı?

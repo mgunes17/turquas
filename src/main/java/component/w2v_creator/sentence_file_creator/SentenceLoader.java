@@ -42,7 +42,7 @@ public class SentenceLoader {
         return sentenceList;
     }
 
-    public List<List<String>> getStemListsForSentences(){
+    List<List<String>> getStemListsForSentences(){
         String stemmedWordsQuery;
         if(sentenceCount == 0){
             stemmedWordsQuery = "SELECT stemmed_words_list from sentence";
@@ -59,7 +59,7 @@ public class SentenceLoader {
         return sentences;
     }
 
-    public List<List<String>> getTokenListsForSentences(){
+    List<List<String>> getTokenListsForSentences(){
         String tokenListQuery;
 
         if(sentenceCount == 0){

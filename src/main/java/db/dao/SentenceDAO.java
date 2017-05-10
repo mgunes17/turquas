@@ -133,25 +133,25 @@ public class SentenceDAO {
 
     }
 
-    public void prepareForInsert(){
+    private void prepareForInsert(){
         preparedStatement = session.prepare(
                 "INSERT INTO " + tableName + " (original_sentence, source_name, questions, " +
                         "stemmed_words_list, tags, token_list) values (?, ?, ?, ?, ?, ?)");
     }
 
-    public void prepareForUpdate(){
+    private void prepareForUpdate(){
         preparedStatement = session.prepare("UPDATE " + tableName +" " +
                 "SET source_name=? questions= ?, stemmed_words_list=?, tags=?, token_list=?" +
                 "WHERE original_sentence=?");
     }
 
-    public void prepareForQuestionUpdate(){
+    private void prepareForQuestionUpdate(){
         preparedStatement = session.prepare("UPDATE " + tableName +" " +
                 "SET questions= ?" +
                 "WHERE original_sentence=?");
     }
 
-    public void prepareForDelete(){
+    private void prepareForDelete(){
         preparedStatement = session.prepare(
                 "DELETE FROM " + tableName + " WHERE original_sentence=?");
     }

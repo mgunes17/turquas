@@ -19,7 +19,7 @@ public class Turquas {
     private CommandSet commandSet;
     public static String namespace = "crawler";
 
-    public Turquas() {
+    private Turquas() {
         adminMap = new HashMap<String, Admin>();
         adminMap.put("crawler", new CrawlerAdmin(CommandBuilder.getCrawlerCommandSet()));
         adminMap.put("qgenerator", new QuestionGeneratorAdmin(CommandBuilder.getQuestionGeneratorCommandSet()));
@@ -42,7 +42,7 @@ public class Turquas {
         turquas.run();
     }
 
-    public void run() {
+    private void run() {
         boolean next = true;
 
         while(next) {

@@ -29,9 +29,6 @@ public class SetCommand extends AbstractCommand implements Command {
     }
 
     protected boolean validateParameter(String[] parameter) {
-        if(parameter.length != 1)
-            return false;
-        else
-            return true;
+        return parameter.length == 1;
     }
 }

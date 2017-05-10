@@ -55,7 +55,7 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
         return true;
     }
 
-    protected void readW2VFromFile(List<W2VToken> w2VTokenList, boolean isStem) {
+    private void readW2VFromFile(List<W2VToken> w2VTokenList, boolean isStem) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("target.txt"));
 

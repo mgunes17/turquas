@@ -7,7 +7,7 @@ public abstract class Preprocessor {
     private Preprocessor nextPreprocessor;
     abstract public PreprocessedSentence process(PreprocessedSentence preprocessedSentence);
 
-    public PreprocessedSentence proceedToNext(PreprocessedSentence preprocessedSentence){
+    PreprocessedSentence proceedToNext(PreprocessedSentence preprocessedSentence){
         if(getNextPreprocessor() != null){
             return getNextPreprocessor().process(preprocessedSentence);
         } else {

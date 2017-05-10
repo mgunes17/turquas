@@ -34,7 +34,7 @@ public class ContentHandler {
         return contentText;
     }
 
-    public boolean refreshContent(){
+    private boolean refreshContent(){
         try{
             contentText = content.fetchContent(sourceName);
             splitParagraphIntoSentences();

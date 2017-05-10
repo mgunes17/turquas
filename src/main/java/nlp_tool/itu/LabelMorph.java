@@ -2,6 +2,7 @@ package nlp_tool.itu;
 
 import model.Token;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,9 +21,7 @@ public class LabelMorph {
             String result = ituConfiguration.connect(ToolType.Morphanalyzer, token.getToken());
             Set<String> analysisSet = new HashSet<String>();
 
-            for(String analysis: result.split("\n")) {
-                analysisSet.add(analysis);
-            }
+            analysisSet.addAll(Arrays.asList(result.split("\n")));
 
             token.setAnalysisSet(analysisSet);
         }

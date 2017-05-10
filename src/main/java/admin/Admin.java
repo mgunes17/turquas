@@ -8,7 +8,7 @@ import command.CommandSet;
 public abstract class Admin {
     private CommandSet commandSet;
 
-    public Admin(CommandSet commandSet) {
+    Admin(CommandSet commandSet) {
         this.commandSet = commandSet;
     }
 
