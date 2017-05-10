@@ -3,6 +3,7 @@ package home_base;
 import command.Command;
 import command.CommandSet;
 import command.crawler_command.AddCommand;
+import command.crawler_command.ReadCommand;
 import command.crawler_command.SetCommand;
 import command.crawler_command.StartCommand;
 import command.db_updater_command.ExitCommand;
@@ -40,6 +41,7 @@ public class CommandBuilder {
         commandMap.put("add", new AddCommand());
         commandMap.put("set", new SetCommand());
         commandMap.put("start", new StartCommand());
+        commandMap.put("read", new ReadCommand());
         return new CommandSet(commandMap);
     }
 

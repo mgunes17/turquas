@@ -16,9 +16,12 @@ public class CommandSet {
         String[] parseList = command.split(" ");
 
         if(commandMap.get(parseList[0]) == null) {
+            System.out.println(false);
             return false;
         } else {
-            return commandMap.get(parseList[0]).execute(parseList);
+            boolean result = commandMap.get(parseList[0]).execute(parseList);
+            System.out.println(result);
+            return result;
         }
     }
 }

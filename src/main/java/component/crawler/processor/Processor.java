@@ -1,7 +1,8 @@
 package component.crawler.processor;
 
 import component.crawler.DBSaver;
-import component.crawler.WebPage;
+import component.crawler.page.Page;
+import component.crawler.page.WebPage;
 import component.crawler.content.ContentHandler;
 import component.crawler.processor.preprocess.PreprocessHandler;
 import component.crawler.processor.preprocess.PreprocessedSentence;
@@ -32,12 +33,12 @@ public class Processor {
         validationHandler = new ValidationHandler();
     }
 
-    public void process(Queue<WebPage> webPageQueue) {
-        WebPage webPage;
+    public void process(Queue<Page> webPageQueue) {
+        Page webPage;
         logger.trace("Processor running..");
 
         while((webPage = webPageQueue.poll()) != null) {
-            Source source = buildSource(webPage.getUrl(), webPage.getContent());
+            Source source = buildSource(webPage.getAddressName(), webPage.getContent());
             logger.trace("Processor " + source.getSourceName());
 
             if(isSourceWorthy(source)) { //doküman kayda değer mi ona bakılacak

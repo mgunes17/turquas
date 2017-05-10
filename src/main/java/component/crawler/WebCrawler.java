@@ -2,6 +2,8 @@ package component.crawler;
 
 import admin.CrawlerAdmin;
 import component.crawler.content.UrlContent;
+import component.crawler.page.Page;
+import component.crawler.page.WebPage;
 import component.crawler.processor.Processor;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,14 +19,14 @@ import java.util.*;
 public class WebCrawler {
     private final static Logger logger = LoggerFactory.getLogger(WebCrawler.class);
     private Queue<String> unvisitedPageUrls;
-    private Queue<WebPage> webPageQueue;
+    private Queue<Page> webPageQueue;
     private UrlContent urlContent;
     private Processor processor;
     private Set<String> visitedUrls;
 
     public WebCrawler(Processor processor){
         unvisitedPageUrls = new LinkedList<String>();
-        webPageQueue = new LinkedList<WebPage>();
+        webPageQueue = new LinkedList<Page>();
         urlContent = new UrlContent();
         this.processor = processor;
         visitedUrls = new HashSet<String>();
