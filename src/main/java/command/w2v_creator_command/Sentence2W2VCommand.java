@@ -11,104 +11,169 @@ import zemberek.tokenization.TurkishTokenizer;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by mustafa on 09.05.2017.
  */
 public class Sentence2W2VCommand extends AbstractCommand implements Command {
+    private Map<String, W2VToken> w2VTokens;
+    private Map<List<Float>, List<List<Float>>> w2vValues = new HashMap<List<Float>, List<List<Float>>>();
+    private Map<String, List<String>> convertedSentences = new HashMap<String, List<String>>();
+    private List<Sentence> sentences = new ArrayList<Sentence>();
+    TurkishTokenizer tokenizer = TurkishTokenizer.DEFAULT;
+
+
     public boolean execute(String[] parameter) {
         if(!validateParameter(parameter)) {
             return false;
         }
 
-        Map<String, W2VToken> w2VTokens;
         W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
-        List<Sentence> sentences = new SentenceDAO().getAllSentences();
+       // sentences = new SentenceDAO().getAllSentences();
 
+        Sentence sentence = new Sentence("adres adı amacı");
+        Set<String> questionss = new HashSet<String>();
+        questionss.add("adres adı amacı");
+        sentence.setQuestions(questionss);
+        sentences.add(sentence);
+
+        //convertedSentences' ı oluşturur
         if(parameter[1].equals("stem")) {
             w2VTokens = w2VTokenDAO.getTokens(true);
-
-            if(parameter[2].equals("near")) {
-                try {
-                    PrintWriter pwInput = new PrintWriter("input.txt");
-                    PrintWriter pwOutput = new PrintWriter("output.txt");
-
-                    for(Sentence sentence: sentences) {
-                        for(String question: sentence.getQuestions()) {
-                            //soru cümlesinin stemlerini bul
-                            //stemlerin w2v değerlerini bul
-                        }
-                    }
-
-                    pwInput.close();
-                    pwOutput.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            } else if(parameter[2].equals("average")) {
-
-            } else {
-                System.out.println("Yanlış komut");
-            }
-
-        } else if(parameter[1].equals("letter")){
+            prepareByStem();
+        }
+        else {
             w2VTokens = w2VTokenDAO.getTokens(false);
-
-            if(parameter[2].equals("near")) {
-                try {
-                    PrintWriter pwInput = new PrintWriter("input.txt");
-                    PrintWriter pwOutput = new PrintWriter("output.txt");
-
-                    for(Sentence sentence: sentences) {
-                        for(String question: sentence.getQuestions()) {
-                            TurkishTokenizer tokenizer = TurkishTokenizer.DEFAULT;
-                            Iterator<Token> tokenIterator = tokenizer.getTokenIterator(question);
-
-                            while (tokenIterator.hasNext()) {
-                                Token token = tokenIterator.next();
-                                String word;
-
-                                if(token.getText().length() >= 5)
-                                    word = token.getText().substring(0, 5);
-                                else
-                                    word = token.getText();
-
-                                if(w2VTokens.containsKey(word)) {
-                                    for(float value: w2VTokens.get(word).getValue()) {
-                                        pwInput.print(value + " ");
-                                    }
-                                } else {
-                                    //tamamlamak için 1 koy
-                                }
-                            }
-
-                            pwInput.println();
-                            pwOutput.println();
-                        }
-                    }
-
-                    pwInput.close();
-                    pwOutput.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            } else if(parameter[2].equals("average")) {
-
-            } else {
-                System.out.println("Yanlış komut");
-            }
-        } else {
-            System.out.println("Yanlış komut");
+            prepareByLetter();
         }
 
+        //w2vValuesSentences' ı oluşturur
+        if(parameter[2].equals("near"))
+            prepareByNear();
+        else
+            prepareByAverage();
+
+        //input-output dosyalarını oluştur
+        writeToFileSentence2W2V(w2vValues);
 
         return true;
     }
 
+    public void prepareByNear() {
+
+    }
+
+    public void prepareByAverage() {
+        for(String sentence: convertedSentences.keySet()) { //her bir cümle için
+            List<Float> sentenceValue = findAverageValue(sentence);
+            List<List<Float>> questionsValues = new ArrayList<List<Float>>();
+
+            for(String question: convertedSentences.get(sentence)) { // her bir soru için
+                List<Float> value = findAverageValue(question);
+                questionsValues.add(value);
+            }
+
+            w2vValues.put(sentenceValue, questionsValues);
+        }
+    }
+
+    protected List<Float> findAverageValue(String sentence) {
+        List<Float> values = new ArrayList<Float>();
+        String[] words = sentence.split(" ");
+        List<List<Float>> wordValues = new ArrayList<List<Float>>();
+        int count = 0;
+
+        for(int i = 0; i < words.length; i++) {
+            if( w2VTokens.containsKey(words[i])) {
+                count++;
+                wordValues.add(w2VTokens.get(words[i]).getValue());
+            }
+        }
+
+        for(int i = 0; i < wordValues.size(); i++) {
+            float sum = 0.0f;
+
+            for(List<Float> xx: wordValues) {
+                sum += xx.get(i);
+            }
+
+            values.add(sum / wordValues.size());
+        }
+
+
+        return values;
+    }
+
+    public void prepareByStem() {
+
+    }
+
+    public void prepareByLetter() {
+        for(Sentence sentence: sentences) {
+            String sentenceWord = rebuildSentenceByLetter(sentence.getOriginalSentence());
+            List<String> questions = new ArrayList<String>();
+
+            for (String question : sentence.getQuestions()) {
+                questions.add(rebuildSentenceByLetter(question));
+            }
+
+            convertedSentences.put(sentenceWord, questions);
+        }
+    }
+
+    public String rebuildSentenceByLetter(String sentence) {
+        Iterator<Token> tokenIterator = tokenizer.getTokenIterator(sentence);
+        StringBuilder newSentence = new StringBuilder();
+
+        while (tokenIterator.hasNext()) {
+            Token token = tokenIterator.next();
+            newSentence.append(getFirst5Letter(token.getText()) + " ");
+        }
+
+        return newSentence.toString();
+    }
+
+    public String getFirst5Letter(String text) {
+        if (text.length() >= 5)
+           return text.substring(0, 5);
+        else
+            return text;
+    }
+
+    protected boolean writeToFileSentence2W2V(Map<List<Float>, List<List<Float>>> w2vValues) {
+        try {
+            PrintWriter pwInput = new PrintWriter("input.txt");
+            PrintWriter pwOutput = new PrintWriter("output.txt");
+
+            for(List<Float> sentenceValue: w2vValues.keySet()) { //her bir cümle için
+                for(List<Float> questionValues: w2vValues.get(sentenceValue)) { // her bir soru için
+                    //soru - input için dosyaya yaz
+                    for(Float value: questionValues) {
+                        pwInput.print(value + " ");
+                    }
+                    pwInput.println();
+
+                    //cevap - output için dosyaya yaz
+                    for(Float value: sentenceValue) {
+                        pwOutput.print(value + " ");
+                    }
+                    pwOutput.println();
+                }
+            }
+
+            pwInput.close();
+            pwOutput.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     protected boolean validateParameter(String[] parameter) {
-        return parameter.length == 3;
+        return (parameter.length == 3 &&
+                (parameter[1].equals("stem") || parameter[1].equals("letter")) &&
+                (parameter[2].equals("average") || parameter[2].equals("near")));
     }
 }
