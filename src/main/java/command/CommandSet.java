@@ -15,13 +15,6 @@ public class CommandSet {
     public boolean run(String command) {
         String[] parseList = command.split(" ");
 
-        if(commandMap.get(parseList[0]) == null) {
-            System.out.println(false);
-            return false;
-        } else {
-            boolean result = commandMap.get(parseList[0]).execute(parseList);
-            System.out.println(result);
-            return result;
-        }
+        return commandMap.get(parseList[0]) != null && commandMap.get(parseList[0]).execute(parseList);
     }
 }

@@ -1,5 +1,6 @@
 package command.w2v_creator_command;
 
+import admin.CrawlerAdmin;
 import admin.W2VCreatorAdmin;
 import command.AbstractCommand;
 import command.Command;
@@ -26,7 +27,7 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
     private Map<List<Float>, List<List<Float>>> w2vValues = new HashMap<List<Float>, List<List<Float>>>();
     private Map<String, List<String>> convertedSentences = new HashMap<String, List<String>>();
     private List<Sentence> sentences = new ArrayList<Sentence>();
-    TurkishTokenizer tokenizer = TurkishTokenizer.DEFAULT;
+    private TurkishTokenizer tokenizer = TurkishTokenizer.DEFAULT;
     private TurkishSentenceAnalyzer analyzer = ZemberekSentenceAnalyzer.getSentenceAnalyzer();
 
 
@@ -61,7 +62,46 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
     }
 
     public void prepareByNear() {
+        for(String sentence: convertedSentences.keySet()) { //her bir cümle için
+            List<Float> sentenceValue = findNearValue(sentence);
+            List<List<Float>> questionsValues = new ArrayList<List<Float>>();
 
+            for(String question: convertedSentences.get(sentence)) { // her bir soru için
+                List<Float> value = findNearValue(question);
+                questionsValues.add(value);
+            }
+
+            w2vValues.put(sentenceValue, questionsValues);
+        }
+    }
+
+    public List<Float> findNearValue(String sentence) {
+        int maxWordSize = CrawlerAdmin.crawlerParameterMap.get("max_word_size");
+        int layerSize = W2VCreatorAdmin.w2vParameterMap.get("layer_size");
+
+        List<Float> values = new ArrayList<Float>();
+        String[] words = sentence.split(" ");
+
+        for(String word: words) {
+            if (w2VTokens.containsKey(word)) {
+                for(Float value: w2VTokens.get(word).getValue()) {
+                    values.add(value);
+                }
+            } else {
+                for(int i = 0; i < layerSize; i++) {
+                    values.add((float) 0);
+                }
+            }
+        }
+
+        //max kelime sayısına kadar 0 koy
+        for(int i = words.length; i < maxWordSize; i++) {
+            for(int j = 0; j < layerSize; j++) {
+                values.add((float) 0);
+            }
+        }
+
+        return values;
     }
 
     public void prepareByAverage() {
@@ -82,12 +122,10 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
         List<Float> values = new ArrayList<Float>();
         String[] words = sentence.split(" ");
         List<List<Float>> wordValues = new ArrayList<List<Float>>();
-        int count = 0;
 
-        for(int i = 0; i < words.length; i++) {
-            if( w2VTokens.containsKey(words[i])) {
-                count++;
-                wordValues.add(w2VTokens.get(words[i]).getValue());
+        for(String word : words) {
+            if (w2VTokens.containsKey(word)) {
+                wordValues.add(w2VTokens.get(word).getValue());
             }
         }
 
