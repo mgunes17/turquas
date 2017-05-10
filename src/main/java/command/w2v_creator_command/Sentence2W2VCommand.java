@@ -1,23 +1,20 @@
 package command.w2v_creator_command;
 
-import admin.CrawlerAdmin;
-import admin.W2VCreatorAdmin;
 import command.AbstractCommand;
 import command.Command;
-import db.dao.SentenceDAO;
 import db.dao.W2VTokenDAO;
-import model.Sentence;
+import file_operation.W2V4Sentence;
 import model.W2VToken;
-import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
-import org.antlr.v4.runtime.Token;
-import zemberek.morphology.analysis.SentenceAnalysis;
-import zemberek.morphology.analysis.WordAnalysis;
-import zemberek.morphology.analysis.tr.TurkishSentenceAnalyzer;
-import zemberek.tokenization.TurkishTokenizer;
+import w2v_operation.vector_operation.AverageBy;
+import w2v_operation.vector_operation.NearBy;
+import w2v_operation.vector_operation.VectorType;
+import w2v_operation.word_operation.LetterBy;
+import w2v_operation.word_operation.StemBy;
+import w2v_operation.word_operation.WordType;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mustafa on 09.05.2017.
@@ -26,10 +23,20 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
     private Map<String, W2VToken> w2VTokens;
     private Map<List<Float>, List<List<Float>>> w2vValues = new HashMap<List<Float>, List<List<Float>>>();
     private Map<String, List<String>> convertedSentences = new HashMap<String, List<String>>();
-    private List<Sentence> sentences = new ArrayList<Sentence>();
-    private TurkishTokenizer tokenizer = TurkishTokenizer.DEFAULT;
-    private TurkishSentenceAnalyzer analyzer = ZemberekSentenceAnalyzer.getSentenceAnalyzer();
+    private WordType wordType;
+    private VectorType vectorType;
+    private Map<String, WordType> wordTypeMap;
+    private Map<String, VectorType> vectorTypeMap;
 
+    public Sentence2W2VCommand() {
+        wordTypeMap = new HashMap<String, WordType>();
+        wordTypeMap.put("stem", new StemBy());
+        wordTypeMap.put("letter", new LetterBy());
+
+        vectorTypeMap = new HashMap<String, VectorType>();
+        vectorTypeMap.put("near", new NearBy());
+        vectorTypeMap.put("average", new AverageBy());
+    }
 
     public boolean execute(String[] parameter) {
         if(!validateParameter(parameter)) {
@@ -37,201 +44,28 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
         }
 
         W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
-        sentences = new SentenceDAO().getAllSentences();
 
         //convertedSentences' ı oluşturur
         if(parameter[1].equals("stem")) {
             w2VTokens = w2VTokenDAO.getTokens(true);
-            prepareByStem();
         }
         else {
             w2VTokens = w2VTokenDAO.getTokens(false);
-            prepareByLetter();
         }
 
-        //w2vValuesSentences' ı oluşturur
-        if(parameter[2].equals("near"))
-            prepareByNear();
-        else
-            prepareByAverage();
+        wordType = wordTypeMap.get(parameter[1]);
+        wordType.prepareWord(convertedSentences);
+
+        vectorType = vectorTypeMap.get(parameter[2]);
+        vectorType.prepareVector(convertedSentences, w2vValues,  w2VTokens);
 
         //input-output dosyalarını oluştur
-        writeToFileSentence2W2V(w2vValues);
+        W2V4Sentence.writeToFileSentence2W2V(w2vValues);
 
         return true;
     }
 
-    public void prepareByNear() {
-        for(String sentence: convertedSentences.keySet()) { //her bir cümle için
-            List<Float> sentenceValue = findNearValue(sentence);
-            List<List<Float>> questionsValues = new ArrayList<List<Float>>();
-
-            for(String question: convertedSentences.get(sentence)) { // her bir soru için
-                List<Float> value = findNearValue(question);
-                questionsValues.add(value);
-            }
-
-            w2vValues.put(sentenceValue, questionsValues);
-        }
-    }
-
-    public List<Float> findNearValue(String sentence) {
-        int maxWordSize = CrawlerAdmin.crawlerParameterMap.get("max_word_size");
-        int layerSize = W2VCreatorAdmin.w2vParameterMap.get("layer_size");
-
-        List<Float> values = new ArrayList<Float>();
-        String[] words = sentence.split(" ");
-
-        for(String word: words) {
-            if (w2VTokens.containsKey(word)) {
-                for(Float value: w2VTokens.get(word).getValue()) {
-                    values.add(value);
-                }
-            } else {
-                for(int i = 0; i < layerSize; i++) {
-                    values.add((float) 0);
-                }
-            }
-        }
-
-        //max kelime sayısına kadar 0 koy
-        for(int i = words.length; i < maxWordSize; i++) {
-            for(int j = 0; j < layerSize; j++) {
-                values.add((float) 0);
-            }
-        }
-
-        return values;
-    }
-
-    public void prepareByAverage() {
-        for(String sentence: convertedSentences.keySet()) { //her bir cümle için
-            List<Float> sentenceValue = findAverageValue(sentence);
-            List<List<Float>> questionsValues = new ArrayList<List<Float>>();
-
-            for(String question: convertedSentences.get(sentence)) { // her bir soru için
-                List<Float> value = findAverageValue(question);
-                questionsValues.add(value);
-            }
-
-            w2vValues.put(sentenceValue, questionsValues);
-        }
-    }
-
-    protected List<Float> findAverageValue(String sentence) {
-        List<Float> values = new ArrayList<Float>();
-        String[] words = sentence.split(" ");
-        List<List<Float>> wordValues = new ArrayList<List<Float>>();
-
-        for(String word : words) {
-            if (w2VTokens.containsKey(word)) {
-                wordValues.add(w2VTokens.get(word).getValue());
-            }
-        }
-
-        for(int i = 0; i < W2VCreatorAdmin.w2vParameterMap.get("layer_size"); i++) {
-            float sum = 0.0f;
-
-            for(List<Float> xx: wordValues) {
-                sum += xx.get(i);
-            }
-
-            values.add(sum / wordValues.size());
-        }
-
-        return values;
-    }
-
-    public void prepareByStem() {
-        for(Sentence sentence: sentences) {
-            String sentenceWord = rebuildSentenceByStem(sentence.getOriginalSentence());
-            List<String> questions = new ArrayList<String>();
-
-            for (String question : sentence.getQuestions()) {
-                questions.add(rebuildSentenceByStem(question));
-            }
-
-            convertedSentences.put(sentenceWord, questions);
-        }
-    }
-
-    public String rebuildSentenceByStem(String sentence) {
-        SentenceAnalysis analysis = analyzer.analyze(sentence);
-        analyzer.disambiguate(analysis);
-
-        StringBuilder newSentence = new StringBuilder();
-
-        for (SentenceAnalysis.Entry entry : analysis) {
-            WordAnalysis wordAnalysis = entry.parses.get(0);
-            newSentence.append(wordAnalysis.dictionaryItem.lemma + " ");
-        }
-
-        return newSentence.toString();
-    }
-
-    public void prepareByLetter() {
-        for(Sentence sentence: sentences) {
-            String sentenceWord = rebuildSentenceByLetter(sentence.getOriginalSentence());
-            List<String> questions = new ArrayList<String>();
-
-            for (String question : sentence.getQuestions()) {
-                questions.add(rebuildSentenceByLetter(question));
-            }
-
-            convertedSentences.put(sentenceWord, questions);
-        }
-    }
-
-    public String rebuildSentenceByLetter(String sentence) {
-        Iterator<Token> tokenIterator = tokenizer.getTokenIterator(sentence);
-        StringBuilder newSentence = new StringBuilder();
-
-        while (tokenIterator.hasNext()) {
-            Token token = tokenIterator.next();
-            newSentence.append(getFirst5Letter(token.getText()) + " ");
-        }
-
-        return newSentence.toString();
-    }
-
-    public String getFirst5Letter(String text) {
-        if (text.length() >= 5)
-           return text.substring(0, 5);
-        else
-            return text;
-    }
-
-    protected boolean writeToFileSentence2W2V(Map<List<Float>, List<List<Float>>> w2vValues) {
-        try {
-            PrintWriter pwInput = new PrintWriter("input.txt");
-            PrintWriter pwOutput = new PrintWriter("output.txt");
-
-            for(List<Float> sentenceValue: w2vValues.keySet()) { //her bir cümle için
-                for(List<Float> questionValues: w2vValues.get(sentenceValue)) { // her bir soru için
-                    //soru - input için dosyaya yaz
-                    for(Float value: questionValues) {
-                        pwInput.print(value + " ");
-                    }
-                    pwInput.println();
-
-                    //cevap - output için dosyaya yaz
-                    for(Float value: sentenceValue) {
-                        pwOutput.print(value + " ");
-                    }
-                    pwOutput.println();
-                }
-            }
-
-            pwInput.close();
-            pwOutput.close();
-            return true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    protected boolean validateParameter(String[] parameter) {
+    protected boolean validateParameter(String[] parameter) { //kontroller map verilerilerine göre yapılsın !!
         return (parameter.length == 3 &&
                 (parameter[1].equals("stem") || parameter[1].equals("letter")) &&
                 (parameter[2].equals("average") || parameter[2].equals("near")));

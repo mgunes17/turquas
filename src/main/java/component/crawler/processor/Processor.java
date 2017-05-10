@@ -1,9 +1,8 @@
 package component.crawler.processor;
 
 import component.crawler.DBSaver;
-import component.crawler.page.Page;
-import component.crawler.page.WebPage;
 import component.crawler.content.ContentHandler;
+import component.crawler.page.Page;
 import component.crawler.processor.preprocess.PreprocessHandler;
 import component.crawler.processor.preprocess.PreprocessedSentence;
 import component.crawler.processor.validation.ValidationHandler;

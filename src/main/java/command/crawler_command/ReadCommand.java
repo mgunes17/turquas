@@ -7,8 +7,6 @@ import component.crawler.FileCrawler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
 /**
  * Created by mustafa on 10.05.2017.
  */

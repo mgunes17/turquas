@@ -25,6 +25,7 @@ public class Turquas {
         adminMap.put("qgenerator", new QuestionGeneratorAdmin(CommandBuilder.getQuestionGeneratorCommandSet()));
         adminMap.put("updater", new DBUpdaterAdmin(CommandBuilder.getUpdaterCommandSet()));
         adminMap.put("w2v", new W2VCreatorAdmin(CommandBuilder.getW2VCreatorAdminCommandSet()));
+        adminMap.put("ui", new UserInterfaceAdmin(CommandBuilder.getUserInterfaceCommandSet()));
 
         Map<String, Command> commandMap = new HashMap<String, Command>();
         commandMap.put("help", new TurquasHelpCommand());

@@ -1,7 +1,5 @@
 package component.crawler.page;
 
-import java.util.Set;
-
 /**
  * Created by mustafa on 23.04.2017.
  */

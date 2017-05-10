@@ -13,6 +13,7 @@ import command.db_updater_command.W2VTokenCommand;
 import command.question_generator_command.AskCommand;
 import command.question_generator_command.ChangeCommand;
 import command.question_generator_command.SaveCommand;
+import command.user_interface_command.AnswerCommand;
 import command.w2v_creator_command.ConvertCommand;
 import command.w2v_creator_command.CreateCommand;
 import command.w2v_creator_command.Input4DLCommand;
@@ -61,6 +62,12 @@ public class CommandBuilder {
         commandMap.put("convert", new ConvertCommand());
         commandMap.put("input4dl", new Input4DLCommand());
         commandMap.put("sentence", new Sentence2W2VCommand());
+        return new CommandSet(commandMap);
+    }
+
+    static CommandSet getUserInterfaceCommandSet() {
+        Map<String, Command> commandMap = new HashMap<String, Command>();
+        commandMap.put("answer", new AnswerCommand());
         return new CommandSet(commandMap);
     }
 
