@@ -19,17 +19,17 @@ import java.util.*;
 public class WebCrawler {
     private final static Logger logger = LoggerFactory.getLogger(WebCrawler.class);
     private Queue<String> unvisitedPageUrls;
-    private Queue<Page> webPageQueue;
+    private Queue<Page> pageQueue;
     private UrlContent urlContent;
     private Processor processor;
     private Set<String> visitedUrls;
 
     public WebCrawler(Processor processor){
         unvisitedPageUrls = new LinkedList<String>();
-        webPageQueue = new LinkedList<Page>();
+        pageQueue = new LinkedList<Page>();
         urlContent = new UrlContent();
-        this.processor = processor;
         visitedUrls = new HashSet<String>();
+        this.processor = processor;
     }
 
     public void crawl(int count) {
@@ -44,7 +44,7 @@ public class WebCrawler {
                 webPage.setContent(urlContent.fetchContent(webPage.getUrl()));
 
                 if (checkAcceptanceOfDocument(urlContent.getDocument())) {
-                    webPageQueue.offer(webPage);
+                    pageQueue.offer(webPage);
                     updateUnvisitedPageUrls();
 
                     System.out.println("Succesfully connected to: " + url);
@@ -53,8 +53,8 @@ public class WebCrawler {
 
                     if(isSessionReady(i)){
                         System.out.println("Seans başlıyor... " + i);
-                        processor.process(webPageQueue);
-                        webPageQueue.clear();
+                        processor.process(pageQueue);
+                        pageQueue.clear();
                         System.out.println("Seans bitti... " + i);
                     }
                 }
@@ -74,11 +74,10 @@ public class WebCrawler {
         System.out.println("Kuyrukta bekleyen url yok.");
         System.out.println("Veri indirme işlemi tamamlandı.");
         System.out.println("Veriler kayda hazırlanıyor.");
-        processor.process(webPageQueue);
+        processor.process(pageQueue);
     }
 
-    private boolean isSessionReady(int count){
-
+    private boolean isSessionReady(int count) {
         return count > 0 && count % CrawlerAdmin.crawlerParameterMap.get("session_size") == 0;
     }
 
@@ -89,7 +88,7 @@ public class WebCrawler {
         return langAttribute != null && (langAttribute.equals("tr-TR") || langAttribute.equals("tr"));
     }
 
-    private void updateUnvisitedPageUrls(){
+    private void updateUnvisitedPageUrls() {
         List<String> linksOnPage = urlContent.extractLinks();
         for(String link: linksOnPage){
             if(!visitedUrls.contains(link)){
