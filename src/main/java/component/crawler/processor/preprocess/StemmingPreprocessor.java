@@ -13,7 +13,7 @@ public class StemmingPreprocessor extends Preprocessor {
     private TurkishTokenizer tokenizer;
     private TurkishSentenceAnalyzer analyzer;
 
-    public StemmingPreprocessor() {
+    StemmingPreprocessor() {
         this.tokenizer = TurkishTokenizer.DEFAULT;
         this.analyzer = ZemberekSentenceAnalyzer.getSentenceAnalyzer();
     }

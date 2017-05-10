@@ -71,12 +71,12 @@ public class TokenDAO {
     }
 
 
-    public void prepareForInsert(){
+    private void prepareForInsert(){
         preparedStatement = session.prepare(
                 "INSERT INTO token_morph_analysis (is_analysis_null, token_name, analysis) values (false, ?, ?)");
     }
 
-    public void prepareForDelete(){
+    private void prepareForDelete(){
         preparedStatement = session.prepare(
                 "DELETE FROM token_morph_analysis WHERE is_analysis_null = true and token_name = ?");
     }

@@ -59,9 +59,26 @@ public class UniqueWordDAO {
         return true;
     }
 
-    public void prepareForUpdate(){
-        preparedStatement = session.prepare(
-                "UPDATE unique_word SET value = ? WHERE word = ?");
+    public boolean updateSources(Set<UniqueWord> uniqueWordSet) {
+        try{
+            session = ConnectionConfiguration.getCLuster().connect("turquas");
+            BatchStatement batch = new BatchStatement();
+            prepareForSourceUpdate();
+
+            for(UniqueWord uniqueWord: uniqueWordSet){
+                BoundStatement bound = preparedStatement.bind(uniqueWord.getDocumentSet(), uniqueWord.getWord());
+                batch.add(bound);
+            }
+
+            session.execute(batch);
+            session.close();
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     public void insert(UniqueWord uniqueWord){
@@ -90,12 +107,23 @@ public class UniqueWordDAO {
         }
     }
 
-    public void prepareForInsert(){
+
+    private void prepareForSourceUpdate(){
+        preparedStatement = session.prepare(
+                "UPDATE unique_word SET source = source + ? WHERE word = ?");
+    }
+
+    private void prepareForUpdate(){
+        preparedStatement = session.prepare(
+                "UPDATE unique_word SET value = ? WHERE word = ?");
+    }
+
+    private void prepareForInsert(){
         preparedStatement = session.prepare(
                 "INSERT INTO " + tableName + " (word, documents) values (?, ?)");
     }
 
-    public void prepareForDelete(){
+    private void prepareForDelete(){
         preparedStatement = session.prepare(
                 "DELETE FROM " + tableName + " WHERE word=?");
     }

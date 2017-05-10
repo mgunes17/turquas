@@ -99,19 +99,19 @@ public class SourceDAO {
 
     }
 
-    public void prepareForInsert(){
+    private void prepareForInsert(){
         preparedStatement = session.prepare(
                 "INSERT INTO " + tableName + " (source_name, " +
                         "last_updated_date, word_count_map) values (?, ?, ?)");
     }
 
-    public void prepareForUpdate(){
+    private void prepareForUpdate(){
         preparedStatement = session.prepare("UPDATE " + tableName +" " +
                 "SET best_words= ?," + "last_updated_date=?, " + "word_count_map = word_count_map + ?" +
                 "WHERE source_name=?");
     }
 
-    public void prepareForDelete(){
+    private void prepareForDelete(){
         preparedStatement = session.prepare(
                 "DELETE FROM " + tableName + " WHERE source_name=?");
     }

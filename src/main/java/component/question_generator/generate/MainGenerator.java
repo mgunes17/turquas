@@ -35,7 +35,7 @@ public class MainGenerator {
         return questionSentence;
     }
 
-    protected void runFactory(QuestionFactory factory, Set<String> questionSentence) {
+    private void runFactory(QuestionFactory factory, Set<String> questionSentence) {
         Sentence sentence1 = factory.getQuestionList();
         Set<Question> questions = sentence1.getQuestionList();
 

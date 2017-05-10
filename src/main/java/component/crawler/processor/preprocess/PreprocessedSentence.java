@@ -12,7 +12,7 @@ public class PreprocessedSentence {
     private List<String> tokenList;
     private Map<String, Integer> wordCountMap;
 
-    public PreprocessedSentence(String sentence){
+    PreprocessedSentence(String sentence){
         this.originalSentence = sentence;
     }
 

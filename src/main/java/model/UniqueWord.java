@@ -15,6 +15,11 @@ public class UniqueWord {
         this.word = word;
     }
 
+    public UniqueWord(String word, Set<String> documentSet) {
+        this.word = word;
+        this.documentSet = documentSet;
+    }
+
     //getter - setter
     public String getWord() {
         return word;
