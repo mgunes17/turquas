@@ -6,6 +6,10 @@ package component.crawler.page;
 public class FilePage extends Page {
     private String filePath;
 
+    public FilePage(String filePath){
+        this.filePath = filePath;
+    }
+
     public String getAddressName() {
         return filePath;
     }
