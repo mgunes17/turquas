@@ -1,12 +1,17 @@
 package command.w2v_creator_command;
 
+import admin.W2VCreatorAdmin;
 import command.AbstractCommand;
 import command.Command;
 import db.dao.SentenceDAO;
 import db.dao.W2VTokenDAO;
 import model.Sentence;
 import model.W2VToken;
+import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
 import org.antlr.v4.runtime.Token;
+import zemberek.morphology.analysis.SentenceAnalysis;
+import zemberek.morphology.analysis.WordAnalysis;
+import zemberek.morphology.analysis.tr.TurkishSentenceAnalyzer;
 import zemberek.tokenization.TurkishTokenizer;
 
 import java.io.FileNotFoundException;
@@ -22,6 +27,7 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
     private Map<String, List<String>> convertedSentences = new HashMap<String, List<String>>();
     private List<Sentence> sentences = new ArrayList<Sentence>();
     TurkishTokenizer tokenizer = TurkishTokenizer.DEFAULT;
+    private TurkishSentenceAnalyzer analyzer = ZemberekSentenceAnalyzer.getSentenceAnalyzer();
 
 
     public boolean execute(String[] parameter) {
@@ -30,13 +36,7 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
         }
 
         W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
-       // sentences = new SentenceDAO().getAllSentences();
-
-        Sentence sentence = new Sentence("adres adı amacı");
-        Set<String> questionss = new HashSet<String>();
-        questionss.add("adres adı amacı");
-        sentence.setQuestions(questionss);
-        sentences.add(sentence);
+        sentences = new SentenceDAO().getAllSentences();
 
         //convertedSentences' ı oluşturur
         if(parameter[1].equals("stem")) {
@@ -91,7 +91,7 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
             }
         }
 
-        for(int i = 0; i < wordValues.size(); i++) {
+        for(int i = 0; i < W2VCreatorAdmin.w2vParameterMap.get("layer_size"); i++) {
             float sum = 0.0f;
 
             for(List<Float> xx: wordValues) {
@@ -101,12 +101,34 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
             values.add(sum / wordValues.size());
         }
 
-
         return values;
     }
 
     public void prepareByStem() {
+        for(Sentence sentence: sentences) {
+            String sentenceWord = rebuildSentenceByStem(sentence.getOriginalSentence());
+            List<String> questions = new ArrayList<String>();
 
+            for (String question : sentence.getQuestions()) {
+                questions.add(rebuildSentenceByStem(question));
+            }
+
+            convertedSentences.put(sentenceWord, questions);
+        }
+    }
+
+    public String rebuildSentenceByStem(String sentence) {
+        SentenceAnalysis analysis = analyzer.analyze(sentence);
+        analyzer.disambiguate(analysis);
+
+        StringBuilder newSentence = new StringBuilder();
+
+        for (SentenceAnalysis.Entry entry : analysis) {
+            WordAnalysis wordAnalysis = entry.parses.get(0);
+            newSentence.append(wordAnalysis.dictionaryItem.lemma + " ");
+        }
+
+        return newSentence.toString();
     }
 
     public void prepareByLetter() {

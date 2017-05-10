@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static javafx.scene.input.KeyCode.H;
-
 /**
  * Created by mustafa on 23.04.2017.
  */
