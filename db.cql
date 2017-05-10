@@ -19,14 +19,15 @@ CREATE TABLE unique_word (
 );
 
 CREATE TABLE token_morph_analysis (
-    isanalysisnull boolean,
+    is_analysis_null boolean,
     token_name text,
     analysis set<text>,
-    PRIMARY KEY (isanalysisnull, token_name)
+    PRIMARY KEY (is_analysis_null, token_name)
 );
 
 CREATE TABLE sentence (
     original_sentence text PRIMARY KEY,
+    source_name text,
     questions set<text>,
     stemmed_words_list list<text>,
     tags set<text>,

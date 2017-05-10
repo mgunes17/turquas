@@ -15,7 +15,7 @@ public class TokenDAO {
     private Session session;
 
     public Set<Token> getUnlabeledToken(int count) {
-        String query = "SELECT token_name FROM token_morph_analysis WHERE isanalysisnull = true LIMIT " + count;
+        String query = "SELECT token_name FROM token_morph_analysis WHERE is_analysis_null = true LIMIT " + count;
         session = ConnectionConfiguration.getCLuster().connect("turquas");
         ResultSet result = session.execute(query);
         Set<Token> tokenSet = new HashSet<Token>();
@@ -73,12 +73,12 @@ public class TokenDAO {
 
     public void prepareForInsert(){
         preparedStatement = session.prepare(
-                "INSERT INTO token_morph_analysis (isanalysisnull, token_name, analysis) values (false, ?, ?)");
+                "INSERT INTO token_morph_analysis (is_analysis_null, token_name, analysis) values (false, ?, ?)");
     }
 
     public void prepareForDelete(){
         preparedStatement = session.prepare(
-                "DELETE FROM token_morph_analysis WHERE isanalysisnull = true and token_name = ?");
+                "DELETE FROM token_morph_analysis WHERE is_analysis_null = true and token_name = ?");
     }
 
 }
