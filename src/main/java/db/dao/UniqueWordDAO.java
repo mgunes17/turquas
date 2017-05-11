@@ -40,16 +40,17 @@ public class UniqueWordDAO {
 
     public boolean update(Set<UniqueWord> uniqueWordSet) {
         try{
-            BatchStatement batch = new BatchStatement();
-            prepareForUpdate();
             session = ConnectionConfiguration.getCLuster().connect("turquas");
+            //BatchStatement batch = new BatchStatement();
+            prepareForUpdate();
 
             for(UniqueWord uniqueWord: uniqueWordSet){
                 BoundStatement bound = preparedStatement.bind(uniqueWord.getValueMap(), uniqueWord.getWord());
-                batch.add(bound);
+                //batch.add(bound);
+                session.execute(bound);
             }
 
-            session.execute(batch);
+            //session.execute(batch);
             session.close();
         } catch(Exception ex){
             System.out.println(ex.getMessage());
@@ -62,15 +63,16 @@ public class UniqueWordDAO {
     public boolean updateSources(Set<UniqueWord> uniqueWordSet) {
         try{
             session = ConnectionConfiguration.getCLuster().connect("turquas");
-            BatchStatement batch = new BatchStatement();
+            //BatchStatement batch = new BatchStatement();
             prepareForSourceUpdate();
 
             for(UniqueWord uniqueWord: uniqueWordSet){
                 BoundStatement bound = preparedStatement.bind(uniqueWord.getDocumentSet(), uniqueWord.getWord());
-                batch.add(bound);
+                //batch.add(bound);
+                session.execute(bound);
             }
 
-            session.execute(batch);
+            //session.execute(batch);
             session.close();
         } catch(Exception ex){
             System.out.println(ex.getMessage());
