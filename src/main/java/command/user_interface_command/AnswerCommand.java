@@ -9,7 +9,9 @@ import model.QuestionForCompare;
 import model.SimilarityValue;
 import w2v_operation.vector_operation.VectorType;
 import w2v_operation.word_operation.WordType;
+import zemberek.langid.LanguageIdentifier;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -54,23 +56,27 @@ public class AnswerCommand extends AbstractCommand implements Command {
                     userQuestion.getSimilarityList().add(similarityValue);
                 }
 
-                Collections.sort(userQuestion.getSimilarityList(), new SimilarityComparator());
+                userQuestion.getSimilarityList().sort(new SimilarityComparator());
 
+                int answerShown = 0;
                 for(int i = 0; i < UserInterfaceAdmin.parameterMap.get("max_answer_count"); i++){
-                    System.out.println("DEĞER: " + userQuestion.getSimilarityList().get(i).getValue() +
-                            " CEVAP: " + userQuestion.getSimilarityList().get(i).getQuestionForCompare().getAnswer() +
-                            " SORU: " + userQuestion.getSimilarityList().get(i).getQuestionForCompare().getQuestion());
+                    double value = userQuestion.getSimilarityList().get(i).getValue();
+
+                    if(value > UserInterfaceAdmin.parameterMap.get("threshold") / 100.0) {
+                        System.out.println("DEĞER: " + userQuestion.getSimilarityList().get(i).getValue() +
+                                " CEVAP: " + userQuestion.getSimilarityList().get(i).
+                                getQuestionForCompare().getAnswer() +
+                                " SORU: " + userQuestion.getSimilarityList().get(i).
+                                getQuestionForCompare().getQuestion());
+                        answerShown++;
+                    }
                 }
 
+                if(answerShown == 0){
+                    System.out.println("cevapların benzerlik değerleri threshold " +
+                            "değerinin altında olduğu için hiç bir cevap gösterilemedi.");
+                }
             }
-            /*
-                benzerlik thrsholdun altındaysa bildir
-             */
-
-            /*
-                Kullanıcı sorusunun ve cevap cümlelerinin w2v ye çevrilmesi gerek ya hani
-                sentence ile başlayan komutta ki çevirme işlemlerini ayrı bir sınıfa al ordan erişs
-             */
             System.out.print("answer=>");
             question = in.nextLine();
         }
@@ -78,10 +84,17 @@ public class AnswerCommand extends AbstractCommand implements Command {
         return true;
     }
 
-    private boolean validateQuestion(String question) {
-        //neden geçersiz olduğunu ekrana yazdır
-        //kontroller -> en az 2 kelime, soru kelimesi içermeli(listeyi hazırla), türkçe, ??
-        return true;
+    private boolean validateQuestion(String question){
+        try{
+            LanguageIdentifier languageIdentifier = LanguageIdentifier.fromInternalModelGroup("tr_group");
+            String[] words = question.split(" ");
+
+            return words.length >= 2 && languageIdentifier.identify(question).equals("tr");
+        } catch(IOException ex){
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+            return false;
+        }
     }
 
     protected boolean validateParameter(String[] parameter) {
