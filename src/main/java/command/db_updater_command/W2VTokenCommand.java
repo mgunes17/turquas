@@ -68,10 +68,10 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
                 w2VToken.setStem(isStem);
                 w2VToken.setTokenName(parsedLine[0]);
 
-                List<Float> w2vValues = new ArrayList<Float>();
+                List<Double> w2vValues = new ArrayList<Double>();
 
                 for(int i = 1; i < parsedLine.length; i++) {
-                    w2vValues.add(Float.parseFloat(parsedLine[i]));
+                    w2vValues.add(Double.parseDouble(parsedLine[i]));
                 }
                 w2VToken.setValue(w2vValues);
                 w2VTokenList.add(w2VToken);

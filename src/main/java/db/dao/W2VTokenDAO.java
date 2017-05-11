@@ -56,7 +56,7 @@ public class W2VTokenDAO {
         ResultSet result = session.execute(query);
 
         for(Row row: result) {
-            w2VTokens.put(row.getString(0), new W2VToken(row.getString(0), row.getList(1, Float.class)));
+            w2VTokens.put(row.getString(0), new W2VToken(row.getString(0), row.getList(1, Double.class)));
         }
 
         return w2VTokens;

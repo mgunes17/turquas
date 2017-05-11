@@ -8,13 +8,13 @@ import java.util.List;
 public class W2VToken {
     private String tokenName;
     private boolean isStem;
-    private List<Float> value;
+    private List<Double> value;
 
     public W2VToken() {
         //non - args
     }
 
-    public W2VToken(String tokenName, List<Float> value) {
+    public W2VToken(String tokenName, List<Double> value) {
         this.tokenName = tokenName;
         this.value = value;
     }
@@ -36,11 +36,11 @@ public class W2VToken {
         isStem = stem;
     }
 
-    public List<Float> getValue() {
+    public List<Double> getValue() {
         return value;
     }
 
-    public void setValue(List<Float> value) {
+    public void setValue(List<Double> value) {
         this.value = value;
     }
 }

@@ -1,8 +1,15 @@
 package command.user_interface_command;
 
+import admin.UserInterfaceAdmin;
 import command.AbstractCommand;
 import command.Command;
+import component.user_interface.candidate.FindingCandidate;
+import model.QuestionForCompare;
+import model.Sentence;
+import w2v_operation.vector_operation.VectorType;
+import w2v_operation.word_operation.WordType;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -16,42 +23,40 @@ public class AnswerCommand extends AbstractCommand implements Command {
 
         Scanner in = new Scanner(System.in);
         System.out.print("answer=>");
-        String sentence = in.nextLine();
+        String question = in.nextLine();
 
-        while(!sentence.equals("change")) {
-            // burda cevap ara !!!
-            /*
-                soru kontrolü
-                en az 2 kelime
-                soru kelimelerini içeren bir listen olsun
-                soru kelimesi kullanmak zorunda
-                soru türkçe olmak zorunda
-                sorunun neden geçersiz olduğunu söylemeslisin
-             */
+        while(!question.equals("change")) {
+            if(validateQuestion(question)) { //girdi cevaplanabilir bir soru ise
+                List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question);
 
+                WordType wordType = UserInterfaceAdmin.wordTypeMap.get(UserInterfaceAdmin.wordType);
+                wordType.prepareQuestionList(candidateList);
+
+                VectorType vectorType = UserInterfaceAdmin.vectorTypeMap.get(UserInterfaceAdmin.vectorType);
+                //vectorType
+                //candidateListi StemBy ya da LetterByAy yolla
+                //NearBy ya da AverageBy a yolla
+                //sırala ilk N cevabıu göster
+            }
             /*
                 benzerlik thrsholdun altındaysa bildir
              */
-            /*
-                parametreler
-                threshold yüzde değeri
-                gösterilecek max cevap sayısı
-                kullanılacak benzerlik algoritması
-                w2v ye çevrilme tipi (near, average) kelime nasıl alınacak
-             */
+
             /*
                 Kullanıcı sorusunun ve cevap cümlelerinin w2v ye çevrilmesi gerek ya hani
                 sentence ile başlayan komutta ki çevirme işlemlerini ayrı bir sınıfa al ordan erişs
              */
-            /*
-                önce tüm soru cümlelerinden benzerlik ara ama ileride
-                ilgili dokümanların getirilmesi gerek ona bir information retrieval ayarı gerek
-             */
             System.out.print("answer=>");
-            sentence = in.nextLine();
+            question = in.nextLine();
         }
 
         return true;
+    }
+
+    private boolean validateQuestion(String question) {
+        //neden geçersiz olduğunu ekrana yazdır
+        //kontroller -> en az 2 kelime, soru kelimesi içermeli(listeyi hazırla), türkçe, ??
+        return false;
     }
 
     protected boolean validateParameter(String[] parameter) {

@@ -6,6 +6,8 @@ import command.CommandSet;
 import command.turquas_command.TurquasGetNSCommand;
 import command.turquas_command.TurquasHelpCommand;
 import command.turquas_command.TurquasSetNSCommand;
+import db.dao.W2VTokenDAO;
+import model.W2VToken;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,5 +59,11 @@ public class Turquas {
             } else
                 next = false;
         }
+    }
+
+    public static Map<String, W2VToken> getW2VToken(String type) { //stem ya da letter
+        W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
+        Map<String, W2VToken> w2VTokens = w2VTokenDAO.getTokens(type.equals("stem"));
+        return w2VTokens;
     }
 }

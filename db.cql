@@ -1,7 +1,7 @@
 CREATE TABLE W2V_TOKEN (
     token_name text,
     is_stem boolean,
-    value list<float>,
+    value list<double>,
     primary key(is_stem, token_name)
 );
 

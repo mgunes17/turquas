@@ -1,6 +1,7 @@
 package w2v_operation.word_operation;
 
 import db.dao.SentenceDAO;
+import model.QuestionForCompare;
 import model.Sentence;
 
 import java.util.List;
@@ -13,12 +14,11 @@ public abstract class WordType {
     private List<Sentence> sentences;
 
     public abstract void prepareWord(Map<String, List<String>> convertedSentences);
+    public abstract void prepareQuestionList(List<QuestionForCompare> questionList);
 
-    public WordType() {
+    List<Sentence> getSentences() {
         sentences = new SentenceDAO().getAllSentences();
-    }
 
-    public List<Sentence> getSentences() {
         return sentences;
     }
 }

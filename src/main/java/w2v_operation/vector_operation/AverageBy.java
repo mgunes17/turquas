@@ -12,14 +12,14 @@ import java.util.Map;
  */
 public class AverageBy implements VectorType {
 
-    public void prepareVector(Map<String, List<String>> convertedSentences, Map<List<Float>, List<List<Float>>> w2vValues,
+    public void prepareVector(Map<String, List<String>> convertedSentences, Map<List<Double>, List<List<Double>>> w2vValues,
                         Map<String, W2VToken> w2VTokens) {
         for(String sentence: convertedSentences.keySet()) { //her bir cümle için
-            List<Float> sentenceValue = findAverageValue(sentence, w2VTokens);
-            List<List<Float>> questionsValues = new ArrayList<List<Float>>();
+            List<Double> sentenceValue = findAverageValue(sentence, w2VTokens);
+            List<List<Double>> questionsValues = new ArrayList<List<Double>>();
 
             for(String question: convertedSentences.get(sentence)) { // her bir soru için
-                List<Float> value = findAverageValue(question, w2VTokens);
+                List<Double> value = findAverageValue(question, w2VTokens);
                 questionsValues.add(value);
             }
 
@@ -27,10 +27,10 @@ public class AverageBy implements VectorType {
         }
     }
 
-    protected List<Float> findAverageValue(String sentence, Map<String, W2VToken> w2VTokens) {
-        List<Float> values = new ArrayList<Float>();
+    protected List<Double> findAverageValue(String sentence, Map<String, W2VToken> w2VTokens) {
+        List<Double> values = new ArrayList<Double>();
         String[] words = sentence.split(" ");
-        List<List<Float>> wordValues = new ArrayList<List<Float>>();
+        List<List<Double>> wordValues = new ArrayList<List<Double>>();
 
         for(String word : words) {
             if (w2VTokens.containsKey(word)) {
@@ -39,9 +39,9 @@ public class AverageBy implements VectorType {
         }
 
         for(int i = 0; i < W2VCreatorAdmin.w2vParameterMap.get("layer_size"); i++) {
-            float sum = 0.0f;
+            Double sum = 0.0d;
 
-            for(List<Float> xx: wordValues) {
+            for(List<Double> xx: wordValues) {
                 sum += xx.get(i);
             }
 

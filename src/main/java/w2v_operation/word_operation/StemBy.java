@@ -1,5 +1,6 @@
 package w2v_operation.word_operation;
 
+import model.QuestionForCompare;
 import model.Sentence;
 import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
 import zemberek.morphology.analysis.SentenceAnalysis;
@@ -30,6 +31,13 @@ public class StemBy extends WordType {
             }
 
             convertedSentences.put(sentenceWord, questions);
+        }
+    }
+
+    public void prepareQuestionList(List<QuestionForCompare> questionList) {
+        for (QuestionForCompare question : questionList) {
+            String question1 = rebuildSentenceByStem(question.getQuestion());
+            question.setQuestion(question1);
         }
     }
 

@@ -1,5 +1,7 @@
 package w2v_operation.word_operation;
 
+import component.question_generator.word.Question;
+import model.QuestionForCompare;
 import model.Sentence;
 import org.antlr.v4.runtime.Token;
 import zemberek.tokenization.TurkishTokenizer;
@@ -32,13 +34,20 @@ public class LetterBy extends WordType {
         }
     }
 
+    public void prepareQuestionList(List<QuestionForCompare> questionList) {
+        for (QuestionForCompare question : questionList) {
+            String question1 = rebuildSentenceByLetter(question.getQuestion());
+            question.setQuestion(question1);
+        }
+    }
+
     private String rebuildSentenceByLetter(String sentence) {
         Iterator<Token> tokenIterator = tokenizer.getTokenIterator(sentence);
         StringBuilder newSentence = new StringBuilder();
 
         while (tokenIterator.hasNext()) {
             Token token = tokenIterator.next();
-            newSentence.append(getFirst5Letter(token.getText()) + " ");
+            newSentence.append(getFirst5Letter(token.getText())).append(" ");
         }
 
         return newSentence.toString();
