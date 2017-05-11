@@ -1,7 +1,5 @@
 package w2v_operation.vector_operation;
 
-import model.W2VToken;
-
 import java.util.List;
 import java.util.Map;
 

@@ -2,9 +2,7 @@ package command.w2v_creator_command;
 
 import command.AbstractCommand;
 import command.Command;
-import db.dao.W2VTokenDAO;
 import file_operation.W2V4Sentence;
-import model.W2VToken;
 import w2v_operation.vector_operation.AverageBy;
 import w2v_operation.vector_operation.NearBy;
 import w2v_operation.vector_operation.VectorType;
