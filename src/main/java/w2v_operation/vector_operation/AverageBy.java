@@ -1,6 +1,7 @@
 package w2v_operation.vector_operation;
 
 import admin.W2VCreatorAdmin;
+import home_base.Turquas;
 import model.W2VToken;
 
 import java.util.ArrayList;
@@ -13,13 +14,13 @@ import java.util.Map;
 public class AverageBy implements VectorType {
 
     public void prepareVector(Map<String, List<String>> convertedSentences, Map<List<Double>, List<List<Double>>> w2vValues,
-                        Map<String, W2VToken> w2VTokens) {
+                        String tokenType) {
         for(String sentence: convertedSentences.keySet()) { //her bir cümle için
-            List<Double> sentenceValue = findAverageValue(sentence, w2VTokens);
+            List<Double> sentenceValue = findAverageValue(sentence, tokenType);
             List<List<Double>> questionsValues = new ArrayList<List<Double>>();
 
             for(String question: convertedSentences.get(sentence)) { // her bir soru için
-                List<Double> value = findAverageValue(question, w2VTokens);
+                List<Double> value = findAverageValue(question, tokenType);
                 questionsValues.add(value);
             }
 
@@ -27,10 +28,11 @@ public class AverageBy implements VectorType {
         }
     }
 
-    protected List<Double> findAverageValue(String sentence, Map<String, W2VToken> w2VTokens) {
+    protected List<Double> findAverageValue(String sentence, String tokenType) {
         List<Double> values = new ArrayList<Double>();
         String[] words = sentence.split(" ");
         List<List<Double>> wordValues = new ArrayList<List<Double>>();
+        Map<String, W2VToken> w2VTokens = Turquas.getW2VToken(tokenType);
 
         for(String word : words) {
             if (w2VTokens.containsKey(word)) {

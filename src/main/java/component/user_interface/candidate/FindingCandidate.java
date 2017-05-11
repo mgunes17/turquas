@@ -1,9 +1,7 @@
 package component.user_interface.candidate;
 
 import db.dao.CandidateDAO;
-import db.dao.SentenceDAO;
 import model.QuestionForCompare;
-import model.Sentence;
 
 import java.util.ArrayList;
 import java.util.List;

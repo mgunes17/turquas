@@ -1,6 +1,5 @@
 package w2v_operation.word_operation;
 
-import component.question_generator.word.Question;
 import model.QuestionForCompare;
 import model.Sentence;
 import org.antlr.v4.runtime.Token;

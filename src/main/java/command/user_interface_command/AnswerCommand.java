@@ -5,7 +5,6 @@ import command.AbstractCommand;
 import command.Command;
 import component.user_interface.candidate.FindingCandidate;
 import model.QuestionForCompare;
-import model.Sentence;
 import w2v_operation.vector_operation.VectorType;
 import w2v_operation.word_operation.WordType;
 
