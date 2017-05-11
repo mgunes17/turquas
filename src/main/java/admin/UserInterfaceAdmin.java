@@ -1,6 +1,8 @@
 package admin;
 
 import command.CommandSet;
+import component.user_interface.similarity.CosineSimilarity;
+import component.user_interface.similarity.SimilarityType;
 import w2v_operation.vector_operation.AverageBy;
 import w2v_operation.vector_operation.NearBy;
 import w2v_operation.vector_operation.VectorType;
@@ -17,8 +19,11 @@ import java.util.Map;
 public class UserInterfaceAdmin extends Admin {
     public static Map<String, WordType> wordTypeMap;
     public static Map<String, VectorType> vectorTypeMap;
+    public static Map<String, SimilarityType> similarityMap;
+    public static Map<String, Integer> parameterMap;
     public static String vectorType;
     public static String wordType;
+    public static String similarityType;
 
     static {
         wordTypeMap = new HashMap<String, WordType>();
@@ -30,6 +35,13 @@ public class UserInterfaceAdmin extends Admin {
         vectorTypeMap.put("near", new NearBy());
         vectorTypeMap.put("average", new AverageBy());
         vectorType = "average";
+
+        similarityMap = new HashMap<>();
+        similarityMap.put("cosine", new CosineSimilarity());
+        similarityType = "cosine";
+
+        parameterMap = new HashMap<>();
+        parameterMap.put("max_answer_count", 10);
     }
 
     public UserInterfaceAdmin(CommandSet commandSet) {

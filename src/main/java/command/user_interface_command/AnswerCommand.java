@@ -4,10 +4,14 @@ import admin.UserInterfaceAdmin;
 import command.AbstractCommand;
 import command.Command;
 import component.user_interface.candidate.FindingCandidate;
+import component.user_interface.similarity.SimilarityType;
 import model.QuestionForCompare;
+import model.SimilarityValue;
 import w2v_operation.vector_operation.VectorType;
 import w2v_operation.word_operation.WordType;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,16 +30,38 @@ public class AnswerCommand extends AbstractCommand implements Command {
 
         while(!question.equals("change")) {
             if(validateQuestion(question)) { //girdi cevaplanabilir bir soru ise
+                QuestionForCompare userQuestion = new QuestionForCompare();
+                userQuestion.setQuestion(question);
+
                 List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question);
+                candidateList.add(0, userQuestion);
 
                 WordType wordType = UserInterfaceAdmin.wordTypeMap.get(UserInterfaceAdmin.wordType);
                 wordType.prepareQuestionList(candidateList);
 
                 VectorType vectorType = UserInterfaceAdmin.vectorTypeMap.get(UserInterfaceAdmin.vectorType);
-                //vectorType
-                //candidateListi StemBy ya da LetterByAy yolla
-                //NearBy ya da AverageBy a yolla
-                //sırala ilk N cevabıu göster
+                vectorType.prepareQuestionVector(candidateList, UserInterfaceAdmin.wordType);
+
+                SimilarityType similarityType = UserInterfaceAdmin.similarityMap.get(UserInterfaceAdmin.similarityType);
+
+                int size = candidateList.size();
+                for(int i = 1; i < size; i++){ // 0, kullanıcı sorusunun kendisi
+                    double value = similarityType.findSimilarity(userQuestion.getVector(),
+                                                                 candidateList.get(i).getVector());
+                    SimilarityValue similarityValue = new SimilarityValue();
+                    similarityValue.setQuestionForCompare(candidateList.get(i));
+                    similarityValue.setValue(value);
+                    userQuestion.getSimilarityList().add(similarityValue);
+                }
+
+                Collections.sort(userQuestion.getSimilarityList(), new SimilarityComparator());
+
+                for(int i = 0; i < UserInterfaceAdmin.parameterMap.get("max_answer_count"); i++){
+                    System.out.println("DEĞER: " + userQuestion.getSimilarityList().get(i).getValue() +
+                            " CEVAP: " + userQuestion.getSimilarityList().get(i).getQuestionForCompare().getAnswer() +
+                            " SORU: " + userQuestion.getSimilarityList().get(i).getQuestionForCompare().getQuestion());
+                }
+
             }
             /*
                 benzerlik thrsholdun altındaysa bildir
@@ -55,10 +81,16 @@ public class AnswerCommand extends AbstractCommand implements Command {
     private boolean validateQuestion(String question) {
         //neden geçersiz olduğunu ekrana yazdır
         //kontroller -> en az 2 kelime, soru kelimesi içermeli(listeyi hazırla), türkçe, ??
-        return false;
+        return true;
     }
 
     protected boolean validateParameter(String[] parameter) {
         return parameter.length == 1;
+    }
+
+    public static class SimilarityComparator implements Comparator<SimilarityValue>{
+        public int compare(SimilarityValue s1, SimilarityValue s2){
+            return s1.compareTo(s2);
+        }
     }
 }

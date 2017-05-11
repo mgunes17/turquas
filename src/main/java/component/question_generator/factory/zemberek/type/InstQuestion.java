@@ -24,7 +24,7 @@ public class InstQuestion implements QuestionType {
         StringBuilder answer = new StringBuilder();
 
         int size = wordList.size();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size - 1; i++) {
             Word word = wordList.get(i);
 
             if(!word.isInstQuestion()) {
