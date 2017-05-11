@@ -26,10 +26,11 @@ CREATE TABLE token_morph_analysis (
 );
 
 CREATE TABLE sentence (
-    original_sentence text PRIMARY KEY,
+    original_sentence text,
     source_name text,
     questions set<text>,
     stemmed_words_list list<text>,
     tags set<text>,
-    token_list list<text>
+    token_list list<text>,
+    PRIMARY KEY (source_name, original_sentence)
 );
