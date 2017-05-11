@@ -33,6 +33,7 @@ public class SaveCommand extends AbstractCommand implements Command {
 
             if(sentence.getQuestions().size() == 0) { //soru üret
                 newSentenceList.add(new Sentence(
+                        sentence.getSourceName(),
                         sentence.getOriginalSentence(),
                         mainGenerator.convertQuestions(sentence.getOriginalSentence()
                         )));

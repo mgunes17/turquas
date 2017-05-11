@@ -20,7 +20,8 @@ public class FindingCandidate {
     public List<QuestionForCompare> findCandidateList(String userQuestion) {
         //soruyu işle, etiket gerekirse bul, tokenlara ayır vs
         //önce ilgili dokümanlar, sonra ilgili cümleler (cümleler nasıl etiketlenebilir?)
-        List<Sentence> sentenceList = candidateDAO.getSentences();
+        String[] words = userQuestion.split(" ");
+        List<Sentence> sentenceList = candidateDAO.getSentences(words);
 
         return createQuestionForCompares(sentenceList); // sentence ve source işlemleri ortak olarak candidate daoda olacak
     }

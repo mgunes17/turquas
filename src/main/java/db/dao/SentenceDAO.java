@@ -27,12 +27,12 @@ public class SentenceDAO {
 
     public List<Sentence> readForGenerateQuestions(int count) {
         List<Sentence> sentenceList = new ArrayList<Sentence>();
-        String query = "SELECT original_sentence, questions FROM sentence;";
+        String query = "SELECT source_name, original_sentence, questions FROM sentence;";
         session = ConnectionConfiguration.getCLuster().connect("turquas");
         ResultSet result = session.execute(query);
 
         for(Row row: result) {
-            sentenceList.add(new Sentence(row.get(0, String.class), row.getSet(1, String.class)));
+            sentenceList.add(new Sentence(row.getString(0), row.get(1, String.class), row.getSet(2, String.class)));
         }
 
         session.close();
@@ -84,7 +84,7 @@ public class SentenceDAO {
             prepareForQuestionUpdate();
 
             for(Sentence sentence: sentenceList) {
-                BoundStatement bound = preparedStatement.bind(sentence.getQuestions(), sentence.getOriginalSentence());
+                BoundStatement bound = preparedStatement.bind(sentence.getQuestions(), sentence.getSourceName(), sentence.getOriginalSentence());
                 batch.add(bound);
             }
             session.execute(batch);
@@ -92,6 +92,7 @@ public class SentenceDAO {
             session.close();
             return true;
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.out.println(ex.getMessage());
             return false;
         }
@@ -148,7 +149,7 @@ public class SentenceDAO {
     private void prepareForQuestionUpdate(){
         preparedStatement = session.prepare("UPDATE " + tableName +" " +
                 "SET questions= ?" +
-                "WHERE original_sentence=?");
+                "WHERE source_name = ? and original_sentence=?");
     }
 
     private void prepareForDelete(){

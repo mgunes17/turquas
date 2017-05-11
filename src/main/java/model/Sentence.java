@@ -18,10 +18,17 @@ public class Sentence {
         this.originalSentence = sentence;
     }
 
+    public Sentence(String sourceName, String sentence, Set<String> questions){
+        this.sourceName = sourceName;
+        this.originalSentence = sentence;
+        this.questions = questions;
+    }
+
     public Sentence(String sentence, Set<String> questions){
         this.originalSentence = sentence;
         this.questions = questions;
     }
+
 
     public Sentence(String sentence, Set<String> questions, List<String> stemmedWordsList){
         this.originalSentence = sentence;

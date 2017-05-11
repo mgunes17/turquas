@@ -49,7 +49,7 @@ public class SourceDAO {
             session.execute(bound);
             logger.info("SourceDAO insert başarıyla tamamlandı.");
         } catch(Exception ex){
-            logger.warn("SourceDAO insert hata verdi.");
+            ex.printStackTrace();
         }
     }
 
