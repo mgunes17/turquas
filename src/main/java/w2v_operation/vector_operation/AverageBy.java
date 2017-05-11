@@ -2,6 +2,7 @@ package w2v_operation.vector_operation;
 
 import admin.W2VCreatorAdmin;
 import home_base.Turquas;
+import model.QuestionForCompare;
 import model.W2VToken;
 
 import java.util.ArrayList;
@@ -25,6 +26,15 @@ public class AverageBy implements VectorType {
             }
 
             w2vValues.put(sentenceValue, questionsValues);
+        }
+    }
+
+    @Override
+    public void prepareQuestionVector(List<QuestionForCompare> questionList, String tokenType) {
+        for (QuestionForCompare question : questionList) {
+            List<Double> vectorList = findAverageValue(question.getQuestion(), tokenType);
+            double[] vector = vectorList.stream().mapToDouble(Double::doubleValue).toArray();
+            question.setVector(vector);
         }
     }
 
