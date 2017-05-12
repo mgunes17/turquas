@@ -35,15 +35,28 @@ public class AnswerCommand extends AbstractCommand implements Command {
                 QuestionForCompare userQuestion = new QuestionForCompare();
                 userQuestion.setQuestion(question);
 
+                long start_time = System.nanoTime();
                 List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question);
                 candidateList.add(0, userQuestion);
 
+                long end_time = System.nanoTime();
+                double difference = (end_time - start_time)/1e6;
+
+                System.out.println("candidate çekilmesi:" + difference);
+
+                start_time = System.nanoTime();
                 WordType wordType = UserInterfaceAdmin.wordTypeMap.get(UserInterfaceAdmin.wordType);
                 wordType.prepareQuestionList(candidateList);
 
                 VectorType vectorType = UserInterfaceAdmin.vectorTypeMap.get(UserInterfaceAdmin.vectorType);
                 vectorType.prepareQuestionVector(candidateList, UserInterfaceAdmin.wordType);
 
+                end_time = System.nanoTime();
+                difference = (end_time - start_time)/1e6;
+                System.out.println("word + vector çekilmesi:" + difference);
+
+
+                start_time = System.nanoTime();
                 SimilarityType similarityType = UserInterfaceAdmin.similarityMap.get(UserInterfaceAdmin.similarityType);
 
                 int size = candidateList.size();
@@ -58,6 +71,7 @@ public class AnswerCommand extends AbstractCommand implements Command {
 
                 userQuestion.getSimilarityList().sort(new SimilarityComparator());
 
+                System.out.println(userQuestion.getQuestion());
                 int answerShown = 0;
                 for(int i = 0; i < UserInterfaceAdmin.parameterMap.get("max_answer_count"); i++){
                     double value = userQuestion.getSimilarityList().get(i).getValue();
@@ -71,6 +85,10 @@ public class AnswerCommand extends AbstractCommand implements Command {
                         answerShown++;
                     }
                 }
+
+                end_time = System.nanoTime();
+                difference = (end_time - start_time)/1e6;
+                System.out.println("benzerlik hesabı:" + difference);
 
                 if(answerShown == 0){
                     System.out.println("cevapların benzerlik değerleri threshold " +

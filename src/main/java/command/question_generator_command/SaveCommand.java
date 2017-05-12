@@ -29,20 +29,22 @@ public class SaveCommand extends AbstractCommand implements Command {
 
         //bir cümle seti için factory 1 kere verilsin
         for(int i = 0; i < recordCount; i++) {
-            Sentence sentence = sentenceList.get(i);
+            if(sentenceList.size() > i){ // düzeltilecek
+                Sentence sentence = sentenceList.get(i);
 
-            if(sentence.getQuestions().size() == 0) { //soru üret
-                newSentenceList.add(new Sentence(
-                        sentence.getSourceName(),
-                        sentence.getOriginalSentence(),
-                        mainGenerator.convertQuestions(sentence.getOriginalSentence()
-                        )));
-            }
+                if(sentence.getQuestions().size() == 0) { //soru üret
+                    newSentenceList.add(new Sentence(
+                            sentence.getSourceName(),
+                            sentence.getOriginalSentence(),
+                            mainGenerator.convertQuestions(sentence.getOriginalSentence()
+                            )));
+                }
 
-            if(i % sessionSize == 0){
-                System.out.println("Seans başlıyor... " + i);
-                dao.updateQuestions(newSentenceList);
-                System.out.println("Seans bitti... " + i);
+                if(i % sessionSize == 0){
+                    System.out.println("Seans başlıyor... " + i);
+                    dao.updateQuestions(newSentenceList);
+                    System.out.println("Seans bitti... " + i);
+                }
             }
         }
 
