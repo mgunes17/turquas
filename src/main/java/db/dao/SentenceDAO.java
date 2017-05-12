@@ -80,14 +80,14 @@ public class SentenceDAO {
     public boolean updateQuestions(List<Sentence> sentenceList){
         try {
             session = ConnectionConfiguration.getCLuster().connect("turquas");
-            BatchStatement batch = new BatchStatement();
+            //BatchStatement batch = new BatchStatement();
             prepareForQuestionUpdate();
 
             for(Sentence sentence: sentenceList) {
                 BoundStatement bound = preparedStatement.bind(sentence.getQuestions(), sentence.getSourceName(), sentence.getOriginalSentence());
-                batch.add(bound);
+                session.execute(bound);
             }
-            session.execute(batch);
+
             System.out.println(("SentenceDAO insertBatch başarıyla tamamlandı."));
             session.close();
             return true;
@@ -114,17 +114,16 @@ public class SentenceDAO {
     public void insertBatch(List<Sentence> sentenceList){
         try{
             session = ConnectionConfiguration.getCLuster().connect("turquas");
-            BatchStatement batch = new BatchStatement();
+            //BatchStatement batch = new BatchStatement();
             prepareForInsert();
 
             for(Sentence sentence: sentenceList){
                 BoundStatement bound = preparedStatement.bind(sentence.getOriginalSentence(), sentence.getSourceName(),
                         sentence.getQuestions(), sentence.getStemmedWordsList(), sentence.getTags(),
                         sentence.getTokenList());
-                batch.add(bound);
+                session.execute(bound);
             }
 
-            session.execute(batch);
             logger.info("SentenceDAO insertBatch başarıyla tamamlandı.");
         } catch(Exception ex){
             logger.warn("SentenceDAO insertBatch hata verdi.");
