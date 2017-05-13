@@ -9,12 +9,12 @@ import model.*;
  */
 public class MappingManagerConfiguration {
     private static MappingManager manager = null;
-    private Mapper<Question> questionMapper;
-    private Mapper<Sentence> sentenceMapper;
-    private Mapper<Source> sourceMapper;
-    private Mapper<Token> tokenMapper;
-    private Mapper<W2VToken> w2VTokenMapper;
-    private Mapper<UniqueWord> uniqueWordMapper;
+    private static Mapper<Question> questionMapper;
+    private static Mapper<Sentence> sentenceMapper;
+    private static Mapper<Source> sourceMapper;
+    private static Mapper<Token> tokenMapper;
+    private static Mapper<W2VToken> w2VTokenMapper;
+    private static Mapper<UniqueWord> uniqueWordMapper;
     private static MappingManagerConfiguration mappingManagerConfiguration = null;
 
     private MappingManagerConfiguration() {
@@ -34,27 +34,27 @@ public class MappingManagerConfiguration {
         return manager;
     }
 
-    public Mapper<Question> getQuestionMapper() {
+    public static Mapper<Question> getQuestionMapper() {
         return questionMapper;
     }
 
-    public Mapper<Sentence> getSentenceMapper() {
+    public static Mapper<Sentence> getSentenceMapper() {
         return sentenceMapper;
     }
 
-    public Mapper<Source> getSourceMapper() {
+    public static Mapper<Source> getSourceMapper() {
         return sourceMapper;
     }
 
-    public Mapper<Token> getTokenMapper() {
+    public static Mapper<Token> getTokenMapper() {
         return tokenMapper;
     }
 
-    public Mapper<W2VToken> getW2VTokenMapper() {
+    public static Mapper<W2VToken> getW2VTokenMapper() {
         return w2VTokenMapper;
     }
 
-    public Mapper<UniqueWord> getUniqueWordMapper() {
+    public static Mapper<UniqueWord> getUniqueWordMapper() {
         return uniqueWordMapper;
     }
 }

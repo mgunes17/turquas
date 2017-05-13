@@ -1,6 +1,7 @@
 package db.dao;
 
-import com.datastax.driver.core.*;
+import com.datastax.driver.core.BatchStatement;
+import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Result;
 import db.accessor.UniqueWordAccessor;
 import db.configuration.ConnectionConfiguration;

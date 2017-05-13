@@ -4,7 +4,6 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import db.configuration.ConnectionConfiguration;
-import db.configuration.ModelVariables;
 
 /**
  * Created by ercan on 13.05.2017.
