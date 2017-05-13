@@ -1,6 +1,8 @@
 package db.dao;
 
-import com.datastax.driver.core.*;
+import com.datastax.driver.core.BatchStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Result;
 import db.accessor.TokenAccessor;
 import db.configuration.ConnectionConfiguration;
@@ -14,7 +16,6 @@ import java.util.Set;
  * Created by mustafa on 26.04.2017.
  */
 public class TokenDAO {
-    private PreparedStatement preparedStatement;
     private Session session;
     private final static TokenAccessor tokenAccessor = MappingManagerConfiguration
             .getMappingManager()

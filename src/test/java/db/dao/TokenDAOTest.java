@@ -2,7 +2,7 @@ package db.dao;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mustafa on 13.05.2017.

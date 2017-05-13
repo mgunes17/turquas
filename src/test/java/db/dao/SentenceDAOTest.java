@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by ercan on 13.05.2017.
@@ -18,5 +18,4 @@ public class SentenceDAOTest {
 
         assertEquals(250, sentenceList.size());
     }
-
 }

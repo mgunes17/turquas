@@ -17,6 +17,9 @@ public interface UniqueWordAccessor {
     @Query("SELECT * FROM unique_word")
     Result<UniqueWord> getAllWords();
 
+    @Query("SELECT * FROM unique_word")
+    Result<UniqueWord> getOne();
+
     @Query("UPDATE unique_word SET value = ? WHERE word = ?")
     Statement update(Map<String, Double> value, String word);
 

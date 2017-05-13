@@ -1,6 +1,8 @@
 package db.dao;
 
-import com.datastax.driver.core.*;
+import com.datastax.driver.core.BatchStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Result;
 import db.accessor.W2VTokenAccessor;
 import db.configuration.ConnectionConfiguration;
@@ -16,7 +18,6 @@ import java.util.Map;
  */
 public class W2VTokenDAO {
     private Session session;
-    private PreparedStatement preparedStatement;
     private final static W2VTokenAccessor w2VTokenAccessor = MappingManagerConfiguration
             .getMappingManager()
             .createAccessor(W2VTokenAccessor.class);;
