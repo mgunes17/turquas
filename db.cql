@@ -25,11 +25,24 @@ CREATE TABLE token_morph_analysis (
     PRIMARY KEY (is_analysis_null, token_name)
 );
 
-CREATE TABLE sentence (     
-	original_sentence text,     
-	source_name text, questions map<text, frozen <map<text, frozen <vector_values>>>>,     
+CREATE TABLE sentence (
+    source_name text,
+	original_sentence text,
+	questions set<text>,
 	stemmed_words_list list<text>,     
 	tags set<text>,     
 	token_list list<text>,     
 	PRIMARY KEY (source_name, original_sentence)
+);
+
+CREATE TABLE question (
+    source_name text,
+    question text,
+    noun_clause boolean,
+    question_w2v_value_map map<text, frozen <list<double>>>,
+    question_word text,
+    word_type_after_question_word text,
+    answer text,
+    answer_w2v_value_map map<text, frozen <list<double>>>,
+    PRIMARY KEY (source_name, question)
 );

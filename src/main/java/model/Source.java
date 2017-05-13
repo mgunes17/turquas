@@ -1,23 +1,40 @@
 package model;
 
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import com.datastax.driver.mapping.annotations.Column;
+import com.datastax.driver.mapping.annotations.PartitionKey;
+import com.datastax.driver.mapping.annotations.Table;
+import com.datastax.driver.mapping.annotations.Transient;
+import db.configuration.ModelVariables;
+
+import java.util.*;
 
 /**
  * Created by ercan on 09.04.2017.
  */
+@Table(keyspace = ModelVariables.KEYSPACE, name = ModelVariables.SOURCE_TABLE_NAME)
 public class Source {
+    @PartitionKey
+    @Column(name = "source_name")
     private String sourceName;
+
+    @Column(name = "best_words")
     private Set<String> bestWords;
-    private Timestamp lastUpdatedDate;
+
+    @Column(name = "last_updated_date")
+    private Date lastUpdatedDate;
+
+    @Column(name = "word_count_map")
     private Map<String, Integer> wordCountMap;
+
+    @Transient
     private Set<Sentence> sentenceSet;
 
     {
         sentenceSet = new HashSet<Sentence>();
+    }
+
+    public Source(){
+        // non-args
     }
 
     public Source(String sourceName, Map<String, Integer> wordCount){
@@ -61,11 +78,11 @@ public class Source {
         this.bestWords = bestWords;
     }
 
-    public Timestamp getLastUpdatedDate() {
+    public Date getLastUpdatedDate() {
         return lastUpdatedDate;
     }
 
-    public void setLastUpdatedDate(Timestamp lastUpdatedDate) {
+    public void setLastUpdatedDate(Date lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
     }
 
