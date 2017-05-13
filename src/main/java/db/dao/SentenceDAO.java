@@ -1,7 +1,10 @@
 package db.dao;
 
 import com.datastax.driver.core.*;
+import com.datastax.driver.mapping.Result;
+import db.accessor.SentenceAccessor;
 import db.configuration.ConnectionConfiguration;
+import db.configuration.MappingManagerConfiguration;
 import db.configuration.ModelVariables;
 import model.Sentence;
 import org.slf4j.Logger;
@@ -40,12 +43,14 @@ public class SentenceDAO {
 
     public List<Sentence> getAllSentences() {
         List<Sentence> sentenceList = new ArrayList<Sentence>();
-        String query = "select original_sentence, questions, stemmed_words_list from sentence ;";
-        ResultSet result = session.execute(query);
+        //String query = "select original_sentence, questions, stemmed_words_list from sentence ;";
+        SentenceAccessor sentenceAccessor = MappingManagerConfiguration
+                .getMappingManager()
+                .createAccessor(SentenceAccessor.class);
+        Result<Sentence> result = sentenceAccessor.getAll();
 
-        for(Row row: result) {
-            sentenceList.add(new Sentence(
-                    row.get(0, String.class), row.getSet(1, String.class), row.getList(2, String.class)));
+        for(Sentence sentence: result) {
+            sentenceList.add(sentence);
         }
 
         return sentenceList;
