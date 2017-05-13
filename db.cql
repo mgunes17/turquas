@@ -8,7 +8,7 @@ CREATE TABLE W2V_TOKEN (
     value list<double>,
 );
 
-CREATE INDEX is_stem_index ON w2v_token (is_stem);
+CREATE INDEX is_stem_index ON w2v_token (stem);
 
 CREATE TABLE source (
     source_name text PRIMARY KEY,
@@ -29,7 +29,7 @@ CREATE TABLE token_morph_analysis (
     analysis set<text>
 );
 
-CREATE INDEX is_analysis_null_index ON token_morph_analysis (is_analysis_null);
+CREATE INDEX is_analysis_null_index ON token_morph_analysis (analysis_null);
 
 CREATE TABLE sentence (
     source_name text,

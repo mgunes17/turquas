@@ -1,8 +1,10 @@
 package db.dao;
 
 import com.datastax.driver.core.*;
+import com.datastax.driver.mapping.Result;
+import db.accessor.UniqueWordAccessor;
 import db.configuration.ConnectionConfiguration;
-import db.configuration.ModelVariables;
+import db.configuration.MappingManagerConfiguration;
 import model.UniqueWord;
 
 import java.util.HashSet;
@@ -13,24 +15,19 @@ import java.util.Set;
  */
 public class UniqueWordDAO {
     private Session session;
-    private PreparedStatement preparedStatement;
-    private String keyspace;
-    private String tableName;
+    private final static UniqueWordAccessor uniqueWordAccessor = MappingManagerConfiguration
+            .getMappingManager()
+            .createAccessor(UniqueWordAccessor.class);
 
     public UniqueWordDAO(){
-        this.keyspace = ModelVariables.KEYSPACE;
-        this.tableName = ModelVariables.UNIQUE_WORD_TABLE_NAME;
         session = ConnectionConfiguration.getSession();
     }
 
     public Set<UniqueWord> getAllWords() {
-        String query = "SELECT * FROM unique_word";
-        ResultSet result = session.execute(query);
+        Result<UniqueWord> result = uniqueWordAccessor.getAllWords();
         Set<UniqueWord> uniqueWordSet = new HashSet<UniqueWord>();
 
-        for(Row row: result) {
-            UniqueWord uniqueWord = new UniqueWord(row.getString(0));
-            uniqueWord.setDocumentSet(row.getSet(1, String.class));
+        for(UniqueWord uniqueWord: result) {
             uniqueWordSet.add(uniqueWord);
         }
 
@@ -39,16 +36,13 @@ public class UniqueWordDAO {
 
     public boolean update(Set<UniqueWord> uniqueWordSet) {
         try{
-            //BatchStatement batch = new BatchStatement();
-            prepareForUpdate();
+            BatchStatement batch = new BatchStatement();
 
             for(UniqueWord uniqueWord: uniqueWordSet){
-                BoundStatement bound = preparedStatement.bind(uniqueWord.getValueMap(), uniqueWord.getWord());
-                //batch.add(bound);
-                session.execute(bound);
+                batch.add(uniqueWordAccessor.update(uniqueWord.getValueMap(), uniqueWord.getWord()));
             }
 
-            //session.execute(batch);
+            session.execute(batch);
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             return false;
@@ -59,16 +53,13 @@ public class UniqueWordDAO {
 
     public boolean updateSources(Set<UniqueWord> uniqueWordSet) {
         try{
-            //BatchStatement batch = new BatchStatement();
-            prepareForSourceUpdate();
+            BatchStatement batch = new BatchStatement();
 
             for(UniqueWord uniqueWord: uniqueWordSet){
-                BoundStatement bound = preparedStatement.bind(uniqueWord.getDocumentSet(), uniqueWord.getWord());
-                //batch.add(bound);
-                session.execute(bound);
+                batch.add(uniqueWordAccessor.updateSources(uniqueWord.getDocumentSet(), uniqueWord.getWord()));
             }
 
-            //session.execute(batch);
+            session.execute(batch);
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             ex.printStackTrace();
@@ -76,52 +67,5 @@ public class UniqueWordDAO {
         }
 
         return true;
-    }
-
-    public void insert(UniqueWord uniqueWord){
-        try{
-            BoundStatement bound = preparedStatement.bind(
-                    uniqueWord.getWord(), uniqueWord.getDocumentSet());
-            session.execute(bound);
-        } catch(Exception ex){
-        }
-    }
-
-    public void update(UniqueWord uniqueWord){
-        try{
-            BoundStatement bound = preparedStatement.bind(
-                    uniqueWord.getDocumentSet(), uniqueWord.getWord());
-            session.execute(bound);
-        } catch(Exception ex){
-        }
-    }
-
-    public void delete(UniqueWord uniqueWord){
-        try{
-            BoundStatement bound = preparedStatement.bind(uniqueWord.getWord());
-            session.execute(bound);
-        } catch(Exception ex){
-        }
-    }
-
-
-    private void prepareForSourceUpdate(){
-        preparedStatement = session.prepare(
-                "UPDATE unique_word SET source = source + ? WHERE word = ?");
-    }
-
-    private void prepareForUpdate(){
-        preparedStatement = session.prepare(
-                "UPDATE unique_word SET value = ? WHERE word = ?");
-    }
-
-    private void prepareForInsert(){
-        preparedStatement = session.prepare(
-                "INSERT INTO " + tableName + " (word, documents) values (?, ?)");
-    }
-
-    private void prepareForDelete(){
-        preparedStatement = session.prepare(
-                "DELETE FROM " + tableName + " WHERE word=?");
     }
 }

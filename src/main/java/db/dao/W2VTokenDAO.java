@@ -1,7 +1,10 @@
 package db.dao;
 
 import com.datastax.driver.core.*;
+import com.datastax.driver.mapping.Result;
+import db.accessor.W2VTokenAccessor;
 import db.configuration.ConnectionConfiguration;
+import db.configuration.MappingManagerConfiguration;
 import model.W2VToken;
 
 import java.util.HashMap;
@@ -14,6 +17,9 @@ import java.util.Map;
 public class W2VTokenDAO {
     private Session session;
     private PreparedStatement preparedStatement;
+    private final static W2VTokenAccessor w2VTokenAccessor = MappingManagerConfiguration
+            .getMappingManager()
+            .createAccessor(W2VTokenAccessor.class);;
 
     public W2VTokenDAO() {
         session = ConnectionConfiguration.getSession();
@@ -25,14 +31,11 @@ public class W2VTokenDAO {
 
         try{
             BatchStatement batch = new BatchStatement();
-            prepareForInsert();
 
             int count = 0;
             for(W2VToken w2VToken: tokens){
                 count++;
-                BoundStatement bound = preparedStatement.bind(
-                        w2VToken.getTokenName(), w2VToken.isStem(), w2VToken.getValue());
-                batch.add(bound);
+                batch.add(w2VTokenAccessor.updateTable(w2VToken.getTokenName(), w2VToken.isStem(), w2VToken.getValue()));
 
                 if(count % 10 == 0){
                     session.execute(batch);
@@ -52,18 +55,12 @@ public class W2VTokenDAO {
 
     public Map<String, W2VToken> getTokens(boolean isStem) {
         Map<String, W2VToken> w2VTokens = new HashMap<String, W2VToken>();
-        String query = "select token_name, value from w2v_token WHERE is_stem = " + isStem + " ;";
-        ResultSet result = session.execute(query);
+        Result<W2VToken> result = w2VTokenAccessor.getToken(isStem);
 
-        for(Row row: result) {
-            w2VTokens.put(row.getString(0), new W2VToken(row.getString(0), row.getList(1, Double.class)));
+        for(W2VToken w2VToken: result) {
+            w2VTokens.put(w2VToken.getTokenName(), w2VToken);
         }
 
         return w2VTokens;
-    }
-
-    private void prepareForInsert(){
-        preparedStatement = session.prepare(
-                "INSERT INTO w2v_token (token_name, is_stem, value) values (?, ?, ?)");
     }
 }

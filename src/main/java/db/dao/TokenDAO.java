@@ -1,7 +1,10 @@
 package db.dao;
 
 import com.datastax.driver.core.*;
+import com.datastax.driver.mapping.Result;
+import db.accessor.TokenAccessor;
 import db.configuration.ConnectionConfiguration;
+import db.configuration.MappingManagerConfiguration;
 import model.Token;
 
 import java.util.HashSet;
@@ -13,18 +16,20 @@ import java.util.Set;
 public class TokenDAO {
     private PreparedStatement preparedStatement;
     private Session session;
+    private final static TokenAccessor tokenAccessor = MappingManagerConfiguration
+            .getMappingManager()
+            .createAccessor(TokenAccessor.class);
+
 
     public TokenDAO() {
         session = ConnectionConfiguration.getSession();
     }
 
     public Set<Token> getUnlabeledToken(int count) {
-        String query = "SELECT token_name FROM token_morph_analysis WHERE is_analysis_null = true LIMIT " + count;
-        ResultSet result = session.execute(query);
-        Set<Token> tokenSet = new HashSet<Token>();
+        Result<Token> result = tokenAccessor.getUnlabeledToken(count);
+        Set<Token> tokenSet = new HashSet<>();
 
-        for(Row row: result) {
-            Token token = new Token(row.get(0, String.class));
+        for(Token token: result) {
             tokenSet.add(token);
         }
 
@@ -34,11 +39,9 @@ public class TokenDAO {
     public boolean saveLabeledToken(Set<Token> tokenSet) {
         try{
             BatchStatement batch = new BatchStatement();
-            prepareForInsert();
 
             for(Token token: tokenSet){
-                BoundStatement bound = preparedStatement.bind( token.getToken(), token.getAnalysisSet());
-                batch.add(bound);
+                batch.add(tokenAccessor.saveTMA(token.getToken(), token.getAnalysisSet()));
             }
 
             session.execute(batch);
@@ -54,11 +57,9 @@ public class TokenDAO {
     public boolean deleteUnLabeledToken(Set<Token> tokenSet) {
         try{
             BatchStatement batch = new BatchStatement();
-            prepareForDelete();
 
             for(Token token: tokenSet){
-                BoundStatement bound = preparedStatement.bind(token.getToken());
-                batch.add(bound);
+                batch.add(tokenAccessor.deleteTMA(token.getToken()));
             }
 
             session.execute(batch);
@@ -69,16 +70,4 @@ public class TokenDAO {
 
         return true;
     }
-
-
-    private void prepareForInsert(){
-        preparedStatement = session.prepare(
-                "INSERT INTO token_morph_analysis (is_analysis_null, token_name, analysis) values (false, ?, ?)");
-    }
-
-    private void prepareForDelete(){
-        preparedStatement = session.prepare(
-                "DELETE FROM token_morph_analysis WHERE is_analysis_null = true and token_name = ?");
-    }
-
 }
