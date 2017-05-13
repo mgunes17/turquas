@@ -9,9 +9,7 @@ import command.turquas_command.TurquasSetNSCommand;
 import db.dao.W2VTokenDAO;
 import model.W2VToken;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by mustafa on 27.04.2017.
