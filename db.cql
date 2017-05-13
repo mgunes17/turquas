@@ -1,9 +1,14 @@
+CREATE KEYSPACE turquas
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '3'}
+AND durable_writes = true;
+
 CREATE TABLE W2V_TOKEN (
-    token_name text,
+    token_name text PRIMARY KEY,
     is_stem boolean,
     value list<double>,
-    primary key(is_stem, token_name)
 );
+
+CREATE INDEX is_stem_index ON w2v_token (is_stem);
 
 CREATE TABLE source (
     source_name text PRIMARY KEY,
@@ -19,11 +24,12 @@ CREATE TABLE unique_word (
 );
 
 CREATE TABLE token_morph_analysis (
+    token_name text PRIMARY KEY,
     is_analysis_null boolean,
-    token_name text,
-    analysis set<text>,
-    PRIMARY KEY (is_analysis_null, token_name)
+    analysis set<text>
 );
+
+CREATE INDEX is_analysis_null_index ON token_morph_analysis (is_analysis_null);
 
 CREATE TABLE sentence (
     source_name text,
