@@ -25,7 +25,10 @@ public class MorphologyTest {
         sentences.add("Elmaların 60ını suya düşürdü .");
         sentences.add("Her yıl kurban bayramında koç keserim.");
         sentences.add("Ali \"bu iş böyle olmaz\" dedi.");
-
+        sentences.add("Türkiye'nin en yüksek dağı hangisidir ?");
+        sentences.add("Bir flüt kaç paradır");
+        sentences.add("Maçı hangi takım kazandı");
+        sentences.add("Oynanan maçı kazanan Beşiktaş'tı");
 
         for(String sentence: sentences) {
             test.print(sentence);

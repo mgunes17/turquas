@@ -25,11 +25,11 @@ public class SourceDAO {
     public SourceDAO(){
         this.keyspace = ModelVariables.KEYSPACE;
         this.tableName = ModelVariables.SOURCE_TABLE_NAME;
+        session = ConnectionConfiguration.getSession();
     }
 
     public Map<String, Source> getAllSourceWordCount() {
         String query = "SELECT * FROM source";
-        session = ConnectionConfiguration.getCLuster().connect("turquas");
         ResultSet resultSet = session.execute(query);
         Map<String, Source> sourceMap = new HashMap<String, Source>();
 
@@ -77,7 +77,6 @@ public class SourceDAO {
 
     public void insertBatch(List<Source> sourceList){
         try{
-            session = ConnectionConfiguration.getCLuster().connect("turquas");
             BatchStatement batch = new BatchStatement();
             prepareForInsert();
 
@@ -90,7 +89,6 @@ public class SourceDAO {
 
             session.execute(batch);
             System.out.println("SourceDAO insertBatch başarıyla tamamlandı.");
-            session.close();
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             ex.printStackTrace();

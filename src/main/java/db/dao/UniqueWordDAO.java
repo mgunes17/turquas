@@ -20,11 +20,11 @@ public class UniqueWordDAO {
     public UniqueWordDAO(){
         this.keyspace = ModelVariables.KEYSPACE;
         this.tableName = ModelVariables.UNIQUE_WORD_TABLE_NAME;
+        session = ConnectionConfiguration.getSession();
     }
 
     public Set<UniqueWord> getAllWords() {
         String query = "SELECT * FROM unique_word";
-        session = ConnectionConfiguration.getCLuster().connect("turquas");
         ResultSet result = session.execute(query);
         Set<UniqueWord> uniqueWordSet = new HashSet<UniqueWord>();
 
@@ -34,13 +34,11 @@ public class UniqueWordDAO {
             uniqueWordSet.add(uniqueWord);
         }
 
-        session.close();
         return uniqueWordSet;
     }
 
     public boolean update(Set<UniqueWord> uniqueWordSet) {
         try{
-            session = ConnectionConfiguration.getCLuster().connect("turquas");
             //BatchStatement batch = new BatchStatement();
             prepareForUpdate();
 
@@ -51,7 +49,6 @@ public class UniqueWordDAO {
             }
 
             //session.execute(batch);
-            session.close();
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             return false;
@@ -62,7 +59,6 @@ public class UniqueWordDAO {
 
     public boolean updateSources(Set<UniqueWord> uniqueWordSet) {
         try{
-            session = ConnectionConfiguration.getCLuster().connect("turquas");
             //BatchStatement batch = new BatchStatement();
             prepareForSourceUpdate();
 
@@ -73,7 +69,6 @@ public class UniqueWordDAO {
             }
 
             //session.execute(batch);
-            session.close();
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             ex.printStackTrace();

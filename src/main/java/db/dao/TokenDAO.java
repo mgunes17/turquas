@@ -14,9 +14,12 @@ public class TokenDAO {
     private PreparedStatement preparedStatement;
     private Session session;
 
+    public TokenDAO() {
+        session = ConnectionConfiguration.getSession();
+    }
+
     public Set<Token> getUnlabeledToken(int count) {
         String query = "SELECT token_name FROM token_morph_analysis WHERE is_analysis_null = true LIMIT " + count;
-        session = ConnectionConfiguration.getCLuster().connect("turquas");
         ResultSet result = session.execute(query);
         Set<Token> tokenSet = new HashSet<Token>();
 
@@ -25,7 +28,6 @@ public class TokenDAO {
             tokenSet.add(token);
         }
 
-        session.close();
         return tokenSet;
     }
 
@@ -33,7 +35,6 @@ public class TokenDAO {
         try{
             BatchStatement batch = new BatchStatement();
             prepareForInsert();
-            session = ConnectionConfiguration.getCLuster().connect("turquas");
 
             for(Token token: tokenSet){
                 BoundStatement bound = preparedStatement.bind( token.getToken(), token.getAnalysisSet());
@@ -42,7 +43,6 @@ public class TokenDAO {
 
             session.execute(batch);
             deleteUnLabeledToken(tokenSet);
-            session.close();
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             return false;

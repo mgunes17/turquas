@@ -30,7 +30,7 @@ public class SentenceLoader {
         } else {
             questionsQuery = "SELECT original_sentence, questions FROM sentence LIMIT " + sentenceCount;
         }
-        session = ConnectionConfiguration.getCLuster().connect(ModelVariables.KEYSPACE);
+        session = ConnectionConfiguration.getSession();
         ResultSet resultSet = session.execute(questionsQuery);
         List<Sentence> sentenceList = new ArrayList<Sentence>();
 

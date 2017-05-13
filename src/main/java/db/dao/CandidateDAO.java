@@ -6,7 +6,6 @@ import com.datastax.driver.core.Session;
 import db.configuration.ConnectionConfiguration;
 import db.configuration.ModelVariables;
 import model.Sentence;
-import model.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +17,14 @@ import java.util.Set;
 public class CandidateDAO {
     private Session session;
 
+    public CandidateDAO() {
+        session = ConnectionConfiguration.getSession();
+    }
+
     public List<Sentence> getSentences(String[] words) {
         List<Sentence> sentenceList = new ArrayList<>();
 
         List<Set<String>> sourceList = new ArrayList<>();
-        session = ConnectionConfiguration.getCLuster().connect(ModelVariables.KEYSPACE);
 
         for(String word: words) {
             String query = "select source from unique_word where word = '" + word + "' ;";
@@ -51,7 +53,6 @@ public class CandidateDAO {
                     row.get(0, String.class), row.getSet(1, String.class)));
         }
 
-        session.close();
         return sentenceList;
     }
 }

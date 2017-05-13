@@ -4,7 +4,7 @@ AND durable_writes = true;
 
 CREATE TABLE W2V_TOKEN (
     token_name text PRIMARY KEY,
-    is_stem boolean,
+    stem boolean,
     value list<double>,
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE unique_word (
 
 CREATE TABLE token_morph_analysis (
     token_name text PRIMARY KEY,
-    is_analysis_null boolean,
+    analysis_null boolean,
     analysis set<text>
 );
 
