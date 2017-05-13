@@ -1,18 +1,42 @@
 package model;
 
+import com.datastax.driver.mapping.annotations.ClusteringColumn;
+import com.datastax.driver.mapping.annotations.Column;
+import com.datastax.driver.mapping.annotations.PartitionKey;
+import com.datastax.driver.mapping.annotations.Table;
+import db.configuration.ModelVariables;
+
 import java.util.List;
 import java.util.Set;
 
 /**
  * Created by ercan on 09.04.2017.
  */
+@Table(keyspace = ModelVariables.KEYSPACE, name = ModelVariables.SENTENCE_TABLE_NAME)
 public class Sentence {
-    private String originalSentence;
+    @PartitionKey
+    @Column(name = "source_name")
     private String sourceName;
+
+    @ClusteringColumn
+    @Column(name = "original_sentence")
+    private String originalSentence;
+
+    @Column(name = "questions")
     private Set<String> questions;
+
+    @Column(name = "stemmed_words_list")
     private List<String> stemmedWordsList;
-    private List<String> tokenList;
+
+    @Column(name = "tags")
     private Set<String> tags;
+
+    @Column(name = "token_list")
+    private List<String> tokenList;
+
+    public Sentence(){
+        // non-args
+    }
 
     public Sentence(String sentence){
         this.originalSentence = sentence;
@@ -28,7 +52,6 @@ public class Sentence {
         this.originalSentence = sentence;
         this.questions = questions;
     }
-
 
     public Sentence(String sentence, Set<String> questions, List<String> stemmedWordsList){
         this.originalSentence = sentence;
