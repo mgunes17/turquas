@@ -27,9 +27,9 @@ public class LetterLimitedSenteceFileCreator extends SenteceFileCreator {
                 for(String token: tokens){
                     if(checkAcceptance(token)){
                         if(token.length() > letterLimit){
-                            writer.print(token.substring(0, letterLimit) + " ");
+                            writer.print(token.substring(0, letterLimit).toLowerCase() + " ");
                         } else {
-                            writer.print(token + " ");
+                            writer.print(token.toLowerCase() + " ");
                         }
                     }
                 }
