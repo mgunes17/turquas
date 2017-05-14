@@ -20,14 +20,8 @@ public interface SentenceAccessor {
     @Query("SELECT * FROM sentence LIMIT ?")
     Result<Sentence> getSentencesByLimit(int limit);
 
-    @Query("UPDATE sentence SET questions= ? WHERE source_name = ? and original_sentence = ?")
-    Statement updateQuestions(Set<String> questions, String sourceName, String originalSentence);
-
-    @Query("INSERT INTO sentence (original_sentence, source_name, questions, " +
-            "stemmed_words_list, tags, token_list) VALUES (?, ?, ?, ?, ?, ?)")
-    Statement insertBatch(String originalSentence, String sourceName, Set<String> questions,
+    @Query("INSERT INTO sentence (original_sentence, source_name, " +
+            "stemmed_words_list, tags, token_list) VALUES (?, ?, ?, ?)")
+    Statement insertBatch(String originalSentence, String sourceName,
                           List<String> stemmedWordsList, Set<String> tags, List<String> tokenList);
-
-    @Query("SELECT * FROM sentence WHERE source_name IN ?")
-    Result<Sentence> getSentencesWithInClause(List<String> sources);
 }

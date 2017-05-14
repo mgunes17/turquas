@@ -37,7 +37,7 @@ public class NearBy implements VectorType {
         }
     }
 
-    private List<Double> findNearValue(String sentence, String tokenType) {
+    public List<Double> findNearValue(String sentence, String tokenType) {
         int maxWordSize = CrawlerAdmin.crawlerParameterMap.get("max_word_size");
         int layerSize = W2VCreatorAdmin.w2vParameterMap.get("layer_size");
 

@@ -31,11 +31,12 @@ public class AnswerCommand extends AbstractCommand implements Command {
 
         while(!question.equals("change")) {
             if(validateQuestion(question)) { //girdi cevaplanabilir bir soru ise
+                String w2vType = UserInterfaceAdmin.wordType + " " + UserInterfaceAdmin.vectorType;
                 QuestionForCompare userQuestion = new QuestionForCompare();
                 userQuestion.setQuestion(question);
 
                 long start_time = System.nanoTime();
-                List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question);
+                List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question, w2vType);
                 candidateList.add(0, userQuestion);
 
                 long end_time = System.nanoTime();
@@ -44,11 +45,8 @@ public class AnswerCommand extends AbstractCommand implements Command {
                 System.out.println("candidate çekilmesi:" + difference);
 
                 start_time = System.nanoTime();
-                WordType wordType = UserInterfaceAdmin.wordTypeMap.get(UserInterfaceAdmin.wordType);
-                wordType.prepareQuestionList(candidateList);
 
-                VectorType vectorType = UserInterfaceAdmin.vectorTypeMap.get(UserInterfaceAdmin.vectorType);
-                vectorType.prepareQuestionVector(candidateList, UserInterfaceAdmin.wordType);
+                ///// Amaç W2V değerlerini elde etmeki zaten kayıtlı, kullanıcınınkini bul yeter
 
                 end_time = System.nanoTime();
                 difference = (end_time - start_time)/1e6;

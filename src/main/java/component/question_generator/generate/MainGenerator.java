@@ -7,9 +7,7 @@ import component.question_generator.word.Question;
 import component.question_generator.word.Sentence;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by mustafa on 22.03.2017.
@@ -24,7 +22,7 @@ public class MainGenerator {
         generator.run();*/
     }
 
-    public Set<String> convertQuestions(String sentence) {
+    public List<model.Question> convertQuestions(String sentence) {
         QuestionFactory factoryZemberek = new ZemberekQuestionFactory(sentence);
         factory = new ItuQuestionFactory(sentence);
         Set<String> questionSentence = new HashSet<String>();
@@ -32,7 +30,17 @@ public class MainGenerator {
         runFactory(factoryZemberek, questionSentence);
         runFactory(factory, questionSentence);
 
-        return questionSentence;
+        return convertForDBFormat(questionSentence, sentence);
+    }
+
+    private List<model.Question> convertForDBFormat(Set<String> questions, String sentence) {
+        List<model.Question> questionListDBformat = new ArrayList<>();
+
+        for(String question: questions) {
+            questionListDBformat.add(new model.Question(question, sentence));
+        }
+
+        return questionListDBformat;
     }
 
     private void runFactory(QuestionFactory factory, Set<String> questionSentence) {

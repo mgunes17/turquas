@@ -13,8 +13,7 @@ import java.util.Map;
 public abstract class WordType {
     private List<Sentence> sentences;
 
-    public abstract void prepareWord(Map<String, List<String>> convertedSentences);
-    public abstract void prepareQuestionList(List<QuestionForCompare> questionList);
+    public abstract String rebuildSentence(String sentence);
 
     List<Sentence> getSentences() {
         sentences = new SentenceDAO().getAllSentences();

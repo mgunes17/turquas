@@ -1,5 +1,6 @@
 package db.dao;
 
+import model.Question;
 import model.Sentence;
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class CandidateDAOTest {
         String[] words = new String[2];
         words[0] = "sokmak";
         words[1] = "kocaman";
-        List<Sentence> sentenceList = candidateDAO.getSentences(words);
+        List<Question> sentenceList = candidateDAO.getQuestions(words);
 
         assertEquals(137, sentenceList.size());
     }

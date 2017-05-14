@@ -1,15 +1,9 @@
 package w2v_operation.word_operation;
 
-import model.QuestionForCompare;
-import model.Sentence;
 import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
 import zemberek.morphology.analysis.SentenceAnalysis;
 import zemberek.morphology.analysis.WordAnalysis;
 import zemberek.morphology.analysis.tr.TurkishSentenceAnalyzer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mustafa on 10.05.2017.
@@ -21,27 +15,7 @@ public class StemBy extends WordType {
         super();
     }
 
-    public void prepareWord(Map<String, List<String>> convertedSentences) {
-        for(Sentence sentence: getSentences()) {
-            String sentenceWord = rebuildSentenceByStem(sentence.getOriginalSentence());
-            List<String> questions = new ArrayList<String>();
-
-            for (String question : sentence.getQuestions()) {
-                questions.add(rebuildSentenceByStem(question));
-            }
-
-            convertedSentences.put(sentenceWord, questions);
-        }
-    }
-
-    public void prepareQuestionList(List<QuestionForCompare> questionList) {
-        for (QuestionForCompare question : questionList) {
-            String question1 = rebuildSentenceByStem(question.getQuestion());
-            question.setQuestion(question1);
-        }
-    }
-
-    public String rebuildSentenceByStem(String sentence) {
+    public String rebuildSentence(String sentence) {
         SentenceAnalysis analysis = analyzer.analyze(sentence);
         analyzer.disambiguate(analysis);
 

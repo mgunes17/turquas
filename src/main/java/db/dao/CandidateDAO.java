@@ -2,10 +2,10 @@ package db.dao;
 
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Result;
-import db.accessor.SentenceAccessor;
+import db.accessor.QuestionAccessor;
 import db.configuration.ConnectionConfiguration;
 import db.configuration.MappingManagerConfiguration;
-import model.Sentence;
+import model.Question;
 import model.UniqueWord;
 
 import java.util.ArrayList;
@@ -17,34 +17,34 @@ import java.util.Set;
  */
 public class CandidateDAO {
     private Session session;
-    private static final SentenceAccessor sentenceAccessor = MappingManagerConfiguration
+    private static final QuestionAccessor questionAccessor = MappingManagerConfiguration
             .getMappingManager()
-            .createAccessor(SentenceAccessor.class);
+            .createAccessor(QuestionAccessor.class);
 
     public CandidateDAO() {
         session = ConnectionConfiguration.getSession();
     }
 
-    public List<Sentence> getSentences(String[] words) {
+    public List<Question> getQuestions(String[] words) {
         List<Set<String>> sourceList = findSources(words);
 
-        return findSentences(sourceList);
+        return findQuestions(sourceList);
     }
 
-    private List<Sentence> findSentences(List<Set<String>> sourceList){
-        List<Sentence> sentenceList = new ArrayList<>();
+    private List<Question> findQuestions(List<Set<String>> sourceList){
+        List<Question> questionList = new ArrayList<>();
         List<String> sourceNames = new ArrayList<>();
 
         for(Set<String> sourceSet: sourceList) {
             sourceNames.addAll(sourceSet);
         }
 
-        Result<Sentence> result = sentenceAccessor.getSentencesWithInClause(sourceNames);
-        for(Sentence sentence: result) {
-            sentenceList.add(sentence);
+        Result<Question> result = questionAccessor.getQuestionsWithInClause(sourceNames);
+        for(Question question: result) {
+            questionList.add(question);
         }
 
-        return sentenceList;
+        return questionList;
     }
 
     private List<Set<String>> findSources(String[] words){

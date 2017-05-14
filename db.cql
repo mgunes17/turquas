@@ -34,8 +34,7 @@ CREATE INDEX is_analysis_null_index ON token_morph_analysis (analysis_null);
 CREATE TABLE sentence (
     source_name text,
 	original_sentence text,
-	questions set<text>,
-	stemmed_words_list list<text>,     
+	stemmed_words_list list<text>,
 	tags set<text>,     
 	token_list list<text>,     
 	PRIMARY KEY (source_name, original_sentence)

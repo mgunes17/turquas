@@ -2,7 +2,9 @@ package command.w2v_creator_command;
 
 import command.AbstractCommand;
 import command.Command;
+import db.dao.QuestionDAO;
 import file_operation.W2V4Sentence;
+import model.Question;
 import w2v_operation.vector_operation.AverageBy;
 import w2v_operation.vector_operation.NearBy;
 import w2v_operation.vector_operation.VectorType;
@@ -18,20 +20,16 @@ import java.util.Map;
  * Created by mustafa on 09.05.2017.
  */
 public class Sentence2W2VCommand extends AbstractCommand implements Command {
-    ;
-    private Map<List<Double>, List<List<Double>>> w2vValues = new HashMap<List<Double>, List<List<Double>>>();
-    private Map<String, List<String>> convertedSentences = new HashMap<String, List<String>>();
-    private WordType wordType;
-    private VectorType vectorType;
+    private Map<List<Double>, List<Double>> w2vValues = new HashMap<>();
     private Map<String, WordType> wordTypeMap;
     private Map<String, VectorType> vectorTypeMap;
 
     public Sentence2W2VCommand() {
-        wordTypeMap = new HashMap<String, WordType>();
+        wordTypeMap = new HashMap<>();
         wordTypeMap.put("stem", new StemBy());
         wordTypeMap.put("letter", new LetterBy());
 
-        vectorTypeMap = new HashMap<String, VectorType>();
+        vectorTypeMap = new HashMap<>();
         vectorTypeMap.put("near", new NearBy());
         vectorTypeMap.put("average", new AverageBy());
     }
@@ -41,11 +39,17 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
             return false;
         }
 
-        wordType = wordTypeMap.get(parameter[1]);
-        wordType.prepareWord(convertedSentences);
+        String wordType = parameter[1];
+        String vectorType = parameter[2];
+        String valueType = wordType + "_" + vectorType;
 
-        vectorType = vectorTypeMap.get(parameter[2]);
-        vectorType.prepareVector(convertedSentences, w2vValues, parameter[1]);
+        QuestionDAO questionDAO = new QuestionDAO();
+        List<Question> questionList = questionDAO.getAllQuestions();
+
+        for(Question question: questionList) {
+            w2vValues.put(question.getQuestionW2vValueMap().get(valueType),
+                    question.getAnswerW2vValueMap().get(valueType));
+        }
 
         //input-output dosyalarını oluştur
         W2V4Sentence.writeToFileSentence2W2V(w2vValues);

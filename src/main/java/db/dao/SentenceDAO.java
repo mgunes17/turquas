@@ -36,21 +36,15 @@ public class SentenceDAO {
     }
 
     public List<Sentence> getAllSentences() {
-        List<Sentence> sentenceList = new ArrayList<>();
         Result<Sentence> result = sentenceAccessor.getAll();
-
-        for(Sentence sentence: result) {
-            sentenceList.add(sentence);
-        }
-
-        return sentenceList;
+        return result.all();
     }
 
-    public void updateQuestions(List<Sentence> sentenceList){
+    /*public void updateQuestions(List<Sentence> sentenceList){
         try {
             BatchStatement batch = new BatchStatement();
             for(Sentence sentence: sentenceList) {
-                Statement statement = sentenceAccessor.updateQuestions(sentence.getQuestions(),
+                Statement statement = sentenceAccessor.updateQuestions(
                         sentence.getSourceName(),
                         sentence.getOriginalSentence());
                 batch.add(statement);
@@ -62,15 +56,14 @@ public class SentenceDAO {
             ex.printStackTrace();
             System.out.println(ex.getMessage());
         }
-    }
+    }*/
 
     public void insertBatch(List<Sentence> sentenceList){
         try{
             BatchStatement batch = new BatchStatement();
             for(Sentence sentence: sentenceList){
                 Statement statement = sentenceAccessor.insertBatch(sentence.getOriginalSentence(),
-                        sentence.getSourceName(), sentence.getQuestions(),
-                        sentence.getStemmedWordsList(), sentence.getTags(), sentence.getTokenList());
+                        sentence.getSourceName(), sentence.getStemmedWordsList(), sentence.getTags(), sentence.getTokenList());
                 batch.add(statement);
             }
 

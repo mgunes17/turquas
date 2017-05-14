@@ -1,6 +1,7 @@
 package component.user_interface.candidate;
 
 import db.dao.CandidateDAO;
+import model.Question;
 import model.QuestionForCompare;
 import model.Sentence;
 
@@ -17,27 +18,25 @@ public class FindingCandidate {
         candidateDAO = new CandidateDAO();
     }
 
-    public List<QuestionForCompare> findCandidateList(String userQuestion) {
+    public List<QuestionForCompare> findCandidateList(String userQuestion, String w2vType) {
         //soruyu işle, etiket gerekirse bul, tokenlara ayır vs
         //önce ilgili dokümanlar, sonra ilgili cümleler (cümleler nasıl etiketlenebilir?)
         String[] words = userQuestion.split(" ");
-        List<Sentence> sentenceList = candidateDAO.getSentences(words);
+        List<Question> questionList = candidateDAO.getQuestions(words);
 
-        return createQuestionForCompares(sentenceList); // sentence ve source işlemleri ortak olarak candidate daoda olacak
+        return createQuestionForCompares(questionList, w2vType); // sentence ve source işlemleri ortak olarak candidate daoda olacak
     }
 
-    private List<QuestionForCompare> createQuestionForCompares(List<Sentence> sentenceList){
+    private List<QuestionForCompare> createQuestionForCompares(List<Question> questionList, String w2vType){
         List<QuestionForCompare> questionForCompareList = new ArrayList<>();
 
-        for(Sentence sentence: sentenceList){
-            if(sentence.getQuestions() != null){
-                for(String question: sentence.getQuestions()){
-                    QuestionForCompare qfc = new QuestionForCompare();
-                    qfc.setAnswer(sentence.getOriginalSentence());
-                    qfc.setQuestion(question);
-                    questionForCompareList.add(qfc);
-                }
-            }
+        for(Question question: questionList){
+            QuestionForCompare qfc = new QuestionForCompare();
+            qfc.setAnswer(question.getAnswer());
+            qfc.setQuestion(question.getQuestion());
+            qfc.setVector(question.getQuestionW2vValueMap().get(w2vType).
+                    stream().mapToDouble(Double::doubleValue).toArray());
+            questionForCompareList.add(qfc);
         }
 
         return questionForCompareList;

@@ -38,7 +38,7 @@ public class AverageBy implements VectorType {
         }
     }
 
-    protected List<Double> findAverageValue(String sentence, String tokenType) {
+    public List<Double> findAverageValue(String sentence, String tokenType) {
         List<Double> values = new ArrayList<Double>();
         String[] words = sentence.split(" ");
         List<List<Double>> wordValues = new ArrayList<List<Double>>();

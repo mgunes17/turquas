@@ -22,25 +22,6 @@ public class SentenceLoader {
         this.sentenceCount = sentenceCount;
     }
 
-    public List<Sentence> getQuestionsForSentences() {
-        String questionsQuery;
-        if(sentenceCount == 0){
-            questionsQuery = "SELECT original_sentence, questions FROM sentence";
-        } else {
-            questionsQuery = "SELECT original_sentence, questions FROM sentence LIMIT " + sentenceCount;
-        }
-        session = ConnectionConfiguration.getSession();
-        ResultSet resultSet = session.execute(questionsQuery);
-        List<Sentence> sentenceList = new ArrayList<Sentence>();
-
-        for(Row row: resultSet) {
-            Sentence sentence = new Sentence(row.getString(0), row.getSet(1, String.class));
-            sentenceList.add(sentence);
-        }
-
-        return sentenceList;
-    }
-
     List<List<String>> getStemListsForSentences(){
         String stemmedWordsQuery;
         if(sentenceCount == 0){

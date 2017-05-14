@@ -22,9 +22,6 @@ public class Sentence {
     @Column(name = "original_sentence")
     private String originalSentence;
 
-    @Column(name = "questions")
-    private Set<String> questions;
-
     @Column(name = "stemmed_words_list")
     private List<String> stemmedWordsList;
 
@@ -42,23 +39,6 @@ public class Sentence {
         this.originalSentence = sentence;
     }
 
-    public Sentence(String sourceName, String sentence, Set<String> questions){
-        this.sourceName = sourceName;
-        this.originalSentence = sentence;
-        this.questions = questions;
-    }
-
-    public Sentence(String sentence, Set<String> questions){
-        this.originalSentence = sentence;
-        this.questions = questions;
-    }
-
-    public Sentence(String sentence, Set<String> questions, List<String> stemmedWordsList){
-        this.originalSentence = sentence;
-        this.questions = questions;
-        this.stemmedWordsList = stemmedWordsList;
-    }
-
     // getters and setters
 
     public String getOriginalSentence() {
@@ -67,14 +47,6 @@ public class Sentence {
 
     public void setOriginalSentence(String originalSentence) {
         this.originalSentence = originalSentence;
-    }
-
-    public Set<String> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Set<String> questions) {
-        this.questions = questions;
     }
 
     public List<String> getStemmedWordsList() {

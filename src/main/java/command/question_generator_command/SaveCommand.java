@@ -4,11 +4,16 @@ import admin.QuestionGeneratorAdmin;
 import command.AbstractCommand;
 import command.Command;
 import component.question_generator.generate.MainGenerator;
+import db.dao.QuestionDAO;
 import db.dao.SentenceDAO;
+import model.Question;
 import model.Sentence;
+import w2v_operation.vector_operation.AverageBy;
+import w2v_operation.vector_operation.NearBy;
+import w2v_operation.word_operation.LetterBy;
+import w2v_operation.word_operation.StemBy;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by mustafa on 09.05.2017.
@@ -24,31 +29,48 @@ public class SaveCommand extends AbstractCommand implements Command {
         int sessionSize = QuestionGeneratorAdmin.questionGEneratorParameterMap.get("session_size");
         mainGenerator = new MainGenerator();
         SentenceDAO dao = new SentenceDAO();
+        QuestionDAO questionDAO = new QuestionDAO();
         List<Sentence> sentenceList = dao.readForGenerateQuestions(recordCount);
-        List<Sentence> newSentenceList = new ArrayList<Sentence>();
 
         //bir cümle seti için factory 1 kere verilsin
         for(int i = 0; i < recordCount; i++) {
             if(sentenceList.size() > i){ // düzeltilecek
                 Sentence sentence = sentenceList.get(i);
+                //soru listesi gelince tek tek hazırla ve kayıt listesine ekle
+                List<Question>  questionList = mainGenerator.convertQuestions(sentence.getOriginalSentence());
 
-                if(sentence.getQuestions().size() == 0) { //soru üret
-                    newSentenceList.add(new Sentence(
-                            sentence.getSourceName(),
-                            sentence.getOriginalSentence(),
-                            mainGenerator.convertQuestions(sentence.getOriginalSentence()
-                            )));
+                Map<String, List<Double>> w2vMapForSentence = new HashMap<>();
+                StemBy stemBy = new StemBy();
+                LetterBy letterBy = new LetterBy();
+                AverageBy averageBy = new AverageBy();
+                NearBy nearBy = new NearBy();
+
+                String stem = stemBy.rebuildSentence(sentence.getOriginalSentence());
+                String letter = letterBy.rebuildSentence(sentence.getOriginalSentence());
+                w2vMapForSentence.put("stem_average", averageBy.findAverageValue(stem, "stem"));
+                w2vMapForSentence.put("stem_near", nearBy.findNearValue(stem, stem));
+                w2vMapForSentence.put("letter_average", averageBy.findAverageValue(letter, "letter"));
+                w2vMapForSentence.put("letter_near", nearBy.findNearValue(letter, "letter"));
+
+                for(Question question: questionList) { // her bir soruyu db için hazırla
+                    stem = stemBy.rebuildSentence(question.getQuestion());
+                    letter = letterBy.rebuildSentence(question.getQuestion());
+
+                    Map<String, List<Double>> w2vMapForQuestion = new HashMap<>();
+                    w2vMapForQuestion.put("stem_average", averageBy.findAverageValue(stem, "stem"));
+                    w2vMapForQuestion.put("stem_near", nearBy.findNearValue(stem, stem));
+                    w2vMapForQuestion.put("letter_average", averageBy.findAverageValue(letter, "letter"));
+                    w2vMapForQuestion.put("letter_near", nearBy.findNearValue(letter, "letter"));
+
+                    question.setQuestionW2vValueMap(w2vMapForQuestion);
+                    question.setAnswerW2vValueMap(w2vMapForSentence);
+                    question.setSourceName(sentence.getSourceName());
                 }
 
-                if(i % sessionSize == 0){
-                    System.out.println("Seans başlıyor... " + i);
-                    dao.updateQuestions(newSentenceList);
-                    System.out.println("Seans bitti... " + i);
-                }
+                questionDAO.saveQuestionList(questionList);
             }
         }
 
-        dao.updateQuestions(newSentenceList);
         return true;
     }
 

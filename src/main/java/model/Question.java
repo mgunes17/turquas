@@ -39,6 +39,15 @@ public class Question {
     @Column(name = "answer_w2v_value_map")
     private Map<String, List<Double>> answerW2vValueMap;
 
+    public Question() {
+        //non - arg
+    }
+
+    public Question(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+    }
+
     public String getSourceName() {
         return sourceName;
     }
