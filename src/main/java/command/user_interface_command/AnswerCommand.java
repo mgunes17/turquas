@@ -30,63 +30,92 @@ public class AnswerCommand extends AbstractCommand implements Command {
         while(!question.equals("change")) {
             if(validateQuestion(question)) { //girdi cevaplanabilir bir soru ise
                 String w2vType = UserInterfaceAdmin.wordType + "_" + UserInterfaceAdmin.vectorType;
-                QuestionForCompare userQuestion = new QuestionForCompare();
-                userQuestion.setQuestion(question);
-                userQuestion.setVector(getUserQuestionVector(userQuestion.getQuestion()));
+                QuestionForCompare userQuestion = createUserQuestionForCompare(question);
 
                 long start_time = System.nanoTime();
                 List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question, w2vType);
                 candidateList.add(0, userQuestion);
-
                 long end_time = System.nanoTime();
                 double difference = (end_time - start_time)/1e6;
-
                 System.out.println("candidate çekilmesi:" + difference);
 
                 start_time = System.nanoTime();
-                SimilarityType similarityType = UserInterfaceAdmin.similarityMap.get(UserInterfaceAdmin.similarityType);
-
-                int size = candidateList.size();
-                for(int i = 1; i < size; i++){ // 0, kullanıcı sorusunun kendisi
-                    double value = similarityType.findSimilarity(userQuestion.getVector(),
-                                                                 candidateList.get(i).getVector());
-                    SimilarityValue similarityValue = new SimilarityValue();
-                    similarityValue.setQuestionForCompare(candidateList.get(i));
-                    similarityValue.setValue(value);
-                    userQuestion.getSimilarityList().add(similarityValue);
-                }
-
-                userQuestion.getSimilarityList().sort(new SimilarityComparator());
-
-                System.out.println(userQuestion.getQuestion());
-                int answerShown = 0;
-                for(int i = 0; i < UserInterfaceAdmin.parameterMap.get("max_answer_count"); i++){
-                    double value = userQuestion.getSimilarityList().get(i).getValue();
-
-                    if(value > UserInterfaceAdmin.parameterMap.get("threshold") / 100.0) {
-                        System.out.println("DEĞER: " + userQuestion.getSimilarityList().get(i).getValue() +
-                                " CEVAP: " + userQuestion.getSimilarityList().get(i).
-                                getQuestionForCompare().getAnswer() +
-                                " SORU: " + userQuestion.getSimilarityList().get(i).
-                                getQuestionForCompare().getQuestion());
-                        answerShown++;
-                    }
-                }
-
+                calculateSimilarityList(userQuestion, candidateList);
                 end_time = System.nanoTime();
                 difference = (end_time - start_time)/1e6;
                 System.out.println("benzerlik hesabı:" + difference);
 
-                if(answerShown == 0){
-                    System.out.println("cevapların benzerlik değerleri threshold " +
-                            "değerinin altında olduğu için hiç bir cevap gösterilemedi.");
-                }
+                int candidateCount = candidateList.size();
+                int answerCount = findAnswerCount(candidateCount);
+                printAnswers(userQuestion, answerCount);
             }
             System.out.print("answer=>");
             question = in.nextLine();
         }
 
         return true;
+    }
+
+    private void printAnswers(QuestionForCompare userQuestion, int answerCount){
+        int answerShown = 0;
+        int answersBelowThreshold = 0;
+
+        System.out.println(userQuestion.getQuestion());
+        for(int i = 0; i < answerCount; i++){
+            double value = userQuestion.getSimilarityList().get(i).getValue();
+
+            if(value > UserInterfaceAdmin.parameterMap.get("threshold") / 100.0) {
+                System.out.println("DEĞER: " + userQuestion.getSimilarityList().get(i).getValue() +
+                        " CEVAP: " + userQuestion.getSimilarityList().get(i).
+                        getQuestionForCompare().getAnswer() +
+                        " SORU: " + userQuestion.getSimilarityList().get(i).
+                        getQuestionForCompare().getQuestion());
+                answerShown++;
+            } else {
+                answersBelowThreshold++;
+            }
+        }
+        printInfo(answerShown, answersBelowThreshold);
+    }
+
+    private void printInfo(int answerShown, int answersBelowThreshold){
+        if(answerShown == 0){
+            if(answersBelowThreshold == 0){
+                System.out.println("hiç bir cevap gösterilemedi.");
+            } else {
+                System.out.println("bulunan cevaplar thresholdun altında, hiçbir cevap gösterilemedi");
+            }
+        }
+    }
+
+    private void calculateSimilarityList(QuestionForCompare userQuestion, List<QuestionForCompare> candidateList){
+        SimilarityType similarityType = UserInterfaceAdmin.similarityMap.get(UserInterfaceAdmin.similarityType);
+
+        int candidateCount = candidateList.size();
+        for(int i = 1; i < candidateCount; i++){ // 0, kullanıcı sorusunun kendisi
+            double value = similarityType.findSimilarity(userQuestion.getVector(), candidateList.get(i).getVector());
+            SimilarityValue similarityValue = new SimilarityValue();
+            similarityValue.setQuestionForCompare(candidateList.get(i));
+            similarityValue.setValue(value);
+            userQuestion.getSimilarityList().add(similarityValue);
+        }
+        userQuestion.getSimilarityList().sort(new SimilarityComparator());
+    }
+
+    private QuestionForCompare createUserQuestionForCompare(String question){
+        QuestionForCompare userQuestion = new QuestionForCompare();
+        userQuestion.setQuestion(question);
+        userQuestion.setVector(getUserQuestionVector(userQuestion.getQuestion()));
+
+        return userQuestion;
+    }
+
+    private int findAnswerCount(int candidateCount){
+        if(candidateCount - 1 > UserInterfaceAdmin.parameterMap.get("max_answer_count")){
+            return UserInterfaceAdmin.parameterMap.get("max_answer_count");
+        } else {
+            return candidateCount - 1;
+        }
     }
 
     private double[] getUserQuestionVector(String userQuestion){

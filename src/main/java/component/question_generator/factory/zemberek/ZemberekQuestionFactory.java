@@ -3,7 +3,6 @@ package component.question_generator.factory.zemberek;
 import component.question_generator.factory.QuestionFactory;
 import component.question_generator.factory.zemberek.type.*;
 import component.question_generator.factory.zemberek.type.suffix.*;
-import component.question_generator.word.Sentence;
 import component.question_generator.word.Word;
 import model.Question;
 import nlp_tool.zemberek.ZemberekSentenceAnalyzer;

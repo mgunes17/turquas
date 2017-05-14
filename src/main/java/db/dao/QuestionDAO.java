@@ -35,4 +35,9 @@ public class QuestionDAO {
         Result<Question> result = questionAccessor.getAll();
         return result.all();
     }
+
+    public List<Question> getQuestionsByLimit(int limit) {
+        Result<Question> result = questionAccessor.getQuestionsByLimit(limit);
+        return result.all();
+    }
 }

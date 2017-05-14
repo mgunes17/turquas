@@ -52,7 +52,8 @@ public class CandidateDAO {
 
         for(String word: words) {
             UniqueWord uniqueWord = MappingManagerConfiguration.getUniqueWordMapper().get(word);
-            sourceList.add(uniqueWord.getDocumentSet());
+            if(uniqueWord != null)
+                sourceList.add(uniqueWord.getDocumentSet());
         }
 
         return sourceList;
