@@ -26,6 +26,7 @@ public class ItuQuestionFactory extends QuestionFactory {
         generatedList.addAll(nerQuestion.reorganize(sentence));
 
         Sentence returnedSentence = new Sentence(sentence);
+        System.out.println(generatedList.size() + " soru üretildi. - ITU");
         return generatedList;
     }
 }

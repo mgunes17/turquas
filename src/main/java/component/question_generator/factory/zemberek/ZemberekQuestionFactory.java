@@ -80,6 +80,7 @@ public class ZemberekQuestionFactory extends QuestionFactory {
             }
         }
 
+        System.out.println(generatedList.size() + " soru üretildi. - ZEMBEREK");
         return generatedList;
     }
 
@@ -105,7 +106,8 @@ public class ZemberekQuestionFactory extends QuestionFactory {
         else if(log.contains("Abl")) {
             questionTypeSet.add(singleTypes.get("abl"));
             return Suffix.ABLATIVE;
-        }else if(log.contains("Gen")) {
+        }
+        else if(log.contains("Gen")) {
             questionTypeSet.add(singleTypes.get("gen"));
             word.setGen(true);
             return Suffix.PLAIN;

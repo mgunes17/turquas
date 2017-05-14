@@ -1,5 +1,6 @@
 package model;
 
+import com.datastax.driver.mapping.annotations.ClusteringColumn;
 import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
@@ -17,6 +18,7 @@ public class W2VToken {
     @Column(name = "token_name")
     private String tokenName;
 
+    @ClusteringColumn
     @Column(name = "stem")
     private boolean stem;
 
