@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Accessor
 public interface W2VTokenAccessor {
-    @Query("INSERT INTO w2v_token (token_name, is_stem, value) values (?, ?, ?)")
+    @Query("INSERT INTO w2v_token (token_name, stem, value) values (?, ?, ?)")
     Statement updateTable(String tokenName, boolean stem, List<Double> values);
 
     @Query("select token_name, value from w2v_token WHERE stem = ? ")

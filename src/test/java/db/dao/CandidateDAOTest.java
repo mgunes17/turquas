@@ -1,7 +1,6 @@
 package db.dao;
 
 import model.Question;
-import model.Sentence;
 import org.junit.Test;
 
 import java.util.List;

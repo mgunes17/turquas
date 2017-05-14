@@ -13,7 +13,9 @@ import w2v_operation.vector_operation.NearBy;
 import w2v_operation.word_operation.LetterBy;
 import w2v_operation.word_operation.StemBy;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mustafa on 09.05.2017.
@@ -47,20 +49,20 @@ public class SaveCommand extends AbstractCommand implements Command {
 
                 String stem = stemBy.rebuildSentence(sentence.getOriginalSentence());
                 String letter = letterBy.rebuildSentence(sentence.getOriginalSentence());
-                w2vMapForSentence.put("stem_average", averageBy.findAverageValue(stem, "stem"));
-                w2vMapForSentence.put("stem_near", nearBy.findNearValue(stem, stem));
-                w2vMapForSentence.put("letter_average", averageBy.findAverageValue(letter, "letter"));
-                w2vMapForSentence.put("letter_near", nearBy.findNearValue(letter, "letter"));
+                w2vMapForSentence.put("stem_average", averageBy.findValue(stem, "stem"));
+                w2vMapForSentence.put("stem_near", nearBy.findValue(stem, stem));
+                w2vMapForSentence.put("letter_average", averageBy.findValue(letter, "letter"));
+                w2vMapForSentence.put("letter_near", nearBy.findValue(letter, "letter"));
 
                 for(Question question: questionList) { // her bir soruyu db için hazırla
                     stem = stemBy.rebuildSentence(question.getQuestion());
                     letter = letterBy.rebuildSentence(question.getQuestion());
 
                     Map<String, List<Double>> w2vMapForQuestion = new HashMap<>();
-                    w2vMapForQuestion.put("stem_average", averageBy.findAverageValue(stem, "stem"));
-                    w2vMapForQuestion.put("stem_near", nearBy.findNearValue(stem, stem));
-                    w2vMapForQuestion.put("letter_average", averageBy.findAverageValue(letter, "letter"));
-                    w2vMapForQuestion.put("letter_near", nearBy.findNearValue(letter, "letter"));
+                    w2vMapForQuestion.put("stem_average", averageBy.findValue(stem, "stem"));
+                    w2vMapForQuestion.put("stem_near", nearBy.findValue(stem, stem));
+                    w2vMapForQuestion.put("letter_average", averageBy.findValue(letter, "letter"));
+                    w2vMapForQuestion.put("letter_near", nearBy.findValue(letter, "letter"));
 
                     question.setQuestionW2vValueMap(w2vMapForQuestion);
                     question.setAnswerW2vValueMap(w2vMapForSentence);

@@ -1,11 +1,9 @@
 package w2v_operation.word_operation;
 
 import db.dao.SentenceDAO;
-import model.QuestionForCompare;
 import model.Sentence;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by mustafa on 11.05.2017.
