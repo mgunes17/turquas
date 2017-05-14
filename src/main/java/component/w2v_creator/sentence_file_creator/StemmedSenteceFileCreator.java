@@ -22,7 +22,7 @@ public class StemmedSenteceFileCreator extends SenteceFileCreator {
 
             for(List<String> tokens: sentences){
                 for(String token: tokens){
-                    writer.print(token + " ");
+                    writer.print(token.toLowerCase() + " ");
                 }
                 writer.print(".");
                 writer.println();

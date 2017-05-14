@@ -57,8 +57,8 @@ public class SaveCommand extends AbstractCommand implements Command {
                 NearBy nearBy = new NearBy();
 
                 start_time = System.nanoTime();
-                String stem = stemBy.rebuildSentence(sentence.getOriginalSentence());
-                String letter = letterBy.rebuildSentence(sentence.getOriginalSentence());
+                String stem = stemBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
+                String letter = letterBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
                 end_time = System.nanoTime();
                 difference = (end_time - start_time)/1e6;
                 System.out.println("stem ve letter rebuild sentence başladı bitti:" + difference);
