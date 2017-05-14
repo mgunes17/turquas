@@ -21,7 +21,8 @@ public class PunctuationValidator extends Validator {
         return !(sentence.contains("\"") || sentence.contains("“") || sentence.contains(";")
                 || sentence.contains(":") || sentence.contains("`")
                 || sentence.contains("´") || sentence.contains("”")
-                || sentence.contains("‘") || sentence.contains("'"));
+                || sentence.contains("‘") || sentence.contains("'")
+                || sentence.contains("\n"));
     }
 
     private boolean hasUrl(String sentence){

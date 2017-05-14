@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Accessor
 public interface QuestionAccessor {
-    @Query("SELECT * FROM sentence WHERE source_name IN ?")
+    @Query("SELECT * FROM question WHERE source_name IN ?")
     Result<Question> getQuestionsWithInClause(List<String> sources);
 
     @Query("SELECT * FROM question")

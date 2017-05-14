@@ -7,8 +7,6 @@ import component.user_interface.candidate.FindingCandidate;
 import component.user_interface.similarity.SimilarityType;
 import model.QuestionForCompare;
 import model.SimilarityValue;
-import w2v_operation.vector_operation.VectorType;
-import w2v_operation.word_operation.WordType;
 import zemberek.langid.LanguageIdentifier;
 
 import java.io.IOException;
@@ -31,9 +29,10 @@ public class AnswerCommand extends AbstractCommand implements Command {
 
         while(!question.equals("change")) {
             if(validateQuestion(question)) { //girdi cevaplanabilir bir soru ise
-                String w2vType = UserInterfaceAdmin.wordType + " " + UserInterfaceAdmin.vectorType;
+                String w2vType = UserInterfaceAdmin.wordType + "_" + UserInterfaceAdmin.vectorType;
                 QuestionForCompare userQuestion = new QuestionForCompare();
                 userQuestion.setQuestion(question);
+                userQuestion.setVector(getUserQuestionVector(userQuestion.getQuestion()));
 
                 long start_time = System.nanoTime();
                 List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question, w2vType);
@@ -43,15 +42,6 @@ public class AnswerCommand extends AbstractCommand implements Command {
                 double difference = (end_time - start_time)/1e6;
 
                 System.out.println("candidate çekilmesi:" + difference);
-
-                start_time = System.nanoTime();
-
-                ///// Amaç W2V değerlerini elde etmeki zaten kayıtlı, kullanıcınınkini bul yeter
-
-                end_time = System.nanoTime();
-                difference = (end_time - start_time)/1e6;
-                System.out.println("word + vector çekilmesi:" + difference);
-
 
                 start_time = System.nanoTime();
                 SimilarityType similarityType = UserInterfaceAdmin.similarityMap.get(UserInterfaceAdmin.similarityType);
@@ -97,6 +87,14 @@ public class AnswerCommand extends AbstractCommand implements Command {
         }
 
         return true;
+    }
+
+    private double[] getUserQuestionVector(String userQuestion){
+        String vecType = UserInterfaceAdmin.vectorType;
+        String tokenType = UserInterfaceAdmin.wordType;
+        List<Double> vector = UserInterfaceAdmin.vectorTypeMap.get(vecType).findValue(userQuestion, tokenType);
+
+        return vector.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
     private boolean validateQuestion(String question){

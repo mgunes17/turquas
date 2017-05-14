@@ -21,7 +21,7 @@ public interface SentenceAccessor {
     Result<Sentence> getSentencesByLimit(int limit);
 
     @Query("INSERT INTO sentence (original_sentence, source_name, " +
-            "stemmed_words_list, tags, token_list) VALUES (?, ?, ?, ?)")
+            "stemmed_words_list, tags, token_list) VALUES (?, ?, ?, ?, ?)")
     Statement insertBatch(String originalSentence, String sourceName,
                           List<String> stemmedWordsList, Set<String> tags, List<String> tokenList);
 }

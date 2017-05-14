@@ -12,33 +12,23 @@ import java.util.Map;
 /**
  * Created by mustafa on 10.05.2017.
  */
-public class AverageBy implements VectorType {
+public class AverageBy extends VectorType {
 
     public void prepareVector(Map<String, List<String>> convertedSentences, Map<List<Double>, List<List<Double>>> w2vValues,
                         String tokenType) {
-        for(String sentence: convertedSentences.keySet()) { //her bir cümle için
-            List<Double> sentenceValue = findAverageValue(sentence, tokenType);
-            List<List<Double>> questionsValues = new ArrayList<List<Double>>();
-
-            for(String question: convertedSentences.get(sentence)) { // her bir soru için
-                List<Double> value = findAverageValue(question, tokenType);
-                questionsValues.add(value);
-            }
-
-            w2vValues.put(sentenceValue, questionsValues);
-        }
+        super.prepareVector(convertedSentences, w2vValues, tokenType);
     }
 
     @Override
     public void prepareQuestionVector(List<QuestionForCompare> questionList, String tokenType) {
         for (QuestionForCompare question : questionList) {
-            List<Double> vectorList = findAverageValue(question.getQuestion(), tokenType);
+            List<Double> vectorList = findValue(question.getQuestion(), tokenType);
             double[] vector = vectorList.stream().mapToDouble(Double::doubleValue).toArray();
             question.setVector(vector);
         }
     }
 
-    public List<Double> findAverageValue(String sentence, String tokenType) {
+    public List<Double> findValue(String sentence, String tokenType) {
         List<Double> values = new ArrayList<Double>();
         String[] words = sentence.split(" ");
         List<List<Double>> wordValues = new ArrayList<List<Double>>();

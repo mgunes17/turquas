@@ -4,8 +4,6 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import db.configuration.ConnectionConfiguration;
-import model.Sentence;
 
 import java.util.ArrayList;
 import java.util.List;
