@@ -43,7 +43,7 @@ public class WebCrawler {
                 webPage = new WebPage(url);
                 webPage.setContent(urlContent.fetchContent(webPage.getUrl()));
 
-                if (checkAcceptanceOfDocument(urlContent.getDocument())) {
+                if (checkAcceptanceOfDocument(urlContent.getDocument(), url)) {
                     pageQueue.offer(webPage);
                     updateUnvisitedPageUrls();
 
@@ -81,11 +81,12 @@ public class WebCrawler {
         return count > 0 && count % CrawlerAdmin.crawlerParameterMap.get("session_size") == 0;
     }
 
-    private boolean checkAcceptanceOfDocument(Document document) {
+    private boolean checkAcceptanceOfDocument(Document document, String url) {
         Element htmlTag = document.select("html").first();
         String langAttribute = htmlTag.attr("lang");
 
-        return langAttribute != null && (langAttribute.equals("tr-TR") || langAttribute.equals("tr"));
+        return langAttribute != null &&
+                (url.contains(".tr") || langAttribute.equals("tr-TR") || langAttribute.equals("tr"));
     }
 
     private void updateUnvisitedPageUrls() {
@@ -102,7 +103,7 @@ public class WebCrawler {
     }
 
     private boolean isAcceptable(String url) {
-        return !url.contains("#") && !url.contains("action=edit") && !url.contains("action=history")
+        return !url.equals("") && !url.contains("#") && !url.contains("action=edit") && !url.contains("action=history")
                 && !url.contains("veaction=edit") && !url.contains(".jpg") && !url.contains(".png");
     }
 

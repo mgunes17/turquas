@@ -10,9 +10,11 @@ public class ValidationHandler {
         LanguageValidator languageValidator = new LanguageValidator();
         QuestionableValidator questionableValidator = new QuestionableValidator();
         WordCountValidator wordCountValidator = new WordCountValidator();
+        PunctuationValidator punctuationValidator = new PunctuationValidator();
 
         languageValidator.setNextValidator(questionableValidator);
         questionableValidator.setNextValidator(wordCountValidator);
+        wordCountValidator.setNextValidator(punctuationValidator);
 
         headValidator = languageValidator;
     }
