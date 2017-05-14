@@ -7,6 +7,7 @@ import com.datastax.driver.mapping.Result;
 import db.accessor.SentenceAccessor;
 import db.configuration.ConnectionConfiguration;
 import db.configuration.MappingManagerConfiguration;
+import db.configuration.ModelVariables;
 import model.Sentence;
 
 import java.util.ArrayList;
@@ -61,10 +62,16 @@ public class SentenceDAO {
     public void insertBatch(List<Sentence> sentenceList){
         try{
             BatchStatement batch = new BatchStatement();
+            int count = 1;
             for(Sentence sentence: sentenceList){
                 Statement statement = sentenceAccessor.insertBatch(sentence.getOriginalSentence(),
                         sentence.getSourceName(), sentence.getStemmedWordsList(), sentence.getTags(), sentence.getTokenList());
                 batch.add(statement);
+                if(count % ModelVariables.batchSize == 0){
+                    session.execute(batch);
+                    batch = new BatchStatement();
+                }
+                count++;
             }
 
             session.execute(batch);

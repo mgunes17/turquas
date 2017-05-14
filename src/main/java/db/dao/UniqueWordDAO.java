@@ -6,6 +6,7 @@ import com.datastax.driver.mapping.Result;
 import db.accessor.UniqueWordAccessor;
 import db.configuration.ConnectionConfiguration;
 import db.configuration.MappingManagerConfiguration;
+import db.configuration.ModelVariables;
 import model.UniqueWord;
 
 import java.util.HashSet;
@@ -38,9 +39,14 @@ public class UniqueWordDAO {
     public boolean update(Set<UniqueWord> uniqueWordSet) {
         try{
             BatchStatement batch = new BatchStatement();
-
+            int count = 1;
             for(UniqueWord uniqueWord: uniqueWordSet){
                 batch.add(uniqueWordAccessor.update(uniqueWord.getValueMap(), uniqueWord.getWord()));
+                if(count % ModelVariables.batchSize == 0){
+                    session.execute(batch);
+                    batch = new BatchStatement();
+                }
+                count++;
             }
 
             session.execute(batch);
@@ -55,9 +61,14 @@ public class UniqueWordDAO {
     public boolean updateSources(Set<UniqueWord> uniqueWordSet) {
         try{
             BatchStatement batch = new BatchStatement();
-
+            int count = 1;
             for(UniqueWord uniqueWord: uniqueWordSet){
                 batch.add(uniqueWordAccessor.updateSources(uniqueWord.getDocumentSet(), uniqueWord.getWord()));
+                if(count % ModelVariables.batchSize == 0){
+                    session.execute(batch);
+                    batch = new BatchStatement();
+                }
+                count++;
             }
 
             session.execute(batch);

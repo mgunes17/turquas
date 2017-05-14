@@ -11,4 +11,5 @@ public class ModelVariables {
     public static final String QUESTION_TABLE_NAME = "question";
     public static final String W2V_TOKEN_TABLE_NAME = "w2v_token";
     public static final String TOKEN_MORPH_ANALYSIS_TABLE_NAME = "token_morph_analysis";
+    public static final int batchSize = 10;
 }

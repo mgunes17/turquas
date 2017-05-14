@@ -32,15 +32,15 @@ public class W2VTokenDAO {
         try{
             BatchStatement batch = new BatchStatement();
 
-            int count = 0;
+            int count = 1;
             for(W2VToken w2VToken: tokens){
-                count++;
                 batch.add(w2VTokenAccessor.updateTable(w2VToken.getTokenName(), w2VToken.isStem(), w2VToken.getValue()));
 
                 if(count % 10 == 0){
                     session.execute(batch);
                     batch = new BatchStatement();
                 }
+                count++;
             }
 
             session.execute(batch);
