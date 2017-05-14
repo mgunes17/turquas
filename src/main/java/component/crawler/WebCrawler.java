@@ -59,14 +59,10 @@ public class WebCrawler {
                     }
                 }
                 url = unvisitedPageUrls.poll();
-            } catch(IOException ex){
-                System.out.println(url + " " + ex.getMessage());
-                ex.printStackTrace();
-                url = unvisitedPageUrls.poll();
-                logger.warn(ex.getMessage());
             } catch (Exception ex) {
                 System.out.println(url + " " + ex.getMessage());
                 ex.printStackTrace();
+                url = unvisitedPageUrls.poll();
                 logger.warn(ex.getMessage());
             }
         }

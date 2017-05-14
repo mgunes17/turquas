@@ -7,6 +7,7 @@ import com.datastax.driver.mapping.Result;
 import db.accessor.SourceAccessor;
 import db.configuration.ConnectionConfiguration;
 import db.configuration.MappingManagerConfiguration;
+import db.configuration.ModelVariables;
 import model.Source;
 
 import java.util.HashMap;
@@ -40,10 +41,16 @@ public class SourceDAO {
     public void insertBatch(List<Source> sourceList){
         try{
             BatchStatement batch = new BatchStatement();
+            int count = 1;
             for(Source source: sourceList){
                 Statement statement = sourceAccessor.insertBatch(source.getSourceName(),
                         source.getLastUpdatedDate(), source.getWordCountMap());
                 batch.add(statement);
+                if(count % ModelVariables.batchSize == 0){
+                    session.execute(batch);
+                    batch = new BatchStatement();
+                }
+                count++;
             }
 
             session.execute(batch);
