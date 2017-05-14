@@ -16,9 +16,9 @@ public interface TokenAccessor {
     @Query("SELECT token_name FROM token_morph_analysis WHERE analysis_null = true LIMIT ?")
     Result<Token> getUnlabeledToken(int count);
 
-    @Query("INSERT INTO token_morph_analysis (is_analysis_null, token_name, analysis) values (false, ?, ?)")
+    @Query("INSERT INTO token_morph_analysis (analysis_null, token_name, analysis) values (false, ?, ?)")
     Statement saveTMA(String tokenName, Set<String> analysis);
 
-    @Query("DELETE FROM token_morph_analysis WHERE is_analysis_null = true and token_name = ?")
+    @Query("DELETE FROM token_morph_analysis WHERE token_name = ?")
     Statement deleteTMA(String tokenName);
 }
