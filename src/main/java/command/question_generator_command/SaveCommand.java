@@ -37,11 +37,18 @@ public class SaveCommand extends AbstractCommand implements Command {
         //bir cümle seti için factory 1 kere verilsin
         for(int i = 0; i < recordCount; i++) {
             if(sentenceList.size() > i){ // düzeltilecek
-                System.out.println("#" + (i + 1) + " cümle için soru üretiliyor..");
+                System.out.println((i + 1) + ". cümle için soru üretiliyor..");
 
                 Sentence sentence = sentenceList.get(i);
                 //soru listesi gelince tek tek hazırla ve kayıt listesine ekle
+
+                long start_time = System.nanoTime();
+                mainGenerator = new MainGenerator();
                 List<Question>  questionList = mainGenerator.convertQuestions(sentence.getOriginalSentence());
+                long end_time = System.nanoTime();
+                double difference = (end_time - start_time)/1e6;
+                System.out.println("sorular convert edildi:" + difference);
+
 
                 Map<String, List<Double>> w2vMapForSentence = new HashMap<>();
                 StemBy stemBy = new StemBy();
@@ -49,14 +56,25 @@ public class SaveCommand extends AbstractCommand implements Command {
                 AverageBy averageBy = new AverageBy();
                 NearBy nearBy = new NearBy();
 
+                start_time = System.nanoTime();
                 String stem = stemBy.rebuildSentence(sentence.getOriginalSentence());
                 String letter = letterBy.rebuildSentence(sentence.getOriginalSentence());
+                end_time = System.nanoTime();
+                difference = (end_time - start_time)/1e6;
+                System.out.println("stem ve letter rebuild sentence başladı bitti:" + difference);
+
+                start_time = System.nanoTime();
                 w2vMapForSentence.put("stem_average", averageBy.findValue(stem, "stem"));
                 //w2vMapForSentence.put("stem_near", nearBy.findValue(stem, stem));
                 w2vMapForSentence.put("letter_average", averageBy.findValue(letter, "letter"));
                 //w2vMapForSentence.put("letter_near", nearBy.findValue(letter, "letter"));
+                end_time = System.nanoTime();
+                difference = (end_time - start_time)/1e6;
+                System.out.println("vektör değerleri hesaplama:" + difference);
+
 
                 for(Question question: questionList) { // her bir soruyu db için hazırla
+                    start_time = System.nanoTime();
                     stem = stemBy.rebuildSentence(question.getQuestion());
                     letter = letterBy.rebuildSentence(question.getQuestion());
 
@@ -70,9 +88,17 @@ public class SaveCommand extends AbstractCommand implements Command {
                     question.setAnswerW2vValueMap(w2vMapForSentence);
                     question.setSourceName(sentence.getSourceName());
                     question.setAnswer(sentence.getOriginalSentence());
+                    end_time = System.nanoTime();
+                    difference = (end_time - start_time)/1e6;
+                    System.out.println("bir soru için stem-letter rebuild + vektörler :" + difference);
                 }
 
+                start_time = System.nanoTime();
                 questionDAO.saveQuestionList(questionList);
+                end_time = System.nanoTime();
+                difference = (end_time - start_time)/1e6;
+                System.out.println(questionList.size() + "sorunun kaydedilmesi :" + difference);
+                questionList = null;
             }
         }
 
