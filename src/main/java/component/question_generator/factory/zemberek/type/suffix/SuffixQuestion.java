@@ -1,7 +1,7 @@
 package component.question_generator.factory.zemberek.type.suffix;
 
-import component.question_generator.word.Question;
 import component.question_generator.word.Word;
+import model.Question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +41,7 @@ public abstract class SuffixQuestion {
                 i++;
             }
 
-            questions.add(new Question(sentence.toString(),
-                    answer.toString(),
-                    suffix.getQuestionType()));
+            questions.add(new Question(sentence.toString(), answer.toString()));
         }
 
         return questions;

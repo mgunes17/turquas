@@ -1,6 +1,6 @@
 package component.question_generator.factory.itu.type;
 
-import component.question_generator.word.Question;
+import model.Question;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package component.question_generator.factory.zemberek.type;
 
-import component.question_generator.word.Question;
 import component.question_generator.word.Word;
+import model.Question;
 
 import java.util.List;
 

@@ -2,11 +2,11 @@ package component.question_generator.factory.itu;
 
 import component.question_generator.factory.QuestionFactory;
 import component.question_generator.factory.itu.type.NerQuestion;
-import component.question_generator.word.Question;
 import component.question_generator.word.Sentence;
+import model.Question;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mustafa on 09.04.2017.
@@ -18,16 +18,14 @@ public class ItuQuestionFactory extends QuestionFactory {
         this.sentence = sentence;
     }
 
-    public Sentence getQuestionList() {
-        Set<Question> generatedList = new HashSet<Question>();
+    public List<Question> getQuestionList() {
+        List<Question> generatedList = new ArrayList<Question>();
 
         //ner sorularını üret
         NerQuestion nerQuestion = new NerQuestion();
         generatedList.addAll(nerQuestion.reorganize(sentence));
 
-
         Sentence returnedSentence = new Sentence(sentence);
-        returnedSentence.setQuestionList(generatedList);
-        return returnedSentence;
+        return generatedList;
     }
 }

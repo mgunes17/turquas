@@ -1,8 +1,8 @@
 package component.question_generator.factory.zemberek.type.suffix;
 
 import component.question_generator.factory.zemberek.type.QuestionType;
-import component.question_generator.word.Question;
 import component.question_generator.word.Word;
+import model.Question;
 
 import java.util.HashMap;
 import java.util.List;

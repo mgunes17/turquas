@@ -3,9 +3,9 @@ package component.question_generator.factory.zemberek;
 import component.question_generator.factory.QuestionFactory;
 import component.question_generator.factory.zemberek.type.*;
 import component.question_generator.factory.zemberek.type.suffix.*;
-import component.question_generator.word.Question;
 import component.question_generator.word.Sentence;
 import component.question_generator.word.Word;
+import model.Question;
 import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
 import zemberek.morphology.analysis.SentenceAnalysis;
 import zemberek.morphology.analysis.WordAnalysis;
@@ -36,8 +36,8 @@ public class ZemberekQuestionFactory extends QuestionFactory {
         singleTypes.put("gen", new GenQuestion());
     }
 
-    public Sentence getQuestionList() {
-        Set<Question> generatedList = new HashSet<Question>();
+    public List<Question> getQuestionList() {
+        List<Question> generatedList = new ArrayList<>();
         Set<String> secondaryPosTags = new HashSet<String>();
         Map<String, QuestionType> tagMap = new HashMap<String, QuestionType>();
         tagMap.put("Time", new TimeQuestion());
@@ -81,9 +81,7 @@ public class ZemberekQuestionFactory extends QuestionFactory {
             }
         }
 
-        Sentence s = new Sentence(sentence);
-        s.setQuestionList(generatedList);
-        return s;
+        return generatedList;
     }
 
     private List<Question> generate(QuestionType type) {

@@ -1,10 +1,12 @@
 package component.question_generator.factory;
 
-import component.question_generator.word.Sentence;
+import model.Question;
+
+import java.util.List;
 
 /**
  * Created by mustafa on 09.04.2017.
  */
 public abstract class QuestionFactory {
-    public abstract Sentence getQuestionList();
+    public abstract List<Question> getQuestionList();
 }

@@ -1,7 +1,7 @@
 package component.question_generator.save;
 
-import component.question_generator.word.Question;
 import component.question_generator.word.Sentence;
+import model.Question;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,7 +25,7 @@ public class FileSave implements SaveType {
                 fileWriter.write(sentence.getSentence() + "\n\n");
 
                 for(Question question: sentence.getQuestionList()) {
-                    fileWriter.write(question.getQuestionSentence() + "\n");
+                    fileWriter.write(question.getQuestion() + "\n");
                     fileWriter.write(question.getAnswer() + "\n\n");
                 }
 

@@ -1,7 +1,7 @@
 package component.question_generator.factory.zemberek.type;
 
-import component.question_generator.word.Question;
 import component.question_generator.word.Word;
+import model.Question;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,6 @@ public class CopQuestion implements QuestionType {
     private final String NEDENDIR = "nedendir";
 
     public List<Question> reorganize(List<Word> wordList) {
-
         StringBuilder sentence = new StringBuilder();
         StringBuilder answer = new StringBuilder();
 
@@ -32,8 +31,8 @@ public class CopQuestion implements QuestionType {
             }
         }
 
-        List<Question> questions = new ArrayList<Question>();
-        questions.add(new Question(sentence.toString() + " ?", answer.toString(), new CopQuestion()));
+        List<Question> questions = new ArrayList<>();
+        questions.add(new Question(sentence.toString() , answer.toString()));
 
         return questions;
     }

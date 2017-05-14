@@ -1,7 +1,7 @@
 package component.question_generator.factory.zemberek.type;
 
-import component.question_generator.word.Question;
 import component.question_generator.word.Word;
+import model.Question;
 import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
 import zemberek.morphology.analysis.SentenceAnalysis;
 
@@ -34,7 +34,7 @@ public class GenQuestion implements QuestionType {
         }
 
         List<Question> questions = new ArrayList<Question>();
-        questions.add(new Question(builder.toString() + " ?", answer.toString(), new GenQuestion()));
+        questions.add(new Question(builder.toString() + " ?", answer.toString()));
         return questions;
     }
 }

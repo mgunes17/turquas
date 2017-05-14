@@ -1,6 +1,10 @@
 package component.question_generator.word;
 
+import model.Question;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -12,7 +16,7 @@ public class Sentence {
 
     public Sentence(String sentence) {
         this.sentence = sentence;
-        questionList = new HashSet<Question>();
+        questionList = new HashSet<>();
     }
 
     //getter-setter

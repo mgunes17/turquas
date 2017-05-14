@@ -1,7 +1,7 @@
 package component.question_generator.factory.itu.type;
 
 import component.question_generator.factory.itu.type.nameEntityQuestionType.*;
-import component.question_generator.word.Question;
+import model.Question;
 import nlp_tool.itu.ItuNlpService;
 import nlp_tool.itu.ParsedWord;
 
