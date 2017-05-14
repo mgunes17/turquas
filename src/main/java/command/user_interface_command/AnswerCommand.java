@@ -25,7 +25,7 @@ public class AnswerCommand extends AbstractCommand implements Command {
 
         Scanner in = new Scanner(System.in);
         System.out.print("answer=>");
-        String question = in.nextLine();
+        String question = in.nextLine().toLowerCase();
 
         while(!question.equals("change")) {
             if(validateQuestion(question)) { //girdi cevaplanabilir bir soru ise
@@ -50,7 +50,7 @@ public class AnswerCommand extends AbstractCommand implements Command {
                 printAnswers(userQuestion, answerCount);
             }
             System.out.print("answer=>");
-            question = in.nextLine();
+            question = in.nextLine().toLowerCase();
         }
 
         return true;
