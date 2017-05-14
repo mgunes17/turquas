@@ -17,4 +17,7 @@ public interface QuestionAccessor {
 
     @Query("SELECT * FROM question")
     Result<Question> getAll();
+
+    @Query("SELECT * FROM question LIMIT ?")
+    Result<Question> getQuestionsByLimit(int limit);
 }

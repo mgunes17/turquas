@@ -5,7 +5,8 @@ import component.question_generator.factory.itu.ItuQuestionFactory;
 import component.question_generator.factory.zemberek.ZemberekQuestionFactory;
 import model.Question;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mustafa on 22.03.2017.
