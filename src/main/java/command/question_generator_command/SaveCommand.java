@@ -37,6 +37,8 @@ public class SaveCommand extends AbstractCommand implements Command {
         //bir cümle seti için factory 1 kere verilsin
         for(int i = 0; i < recordCount; i++) {
             if(sentenceList.size() > i){ // düzeltilecek
+                System.out.println("#" + (i + 1) + " cümle için soru üretiliyor..");
+
                 Sentence sentence = sentenceList.get(i);
                 //soru listesi gelince tek tek hazırla ve kayıt listesine ekle
                 List<Question>  questionList = mainGenerator.convertQuestions(sentence.getOriginalSentence());
@@ -50,9 +52,9 @@ public class SaveCommand extends AbstractCommand implements Command {
                 String stem = stemBy.rebuildSentence(sentence.getOriginalSentence());
                 String letter = letterBy.rebuildSentence(sentence.getOriginalSentence());
                 w2vMapForSentence.put("stem_average", averageBy.findValue(stem, "stem"));
-                w2vMapForSentence.put("stem_near", nearBy.findValue(stem, stem));
+                //w2vMapForSentence.put("stem_near", nearBy.findValue(stem, stem));
                 w2vMapForSentence.put("letter_average", averageBy.findValue(letter, "letter"));
-                w2vMapForSentence.put("letter_near", nearBy.findValue(letter, "letter"));
+                //w2vMapForSentence.put("letter_near", nearBy.findValue(letter, "letter"));
 
                 for(Question question: questionList) { // her bir soruyu db için hazırla
                     stem = stemBy.rebuildSentence(question.getQuestion());
@@ -60,13 +62,14 @@ public class SaveCommand extends AbstractCommand implements Command {
 
                     Map<String, List<Double>> w2vMapForQuestion = new HashMap<>();
                     w2vMapForQuestion.put("stem_average", averageBy.findValue(stem, "stem"));
-                    w2vMapForQuestion.put("stem_near", nearBy.findValue(stem, stem));
+                    //w2vMapForQuestion.put("stem_near", nearBy.findValue(stem, stem));
                     w2vMapForQuestion.put("letter_average", averageBy.findValue(letter, "letter"));
-                    w2vMapForQuestion.put("letter_near", nearBy.findValue(letter, "letter"));
+                    //w2vMapForQuestion.put("letter_near", nearBy.findValue(letter, "letter"));
 
                     question.setQuestionW2vValueMap(w2vMapForQuestion);
                     question.setAnswerW2vValueMap(w2vMapForSentence);
                     question.setSourceName(sentence.getSourceName());
+                    question.setAnswer(sentence.getOriginalSentence());
                 }
 
                 questionDAO.saveQuestionList(questionList);

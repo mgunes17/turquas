@@ -26,7 +26,7 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
         String vectorType = parameter[2];
         String valueType = wordType + "_" + vectorType;
 
-        int limit = readLimitCount(parameter[3]);
+        int limit = parseLimitCount(parameter[3]);
 
         QuestionDAO questionDAO = new QuestionDAO();
         List<Question> questionList = new ArrayList<>();
@@ -54,7 +54,7 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
                 && UserInterfaceAdmin.vectorTypeMap.get(parameter[2]) != null; // öyle bir vector type var mı ?
     }
 
-    private int readLimitCount(String parameter){
+    private int parseLimitCount(String parameter){
         try {
             return Integer.parseInt(parameter);
         } catch (NumberFormatException ex){

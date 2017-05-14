@@ -22,6 +22,7 @@ import java.util.List;
 public class W2VTokenCommand extends AbstractCommand implements Command {
     public boolean execute(String[] parameter) {
         //kaydedilecek liste
+        W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
         List<W2VToken> w2VTokenList = new ArrayList<W2VToken>();
 
         SentenceLoader sentenceLoader = new SentenceLoader(0); //tüm cümleleri çek
@@ -50,7 +51,7 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
         readW2VFromFile(w2VTokenList, false);
 
         //kaydet
-        W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
+
         w2VTokenDAO.updateTable(w2VTokenList);
         return true;
     }

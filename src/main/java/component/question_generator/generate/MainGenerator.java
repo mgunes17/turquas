@@ -15,10 +15,10 @@ public class MainGenerator {
     private List<Question> questionList = new ArrayList<>();
 
     public List<Question> convertQuestions(String sentence) {
-        QuestionFactory factory = new ItuQuestionFactory(sentence);
-        questionList.addAll(factory.getQuestionList());
+        /*QuestionFactory factory = new ItuQuestionFactory(sentence);
+        questionList.addAll(factory.getQuestionList());*/
 
-        factory = new ZemberekQuestionFactory(sentence);
+        QuestionFactory factory = new ZemberekQuestionFactory(sentence);
         questionList.addAll(factory.getQuestionList());
 
         return questionList;
