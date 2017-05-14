@@ -40,14 +40,17 @@ public class AverageBy extends VectorType {
             }
         }
 
-        for(int i = 0; i < W2VCreatorAdmin.w2vParameterMap.get("layer_size"); i++) {
+        int layerSize = W2VCreatorAdmin.w2vParameterMap.get("layer_size");
+        int wordValuesSize = wordValues.size();
+
+        for(int i = 0; i < layerSize; i++) {
             Double sum = 0.0d;
 
             for(List<Double> xx: wordValues) {
                 sum += xx.get(i);
             }
 
-            values.add(sum / wordValues.size());
+            values.add(sum / wordValuesSize);
         }
 
         return values;
