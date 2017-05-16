@@ -51,9 +51,11 @@ public class CandidateDAO {
         List<Set<String>> sourceList = new ArrayList<>();
 
         for(String word: words) {
-            UniqueWord uniqueWord = MappingManagerConfiguration.getUniqueWordMapper().get(word);
-            if(uniqueWord != null)
-                sourceList.add(uniqueWord.getDocumentSet());
+            if(!word.equals("")){
+                UniqueWord uniqueWord = MappingManagerConfiguration.getUniqueWordMapper().get(word);
+                if(uniqueWord != null)
+                    sourceList.add(uniqueWord.getDocumentSet());
+            }
         }
 
         return sourceList;
