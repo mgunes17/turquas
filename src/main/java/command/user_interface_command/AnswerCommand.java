@@ -35,8 +35,8 @@ public class AnswerCommand extends AbstractCommand implements Command {
                 QuestionForCompare userQuestion = createUserQuestionForCompare(question);
 
                 long start_time = System.nanoTime();
-                double[] answer = predictWithDeepLearning();
-                userQuestion.setVector(answer);
+                //double[] answer = predictWithDeepLearning();
+                //userQuestion.setVector(answer);
                 long end_time = System.nanoTime();
                 double difference = (end_time - start_time)/1e6;
                 System.out.println("dl ile cevaplama:" + difference);
