@@ -31,9 +31,11 @@ public class FindingCandidate {
 
         for(Question question: questionList){
             QuestionForCompare qfc = new QuestionForCompare();
-            qfc.setAnswer(question.getAnswer());
             qfc.setQuestion(question.getQuestion());
-            qfc.setVector(question.getQuestionW2vValueMap().get(w2vType).
+            qfc.setQuestionVector(question.getQuestionW2vValueMap().get(w2vType).
+                    stream().mapToDouble(Double::doubleValue).toArray());
+            qfc.setAnswer(question.getAnswer());
+            qfc.setAnswerVector(question.getAnswerW2vValueMap().get(w2vType).
                     stream().mapToDouble(Double::doubleValue).toArray());
             questionForCompareList.add(qfc);
         }
