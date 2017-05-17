@@ -9,7 +9,8 @@ import java.util.List;
 public class QuestionForCompare {
     private String question;
     private String answer;
-    private double[] vector; // sorunun vektör değeri
+    private double[] questionVector; // sorunun vektör değeri
+    private double[] answerVector; // cevabın vektör değeri
     private List<SimilarityValue> similarityList;
 
     public QuestionForCompare() {
@@ -32,12 +33,20 @@ public class QuestionForCompare {
         this.answer = answer;
     }
 
-    public double[] getVector() {
-        return vector;
+    public double[] getQuestionVector() {
+        return questionVector;
     }
 
-    public void setVector(double[] vector) {
-        this.vector = vector;
+    public void setQuestionVector(double[] questionVector) {
+        this.questionVector = questionVector;
+    }
+
+    public double[] getAnswerVector() {
+        return answerVector;
+    }
+
+    public void setAnswerVector(double[] answerVector) {
+        this.answerVector = answerVector;
     }
 
     public List<SimilarityValue> getSimilarityList() {
