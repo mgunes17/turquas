@@ -25,14 +25,18 @@ public class Word2Vec {
 
         org.deeplearning4j.models.word2vec.Word2Vec vec = new org.deeplearning4j.models.word2vec.Word2Vec.Builder()
                 .minWordFrequency(W2VCreatorAdmin.w2vParameterMap.get("min_word_freq"))
+                .batchSize(1000)
+                .useAdaGrad(false)
                 .iterations(W2VCreatorAdmin.w2vParameterMap.get("iteration"))
                 .layerSize(W2VCreatorAdmin.w2vParameterMap.get("layer_size"))
+                .learningRate(0.025)
+                .minLearningRate(1e-2)
+                .negativeSample(10)
                 .seed(42)
                 .windowSize(W2VCreatorAdmin.w2vParameterMap.get("window_size"))
                 .iterate(iterator)
                 .tokenizerFactory(t)
                 .build();
-
         vec.fit();
 
         WordVectorSerializer.writeWordVectors(vec, W2VCreatorAdmin.filenameMap.get("target_file"));

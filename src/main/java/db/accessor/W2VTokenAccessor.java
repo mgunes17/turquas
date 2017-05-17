@@ -13,9 +13,9 @@ import java.util.List;
  */
 @Accessor
 public interface W2VTokenAccessor {
-    @Query("INSERT INTO w2v_token (token_name, stem, value) values (?, ?, ?)")
-    Statement updateTable(String tokenName, boolean stem, List<Double> values);
+    @Query("INSERT INTO w2v_token (token_name, type, value) values (?, ?, ?)")
+    Statement updateTable(String tokenName, String type, List<Double> values);
 
-    @Query("select token_name, value from w2v_token WHERE stem = ? ")
-    Result<W2VToken> getToken(boolean stem);
+    @Query("select token_name, value from w2v_token WHERE type = ? ")
+    Result<W2VToken> getToken(String type);
 }
