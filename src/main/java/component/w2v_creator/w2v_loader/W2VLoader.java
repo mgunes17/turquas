@@ -1,6 +1,8 @@
-package component.w2v_creator.input_creator;
+package component.w2v_creator.w2v_loader;
 
 import admin.W2VCreatorAdmin;
+import db.dao.W2VTokenDAO;
+import model.W2VToken;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -8,17 +10,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by ercan on 27.04.2017.
+ * Created by ercan on 17.05.2017.
  */
-public class VectorLoader {
+public class W2VLoader {
 
-    public void loadVectorsIntoMapFromFile(){
+    public void loadVectorsFromFile(){
         try {
-            BufferedReader br = new BufferedReader(new FileReader(W2VCreatorAdmin.filenameMap.get("target_file")));
+            BufferedReader br = new BufferedReader(new FileReader(W2VCreatorAdmin.filenameMap.get("pretrained_file")));
             String line;
-            br.readLine();
+
             while ((line = br.readLine()) != null) {
                 List<Double> vectorValues = new ArrayList<Double>();
                 String [] values = line.split(" ");
@@ -35,8 +38,9 @@ public class VectorLoader {
                     }
                 }
                 W2VCreatorAdmin.wordVectorMap.put(values[0], vectorValues);
-                System.out.println(W2VCreatorAdmin.wordVectorMap.get(values[0]).get(0) + " " + values[0]);
             }
+
+            br.close();
         } catch (FileNotFoundException e) {
             System.out.println("dosya açılamadı");
             e.printStackTrace();
@@ -44,6 +48,28 @@ public class VectorLoader {
             System.out.println("input hatası");
             e.printStackTrace();
         }
-
     }
+
+    public void saveToDatabase(){
+        List<W2VToken> w2VTokenList = createW2VTokenList();
+        W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
+        w2VTokenDAO.updateTable(w2VTokenList);
+    }
+
+    private List<W2VToken> createW2VTokenList(){
+        Map<String, List<Double>> map = W2VCreatorAdmin.wordVectorMap;
+        List<W2VToken> w2VTokenList = new ArrayList<>();
+
+        for(String token: map.keySet()){
+            W2VToken w2VToken = new W2VToken();
+            w2VToken.setType("token");
+            w2VToken.setTokenName(token);
+            w2VToken.setValue(map.get(token));
+            w2VTokenList.add(w2VToken);
+        }
+
+        return w2VTokenList;
+    }
+
+
 }
