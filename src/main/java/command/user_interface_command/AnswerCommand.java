@@ -1,15 +1,17 @@
 package command.user_interface_command;
 
 import admin.UserInterfaceAdmin;
+import admin.W2VCreatorAdmin;
 import command.AbstractCommand;
 import command.Command;
 import component.user_interface.candidate.FindingCandidate;
 import component.user_interface.similarity.SimilarityType;
 import model.QuestionForCompare;
 import model.SimilarityValue;
+import org.apache.commons.io.IOUtils;
 import zemberek.langid.LanguageIdentifier;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -33,10 +35,17 @@ public class AnswerCommand extends AbstractCommand implements Command {
                 QuestionForCompare userQuestion = createUserQuestionForCompare(question);
 
                 long start_time = System.nanoTime();
-                List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question, w2vType);
-                candidateList.add(0, userQuestion);
+                //double[] answer = predictWithDeepLearning();
+                //userQuestion.setVector(answer);
                 long end_time = System.nanoTime();
                 double difference = (end_time - start_time)/1e6;
+                System.out.println("dl ile cevaplama:" + difference);
+
+                start_time = System.nanoTime();
+                List<QuestionForCompare> candidateList = new FindingCandidate().findCandidateList(question, w2vType);
+                candidateList.add(0, userQuestion);
+                end_time = System.nanoTime();
+                difference = (end_time - start_time)/1e6;
                 System.out.println("candidate çekilmesi:" + difference);
 
                 start_time = System.nanoTime();
@@ -48,13 +57,58 @@ public class AnswerCommand extends AbstractCommand implements Command {
                 int candidateCount = candidateList.size();
                 int answerCount = findAnswerCount(candidateCount);
                 printAnswers(userQuestion, answerCount);
+
             }
+
             System.out.print("answer=>");
             question = in.nextLine().toLowerCase();
         }
 
         return true;
     }
+
+    private double[] predictWithDeepLearning(){
+        try {
+            Process p = Runtime.getRuntime().exec("/home/ercan/anaconda2/bin/python /home/ercan/ideaprojects/turquas/predict.py");
+            p.waitFor();
+            p.destroy();
+
+            return predict();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private String readRawPredictedVector(){
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream("/home/ercan/ideaprojects/turquas/predict.txt");
+
+            return IOUtils.toString(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private double[] predict(){
+        String prediction = readRawPredictedVector();
+
+        int length = prediction.length();
+        prediction = prediction.substring(2, length-2);
+        String[] values = prediction.split(",");
+
+        double[] vector = new double[W2VCreatorAdmin.w2vParameterMap.get("layer_size")];
+        for(int i = 0; i < W2VCreatorAdmin.w2vParameterMap.get("layer_size"); i++){
+            vector[i] = Double.parseDouble(values[i]);
+        }
+
+        return vector;
+    }
+
 
     private void printAnswers(QuestionForCompare userQuestion, int answerCount){
         int answerShown = 0;
