@@ -61,10 +61,10 @@ public class SaveCommand extends AbstractCommand implements Command {
                 start_time = System.nanoTime();
                 String sentenceByStem = stemBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
                 String sentenceByLetter = letterBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
-                String sentenceByToken = tokenBy.rebuildSentence(sentence.getOriginalSentence().toLowerCase());
+                String sentenceByToken = tokenBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
                 end_time = System.nanoTime();
                 difference = (end_time - start_time)/1e6;
-                System.out.println("stem ve letter rebuild sentence başladı bitti:" + difference);
+                System.out.println("stem-letter-token rebuild sentence başladı bitti:" + difference);
 
                 start_time = System.nanoTime();
                 w2vMapForSentence.put("stem_average",
@@ -102,7 +102,7 @@ public class SaveCommand extends AbstractCommand implements Command {
                     question.setAnswer(sentence.getOriginalSentence());
                     end_time = System.nanoTime();
                     difference = (end_time - start_time)/1e6;
-                    System.out.println("bir soru için stem-letter rebuild + vektörler :" + difference);
+                    System.out.println("bir soru için stem-letter-token rebuild + vektörler :" + difference);
                 }
 
                 start_time = System.nanoTime();
