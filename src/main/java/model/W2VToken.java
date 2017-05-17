@@ -19,8 +19,8 @@ public class W2VToken {
     private String tokenName;
 
     @ClusteringColumn
-    @Column(name = "stem")
-    private boolean stem;
+    @Column(name = "type")
+    private String type;
 
     @Column(name = "value")
     private List<Double> value;
@@ -43,12 +43,12 @@ public class W2VToken {
         this.tokenName = tokenName;
     }
 
-    public boolean isStem() {
-        return stem;
+    public String getType() {
+        return type;
     }
 
-    public void setStem(boolean stem) {
-        this.stem = stem;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public List<Double> getValue() {

@@ -9,6 +9,7 @@ import w2v_operation.vector_operation.NearBy;
 import w2v_operation.vector_operation.VectorType;
 import w2v_operation.word_operation.LetterBy;
 import w2v_operation.word_operation.StemBy;
+import w2v_operation.word_operation.TokenBy;
 import w2v_operation.word_operation.WordType;
 
 import java.util.HashMap;
@@ -31,7 +32,8 @@ public class UserInterfaceAdmin extends Admin {
         wordTypeMap = new HashMap<>();
         wordTypeMap.put("letter", new LetterBy());
         wordTypeMap.put("stem", new StemBy());
-        wordType = "letter";
+        wordTypeMap.put("token", new TokenBy());
+        wordType = "token";
 
         vectorTypeMap = new HashMap<>();
         vectorTypeMap.put("near", new NearBy());

@@ -3,14 +3,14 @@ package command.db_updater_command;
 import command.AbstractCommand;
 import command.Command;
 import component.w2v_creator.converter.Word2Vec;
-import component.w2v_creator.sentence_file_creator.LetterLimitedSenteceFileCreator;
+import component.w2v_creator.sentence_file_creator.DefaultSentenceFileCreator;
+import component.w2v_creator.sentence_file_creator.LetterLimitedSentenceFileCreator;
 import component.w2v_creator.sentence_file_creator.SentenceLoader;
-import component.w2v_creator.sentence_file_creator.StemmedSenteceFileCreator;
+import component.w2v_creator.sentence_file_creator.StemmedSentenceFileCreator;
 import db.dao.W2VTokenDAO;
 import model.W2VToken;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,8 +26,9 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
         List<W2VToken> w2VTokenList = new ArrayList<W2VToken>();
 
         SentenceLoader sentenceLoader = new SentenceLoader(0); //tüm cümleleri çek
-        StemmedSenteceFileCreator stemmedCreator = new StemmedSenteceFileCreator(sentenceLoader);
+        StemmedSentenceFileCreator stemmedCreator = new StemmedSentenceFileCreator(sentenceLoader);
         stemmedCreator.createFile(); // stem hallerini al
+
         Word2Vec word2Vec = new Word2Vec();
         try {
             word2Vec.run(); //w2v değerlerini hesapla
@@ -35,11 +36,10 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
             e.printStackTrace();
         }
 
-        readW2VFromFile(w2VTokenList, true);
+        readW2VFromFile(w2VTokenList, "stem");
 
-        //kelimelerin ilk 5 harfini al
-        LetterLimitedSenteceFileCreator letterLimitedCreator = new LetterLimitedSenteceFileCreator(sentenceLoader, 5);
-        letterLimitedCreator.createFile();
+        LetterLimitedSentenceFileCreator letterLimitedCreator = new LetterLimitedSentenceFileCreator(sentenceLoader, 5);
+        letterLimitedCreator.createFile(); //kelimelerin ilk 5 harfini al
 
         try {
             word2Vec.run(); //w2v değerlerini hesapla
@@ -48,15 +48,26 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
         }
 
         //dosyadan değerleri oku
-        readW2VFromFile(w2VTokenList, false);
+        readW2VFromFile(w2VTokenList, "letter");
+
+        DefaultSentenceFileCreator defaultSentenceFileCreator = new DefaultSentenceFileCreator(sentenceLoader);
+        defaultSentenceFileCreator.createFile(); // token olarak kaydet
+
+        try {
+            word2Vec.run(); //w2v değerlerini hesapla
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //dosyadan değerleri oku
+        readW2VFromFile(w2VTokenList, "token");
 
         //kaydet
-
         w2VTokenDAO.updateTable(w2VTokenList);
         return true;
     }
 
-    private void readW2VFromFile(List<W2VToken> w2VTokenList, boolean isStem) {
+    private void readW2VFromFile(List<W2VToken> w2VTokenList, String type) {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader("target.txt"));
 
@@ -66,7 +77,7 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
             while(line != null) {
                 String[] parsedLine = line.split(" ");
                 W2VToken w2VToken = new W2VToken();
-                w2VToken.setStem(isStem);
+                w2VToken.setType(type);
                 w2VToken.setTokenName(parsedLine[0]);
 
                 List<Double> w2vValues = new ArrayList<Double>();
@@ -78,8 +89,6 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
                 w2VTokenList.add(w2VToken);
                 line = bufferedReader.readLine();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

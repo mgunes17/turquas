@@ -36,14 +36,14 @@ public class W2VTokenTest {
     public void testColumns() {
         token = new W2VToken();
         token.setTokenName("deneme token");
-        token.setStem(true);
+        token.setType("stem");
         List<Double> list = new ArrayList<>();
         list.add(17.0);
         token.setValue(list);
 
         token2 = new W2VToken();
         token2.setTokenName("testt");
-        token2.setStem(false);
+        token2.setType("letter");
 
         tokenMapper.save(token);
         tokenMapper.save(token2);

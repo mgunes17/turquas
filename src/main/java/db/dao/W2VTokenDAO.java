@@ -19,7 +19,7 @@ public class W2VTokenDAO {
     private Session session;
     private final static W2VTokenAccessor w2VTokenAccessor = MappingManagerConfiguration
             .getMappingManager()
-            .createAccessor(W2VTokenAccessor.class);;
+            .createAccessor(W2VTokenAccessor.class);
 
     public W2VTokenDAO() {
         session = ConnectionConfiguration.getSession();
@@ -34,7 +34,7 @@ public class W2VTokenDAO {
 
             int count = 1;
             for(W2VToken w2VToken: tokens){
-                batch.add(w2VTokenAccessor.updateTable(w2VToken.getTokenName(), w2VToken.isStem(), w2VToken.getValue()));
+                batch.add(w2VTokenAccessor.updateTable(w2VToken.getTokenName(), w2VToken.getType(), w2VToken.getValue()));
 
                 if(count % 10 == 0){
                     session.execute(batch);
@@ -53,9 +53,9 @@ public class W2VTokenDAO {
         return true;
     }
 
-    public Map<String, W2VToken> getTokens(boolean isStem) {
+    public Map<String, W2VToken> getTokens(String type) {
         Map<String, W2VToken> w2VTokens = new HashMap<String, W2VToken>();
-        Result<W2VToken> result = w2VTokenAccessor.getToken(isStem);
+        Result<W2VToken> result = w2VTokenAccessor.getToken(type);
 
         for(W2VToken w2VToken: result) {
             w2VTokens.put(w2VToken.getTokenName(), w2VToken);
