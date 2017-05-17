@@ -9,10 +9,13 @@ public class SimilarityValue implements Comparable<SimilarityValue> {
 
     public int compareTo(SimilarityValue o) {
         double oValue = o.getValue();
-        if(this.value > oValue)
+        if(this.value > oValue) {
             return -1;
-        else
+        } else if(this.value == oValue){
+            return 0;
+        } else {
             return 1;
+        }
     }
 
     public double getValue() {

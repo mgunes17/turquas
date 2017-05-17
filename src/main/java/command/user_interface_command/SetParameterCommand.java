@@ -44,12 +44,15 @@ public class SetParameterCommand implements Command{
                 break;
             default:
                 try {
-                    if(UserInterfaceAdmin.parameterMap.get(parameter[1]) != null){
+                    if(UserInterfaceAdmin.parameterMap.get(parameter[1]) != null){ // parametre mapinde mi ?
                         int value = Integer.parseInt(parameter[2]);
                         UserInterfaceAdmin.parameterMap.put(parameter[1], value);
                         System.out.println(UserInterfaceAdmin.parameterMap.get(parameter[1]));
+                    } else if(UserInterfaceAdmin.pathMap.get(parameter[1]) != null) { // path mapinde mi ?
+                        UserInterfaceAdmin.pathMap.put(parameter[1], parameter[2]);
+                        System.out.println(UserInterfaceAdmin.pathMap.get(parameter[1]));
                     } else {
-                        System.out.println("Bu isimde bir parametre bulunamadı.");
+                        System.out.println("Böyle bir parametre bulunamadı.");
                     }
                 } catch (NumberFormatException ex) {
                     System.out.println("Lütfen sayısal bir değer giriniz.");

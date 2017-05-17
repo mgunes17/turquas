@@ -23,7 +23,7 @@ public class NearBy extends VectorType {
         for (QuestionForCompare question : questionList) {
             List<Double> vectorList = findValue(question.getQuestion(), tokenType);
             double[] vector = vectorList.stream().mapToDouble(Double::doubleValue).toArray();
-            question.setVector(vector);
+            question.setQuestionVector(vector);
         }
     }
 
