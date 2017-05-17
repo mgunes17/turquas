@@ -15,10 +15,7 @@ import command.question_generator_command.ChangeCommand;
 import command.question_generator_command.SaveCommand;
 import command.user_interface_command.AnswerCommand;
 import command.user_interface_command.SetParameterCommand;
-import command.w2v_creator_command.ConvertCommand;
-import command.w2v_creator_command.CreateCommand;
-import command.w2v_creator_command.Input4DLCommand;
-import command.w2v_creator_command.Sentence2W2VCommand;
+import command.w2v_creator_command.*;
 import db.dao.TokenDAO;
 import nlp_tool.itu.LabelMorph;
 
@@ -61,8 +58,8 @@ public class CommandBuilder {
         commandMap.put("set", new command.w2v_creator_command.SetCommand());
         commandMap.put("create", new CreateCommand());
         commandMap.put("convert", new ConvertCommand());
-        commandMap.put("input4dl", new Input4DLCommand());
         commandMap.put("sentence", new Sentence2W2VCommand());
+        commandMap.put("load", new LoadCommand());
         return new CommandSet(commandMap);
     }
 

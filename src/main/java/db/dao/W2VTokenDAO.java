@@ -36,7 +36,7 @@ public class W2VTokenDAO {
             for(W2VToken w2VToken: tokens){
                 batch.add(w2VTokenAccessor.updateTable(w2VToken.getTokenName(), w2VToken.getType(), w2VToken.getValue()));
 
-                if(count % 10 == 0){
+                if(count % 2 == 0){
                     session.execute(batch);
                     batch = new BatchStatement();
                 }
