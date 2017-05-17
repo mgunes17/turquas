@@ -4,12 +4,12 @@ AND durable_writes = true;
 
 CREATE TABLE W2V_TOKEN (
     token_name text,
-    stem boolean,
+    type text,
     value list<double>,
     PRIMARY KEY (token_name, stem)
 );
 
-CREATE INDEX is_stem_index ON w2v_token (stem);
+CREATE INDEX type_index ON w2v_token (type);
 
 CREATE TABLE source (
     source_name text PRIMARY KEY,

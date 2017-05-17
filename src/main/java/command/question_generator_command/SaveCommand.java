@@ -12,6 +12,7 @@ import w2v_operation.vector_operation.AverageBy;
 import w2v_operation.vector_operation.NearBy;
 import w2v_operation.word_operation.LetterBy;
 import w2v_operation.word_operation.StemBy;
+import w2v_operation.word_operation.TokenBy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,20 +54,26 @@ public class SaveCommand extends AbstractCommand implements Command {
                 Map<String, List<Double>> w2vMapForSentence = new HashMap<>();
                 StemBy stemBy = new StemBy();
                 LetterBy letterBy = new LetterBy();
+                TokenBy tokenBy = new TokenBy();
                 AverageBy averageBy = new AverageBy();
                 NearBy nearBy = new NearBy();
 
                 start_time = System.nanoTime();
-                String stem = stemBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
-                String letter = letterBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
+                String sentenceByStem = stemBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
+                String sentenceByLetter = letterBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
+                String sentenceByToken = tokenBy.rebuildSentence(sentence.getOriginalSentence().toLowerCase());
                 end_time = System.nanoTime();
                 difference = (end_time - start_time)/1e6;
                 System.out.println("stem ve letter rebuild sentence başladı bitti:" + difference);
 
                 start_time = System.nanoTime();
-                w2vMapForSentence.put("stem_average", averageBy.findValue(stem, "stem"));
+                w2vMapForSentence.put("stem_average",
+                        averageBy.findValue(sentenceByStem, "stem"));
+                w2vMapForSentence.put("letter_average",
+                        averageBy.findValue(sentenceByLetter, "letter"));
+                w2vMapForSentence.put("token_average",
+                        averageBy.findValue(sentenceByToken, "token"));
                 //w2vMapForSentence.put("stem_near", nearBy.findValue(stem, stem));
-                w2vMapForSentence.put("letter_average", averageBy.findValue(letter, "letter"));
                 //w2vMapForSentence.put("letter_near", nearBy.findValue(letter, "letter"));
                 end_time = System.nanoTime();
                 difference = (end_time - start_time)/1e6;
@@ -75,13 +82,18 @@ public class SaveCommand extends AbstractCommand implements Command {
 
                 for(Question question: questionList) { // her bir soruyu db için hazırla
                     start_time = System.nanoTime();
-                    stem = stemBy.rebuildSentence(question.getQuestion());
-                    letter = letterBy.rebuildSentence(question.getQuestion());
+                    sentenceByStem = stemBy.rebuildSentence(question.getQuestion()).toLowerCase();
+                    sentenceByLetter = letterBy.rebuildSentence(question.getQuestion()).toLowerCase();
+                    sentenceByToken = tokenBy.rebuildSentence(question.getQuestion()).toLowerCase();
 
                     Map<String, List<Double>> w2vMapForQuestion = new HashMap<>();
-                    w2vMapForQuestion.put("stem_average", averageBy.findValue(stem, "stem"));
+                    w2vMapForQuestion.put("stem_average",
+                            averageBy.findValue(sentenceByStem, "stem"));
+                    w2vMapForQuestion.put("letter_average",
+                            averageBy.findValue(sentenceByLetter, "letter"));
+                    w2vMapForQuestion.put("token_average",
+                            averageBy.findValue(sentenceByToken, "token"));
                     //w2vMapForQuestion.put("stem_near", nearBy.findValue(stem, stem));
-                    w2vMapForQuestion.put("letter_average", averageBy.findValue(letter, "letter"));
                     //w2vMapForQuestion.put("letter_near", nearBy.findValue(letter, "letter"));
 
                     question.setQuestionW2vValueMap(w2vMapForQuestion);

@@ -18,7 +18,7 @@ public class W2VCreatorAdmin extends Admin {
         w2vParameterMap = new HashMap<String, Integer>();
         w2vParameterMap.put("epoch", 5);
         w2vParameterMap.put("min_word_freq", 1);
-        w2vParameterMap.put("iteration", 1);
+        w2vParameterMap.put("iteration", 3);
         w2vParameterMap.put("layer_size", 100);
         w2vParameterMap.put("window_size", 5);
         filenameMap = new HashMap<String, String>();

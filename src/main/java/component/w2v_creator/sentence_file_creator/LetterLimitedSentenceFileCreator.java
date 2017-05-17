@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * Created by ercan on 26.04.2017.
  */
-public class LetterLimitedSenteceFileCreator extends SenteceFileCreator {
+public class LetterLimitedSentenceFileCreator extends SenteceFileCreator {
     private int letterLimit;
     private String forbiddenChars = "oO1234567890";
 
-    public LetterLimitedSenteceFileCreator(SentenceLoader sentenceLoader, int letterLimit){
+    public LetterLimitedSentenceFileCreator(SentenceLoader sentenceLoader, int letterLimit){
         this.sentenceLoader = sentenceLoader;
         this.letterLimit = letterLimit;
     }
@@ -33,7 +33,6 @@ public class LetterLimitedSenteceFileCreator extends SenteceFileCreator {
                         }
                     }
                 }
-                writer.print(".");
                 writer.println();
             }
             writer.close();
