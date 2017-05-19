@@ -21,13 +21,17 @@ public class AnswerCommand extends AbstractCommand implements Command {
         Scanner in = new Scanner(System.in);
         System.out.print("answer=>");
         String question = in.nextLine().toLowerCase();
+        AnswererWithDeepLearning answererWithDeepLearning = new AnswererWithDeepLearning();
+        AnswererWithVectorSimilarity answererWithVectorSimilarity = new AnswererWithVectorSimilarity();
 
         while(!question.equals("change")) {
             if(validateQuestion(question)) { //girdi cevaplanabilir bir soru ise
-                AnswererWithDeepLearning answererWithDeepLearning = new AnswererWithDeepLearning();
+                long start_time = System.nanoTime();
                 answererWithDeepLearning.answer(question);
-                AnswererWithVectorSimilarity answererWithVectorSimilarity = new AnswererWithVectorSimilarity();
                 answererWithVectorSimilarity.answer(question);
+                long end_time = System.nanoTime();
+                double difference = (end_time - start_time)/1e6;
+                System.out.println("toplam geçen süre:" + difference);
             }
 
             System.out.print("answer=>");
