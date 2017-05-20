@@ -9,6 +9,9 @@ import command.turquas_command.TurquasSetNSCommand;
 import component.user_interface.w2vtoken.W2VTokenMap;
 import model.W2VToken;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,6 +21,7 @@ import java.util.Scanner;
  */
 public class Turquas {
     public static Map<String, Admin> adminMap;
+    public static Socket pythonSocket;
     private CommandSet commandSet;
     public static String namespace = "crawler";
 
@@ -35,6 +39,20 @@ public class Turquas {
         commandMap.put("get-ns", new TurquasGetNSCommand());
 
         commandSet = new CommandSet(commandMap);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ServerSocket serverSocket = new ServerSocket(5555);
+                    pythonSocket = serverSocket.accept();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                }
+            }
+        }).start();
+        startPythonScript();
+        System.out.println("python-java iletişimi kuruldu.");
     }
 
     public static void main(String[] args) {
@@ -64,5 +82,17 @@ public class Turquas {
     public static Map<String, W2VToken> getW2VToken(String type) { //stem ya da letter ya da token
 
         return W2VTokenMap.getW2VTokenMap().get(type);
+    }
+
+    private void startPythonScript(){
+        try {
+            String command = UserInterfaceAdmin.pathMap.get("python") + " " + UserInterfaceAdmin.pathMap.get("script");
+            Process p = Runtime.getRuntime().exec(command);
+            //p.waitFor();
+            //p.destroy();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
