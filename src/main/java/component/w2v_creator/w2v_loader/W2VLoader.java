@@ -19,8 +19,11 @@ public class W2VLoader {
 
     public void loadVectorsFromFile(){
         try {
+            W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
             BufferedReader br = new BufferedReader(new FileReader(W2VCreatorAdmin.filenameMap.get("pretrained_file")));
             String line;
+            int lineNumber = 0;
+            List<W2VToken> w2VTokenList = new ArrayList<>();
 
             while ((line = br.readLine()) != null) {
                 List<Double> vectorValues = new ArrayList<Double>();
@@ -37,7 +40,17 @@ public class W2VLoader {
                         vectorValues.add(value);
                     }
                 }
-                W2VCreatorAdmin.wordVectorMap.put(values[0], vectorValues);
+                W2VToken w2VToken = createW2VToken(values[0], vectorValues);
+                w2VTokenList.add(w2VToken);
+
+                if(++lineNumber % 10000 == 0){
+                    if(w2VTokenDAO.insertToTable(w2VTokenList)){
+                        System.out.println("başarıyla kaydedildi :) #" + lineNumber);
+                    } else {
+                        System.out.println("kaydedilemedi !!!!");
+                    }
+                    w2VTokenList = new ArrayList<>();
+                }
             }
 
             br.close();
@@ -50,25 +63,13 @@ public class W2VLoader {
         }
     }
 
-    public void saveToDatabase(){
-        List<W2VToken> w2VTokenList = createW2VTokenList();
-        W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
-        w2VTokenDAO.updateTable(w2VTokenList);
-    }
+    private W2VToken createW2VToken(String token, List<Double> vector){
+        W2VToken w2VToken = new W2VToken();
+        w2VToken.setType("token");
+        w2VToken.setTokenName(token);
+        w2VToken.setValue(vector);
 
-    private List<W2VToken> createW2VTokenList(){
-        Map<String, List<Double>> map = W2VCreatorAdmin.wordVectorMap;
-        List<W2VToken> w2VTokenList = new ArrayList<>();
-
-        for(String token: map.keySet()){
-            W2VToken w2VToken = new W2VToken();
-            w2VToken.setType("token");
-            w2VToken.setTokenName(token);
-            w2VToken.setValue(map.get(token));
-            w2VTokenList.add(w2VToken);
-        }
-
-        return w2VTokenList;
+        return w2VToken;
     }
 
 

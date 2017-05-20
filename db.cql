@@ -2,11 +2,11 @@ CREATE KEYSPACE turquas
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '3'}
 AND durable_writes = true;
 
-CREATE TABLE W2V_TOKEN (
+CREATE TABLE w2v_token (
     token_name text,
     type text,
     value list<double>,
-    PRIMARY KEY (token_name, stem)
+    PRIMARY KEY (token_name, type)
 );
 
 CREATE INDEX type_index ON w2v_token (type);

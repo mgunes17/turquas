@@ -26,15 +26,21 @@ public class W2VTokenDAO {
     }
 
     public boolean updateTable(List<W2VToken> tokens) {
-        String query = "TRUNCATE TABLE w2v_token";
+        /*String query = "DELETE FROM w2v_token WHERE type = '" + tokens.get(0).getType() + "';";
         session.execute(query);
 
+        return insertToTable(tokens);*/
+        System.out.println("güncellenmemesi gerek");
+        return false;
+    }
+
+    public boolean insertToTable(List<W2VToken> tokens){
         try{
             BatchStatement batch = new BatchStatement();
 
             int count = 1;
             for(W2VToken w2VToken: tokens){
-                batch.add(w2VTokenAccessor.updateTable(w2VToken.getTokenName(), w2VToken.getType(), w2VToken.getValue()));
+                batch.add(w2VTokenAccessor.insertToTable(w2VToken.getTokenName(), w2VToken.getType(), w2VToken.getValue()));
 
                 if(count % 2 == 0){
                     session.execute(batch);

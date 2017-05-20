@@ -13,7 +13,6 @@ public class LoadCommand implements Command {
         try {
             W2VLoader w2VLoader = new W2VLoader();
             w2VLoader.loadVectorsFromFile();
-            w2VLoader.saveToDatabase();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
             ex.printStackTrace();
