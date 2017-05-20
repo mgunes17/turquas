@@ -77,34 +77,20 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
 
     private double[] predictWithDeepLearning(){
         try {
-            String command = UserInterfaceAdmin.pathMap.get("python") + " " + UserInterfaceAdmin.pathMap.get("script");
-            Process p = Runtime.getRuntime().exec(command);
-            p.waitFor();
-            p.destroy();
+            PythonSocketServer server = new PythonSocketServer();
+            String prediction = server.askForPrediction(userQuestion.getQuestionVector());
 
-            return predict();
-        } catch (IOException | InterruptedException e) {
+            return predict(prediction);
+        } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
         return null;
     }
 
-    private String readRawPredictedVector(){
-        FileInputStream inputStream;
-        try {
-            inputStream = new FileInputStream(UserInterfaceAdmin.pathMap.get("prediction"));
-
-            return IOUtils.toString(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    private double[] predict(){
-        String prediction = readRawPredictedVector();
+    private double[] predict(String prediction){
+        //String prediction = readRawPredictedVector();
         double[] vector = new double[W2VCreatorAdmin.w2vParameterMap.get("layer_size")];
 
         if(prediction != null){
@@ -120,6 +106,19 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
         }
 
         return vector;
+    }
+
+    private String readRawPredictedVector(){
+        FileInputStream inputStream;
+        try {
+            inputStream = new FileInputStream(UserInterfaceAdmin.pathMap.get("prediction"));
+
+            return IOUtils.toString(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 
