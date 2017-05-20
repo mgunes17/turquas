@@ -79,11 +79,6 @@ public class Turquas {
         }
     }
 
-    public static Map<String, W2VToken> getW2VToken(String type) { //stem ya da letter ya da token
-
-        return W2VTokenMap.getW2VTokenMap().get(type);
-    }
-
     private void startPythonScript(){
         try {
             String command = UserInterfaceAdmin.pathMap.get("python") + " " + UserInterfaceAdmin.pathMap.get("script");

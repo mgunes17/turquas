@@ -1,6 +1,7 @@
 package w2v_operation.vector_operation;
 
 import admin.W2VCreatorAdmin;
+import component.user_interface.w2vtoken.W2VTokenMap;
 import home_base.Turquas;
 import model.QuestionForCompare;
 import model.W2VToken;
@@ -32,7 +33,7 @@ public class AverageBy extends VectorType {
         List<Double> values = new ArrayList<Double>();
         String[] words = sentence.split(" ");
         List<List<Double>> wordValues = new ArrayList<List<Double>>();
-        Map<String, W2VToken> w2VTokens = Turquas.getW2VToken(tokenType);
+        Map<String, W2VToken> w2VTokens = super.w2VTokens.get(tokenType);
 
         for(String word : words) {
             if (w2VTokens.containsKey(word)) {

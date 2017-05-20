@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CreateCommand implements Command {
     private final static Logger logger = LoggerFactory.getLogger(CreateCommand.class);
+    private final int letterCount = 5;
 
     public boolean execute(String[] parameter) {
         try {
@@ -26,8 +27,7 @@ public class CreateCommand implements Command {
             } else if(parameterLength == 3 && parameter[2].equals("stem")){ // kelimelerin stemlerini al
                 StemmedSentenceFileCreator stemmedCreator = new StemmedSentenceFileCreator(sentenceLoader);
                 stemmedCreator.createFile();
-            } else if(parameterLength == 4 && parameter[2].equals("first")){ // kelimelerin ilk N harfini al
-                int letterCount = Integer.parseInt(parameter[3]);
+            } else if(parameterLength == 3 && parameter[2].equals("letter")){ // kelimelerin ilk N harfini al
                 LetterLimitedSentenceFileCreator letterLimitedCreator = new LetterLimitedSentenceFileCreator(sentenceLoader, letterCount);
                 letterLimitedCreator.createFile();
             }

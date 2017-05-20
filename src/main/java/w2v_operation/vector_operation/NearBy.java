@@ -2,6 +2,7 @@ package w2v_operation.vector_operation;
 
 import admin.CrawlerAdmin;
 import admin.W2VCreatorAdmin;
+import component.user_interface.w2vtoken.W2VTokenMap;
 import home_base.Turquas;
 import model.QuestionForCompare;
 import model.W2VToken;
@@ -33,7 +34,7 @@ public class NearBy extends VectorType {
 
         List<Double> values = new ArrayList<Double>();
         String[] words = sentence.split(" ");
-        Map<String, W2VToken> w2VTokens = Turquas.getW2VToken(tokenType);
+        Map<String, W2VToken> w2VTokens = super.w2VTokens.get(tokenType);
 
         for(String word: words) {
             if (w2VTokens.containsKey(word)) {
