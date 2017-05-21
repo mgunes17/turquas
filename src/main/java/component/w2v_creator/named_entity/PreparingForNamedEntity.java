@@ -25,8 +25,8 @@ public class PreparingForNamedEntity {
 
             for(int i = 0; i < parsedWords.size(); i++) { //her bir kelime için NE kontrolü yap
                 if(parsedWords.get(i).getNer().contains("B-")) {
-                    int j = i + 1;
-                    while(j < parsedWords.size()) { //NE kaç token ?
+                    int j = i;
+                    while(j < parsedWords.size() && parsedWords.get(j + 1).getNer().contains("I-")) { //NE kaç token ?
                         j++;
                     }
 
@@ -50,14 +50,14 @@ public class PreparingForNamedEntity {
             }
         }
 
-        return builder.deleteCharAt(builder.toString().length() - 1).toString();
+        return builder.deleteCharAt(builder.length() - 1).toString();
     }
 
     protected String sumNamedEntity(List<ParsedWord> parsedWords, int i, int j) {
         StringBuilder builder = new StringBuilder();
 
         for(int k = 0; k < parsedWords.size(); k++) {
-            if(k >= i || k <= j) {
+            if(k >= i && k <= j) {
                 builder.append(parsedWords.get(k).getWord());
                 builder.append(" ");
             }

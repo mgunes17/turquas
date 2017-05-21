@@ -12,6 +12,10 @@ public class ParsedWord {
         //non-args
     }
 
+    public ParsedWord(String word) {
+        this.word = word;
+    }
+
     //getter - setter
 
     public String getWord() {
