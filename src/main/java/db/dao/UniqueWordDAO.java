@@ -2,6 +2,7 @@ package db.dao;
 
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Result;
 import db.accessor.UniqueWordAccessor;
 import db.configuration.ConnectionConfiguration;
@@ -38,18 +39,10 @@ public class UniqueWordDAO {
 
     public boolean update(Set<UniqueWord> uniqueWordSet) {
         try{
-            BatchStatement batch = new BatchStatement();
-            int count = 1;
             for(UniqueWord uniqueWord: uniqueWordSet){
-                batch.add(uniqueWordAccessor.update(uniqueWord.getValueMap(), uniqueWord.getWord()));
-                if(count % ModelVariables.batchSize == 0){
-                    session.execute(batch);
-                    batch = new BatchStatement();
-                }
-                count++;
+                Statement statement = uniqueWordAccessor.update(uniqueWord.getValueMap(), uniqueWord.getWord());
+                session.execute(statement);
             }
-
-            session.execute(batch);
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             return false;
@@ -60,18 +53,10 @@ public class UniqueWordDAO {
 
     public boolean updateSources(Set<UniqueWord> uniqueWordSet) {
         try{
-            BatchStatement batch = new BatchStatement();
-            int count = 1;
             for(UniqueWord uniqueWord: uniqueWordSet){
-                batch.add(uniqueWordAccessor.updateSources(uniqueWord.getDocumentSet(), uniqueWord.getWord()));
-                if(count % ModelVariables.batchSize == 0){
-                    session.execute(batch);
-                    batch = new BatchStatement();
-                }
-                count++;
+                Statement statement = uniqueWordAccessor.updateSources(uniqueWord.getDocumentSet(), uniqueWord.getWord());
+                session.execute(statement);
             }
-
-            session.execute(batch);
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             ex.printStackTrace();

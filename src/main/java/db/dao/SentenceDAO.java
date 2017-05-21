@@ -59,26 +59,18 @@ public class SentenceDAO {
         }
     }*/
 
-    public void insertBatch(List<Sentence> sentenceList){
+    public void insertList(List<Sentence> sentenceList){
         try{
-            BatchStatement batch = new BatchStatement();
-            int count = 1;
             for(Sentence sentence: sentenceList){
                 Statement statement = sentenceAccessor.insertBatch(sentence.getOriginalSentence(),
                         sentence.getSourceName(), sentence.getStemmedWordsList(), sentence.getTags(), sentence.getTokenList());
-                batch.add(statement);
-                if(count % ModelVariables.batchSize == 0){
-                    session.execute(batch);
-                    batch = new BatchStatement();
-                }
-                count++;
+                session.execute(statement);
             }
-
-            session.execute(batch);
             System.out.println("SentenceDAO insertBatch başarıyla tamamlandı.");
         } catch(Exception ex){
             ex.printStackTrace();
             System.out.println(ex.getMessage());
+            System.out.println("SentenceDAO insertBatch hata verdi.");
         }
 
     }

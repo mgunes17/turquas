@@ -1,5 +1,8 @@
 package component.user_interface.answerer;
 
+import admin.UserInterfaceAdmin;
+import component.user_interface.candidate.FindingCandidate;
+import home_base.SentenceType;
 import model.QuestionForCompare;
 import model.SimilarityValue;
 
@@ -20,7 +23,8 @@ public class AnswererWithVectorSimilarity extends QuestionAnswerer{
         userQuestion = createUserQuestionForCompare(question);
 
         long start_time = System.nanoTime();
-        List<QuestionForCompare> candidateList = createCandidateList(question);
+        String w2vType = UserInterfaceAdmin.wordType + "_" + UserInterfaceAdmin.vectorType;
+        List<QuestionForCompare> candidateList = findCandidates(question, w2vType, new SentenceType().isNounClause(question));
         candidateList.add(0, userQuestion);
         long end_time = System.nanoTime();
         double difference = (end_time - start_time)/1e6;
@@ -50,5 +54,11 @@ public class AnswererWithVectorSimilarity extends QuestionAnswerer{
             userQuestion.getSimilarityList().add(similarityValue);
         }
         userQuestion.getSimilarityList().sort(new SimilarityComparator());
+    }
+
+    @Override
+    public List<QuestionForCompare> findCandidates(String question, String w2vType, boolean nounClause) {
+
+        return new FindingCandidate(w2vType).findCandidatesForVecSim(question, nounClause);
     }
 }

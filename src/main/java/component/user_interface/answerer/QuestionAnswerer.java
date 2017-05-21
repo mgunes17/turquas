@@ -1,7 +1,6 @@
 package component.user_interface.answerer;
 
 import admin.UserInterfaceAdmin;
-import component.user_interface.candidate.FindingCandidate;
 import component.user_interface.similarity.SimilarityType;
 import model.QuestionForCompare;
 import model.SimilarityValue;
@@ -17,6 +16,7 @@ public abstract class QuestionAnswerer {
 
     public abstract void answer(String question);
     public abstract void calculateSimilarityList(List<QuestionForCompare> candidateList);
+    public abstract List<QuestionForCompare> findCandidates(String question, String w2vType, boolean nounClause);
 
     void printAnswers(QuestionForCompare userQuestion, int answerCount){
         int answerShown = 0;
@@ -33,12 +33,6 @@ public abstract class QuestionAnswerer {
             }
         }
         printInfo(answerShown, answersBelowThreshold);
-    }
-
-    List<QuestionForCompare> createCandidateList(String question){
-        String w2vType = UserInterfaceAdmin.wordType + "_" + UserInterfaceAdmin.vectorType;
-
-        return new FindingCandidate().findCandidateList(question, w2vType);
     }
 
     QuestionForCompare createUserQuestionForCompare(String question){

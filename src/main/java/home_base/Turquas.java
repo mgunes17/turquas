@@ -8,6 +8,7 @@ import command.turquas_command.TurquasHelpCommand;
 import command.turquas_command.TurquasSetNSCommand;
 import component.user_interface.w2vtoken.W2VTokenMap;
 import model.W2VToken;
+import properties.TurquasProperties;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -39,6 +40,7 @@ public class Turquas {
         commandMap.put("get-ns", new TurquasGetNSCommand());
 
         commandSet = new CommandSet(commandMap);
+        new TurquasProperties().loadProperties();
         new Thread(new Runnable() {
             @Override
             public void run() {

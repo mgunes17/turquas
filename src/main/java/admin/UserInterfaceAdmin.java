@@ -30,14 +30,14 @@ public class UserInterfaceAdmin extends Admin {
 
     static {
         wordTypeMap = new HashMap<>();
-        wordTypeMap.put("letter", new LetterBy());
-        wordTypeMap.put("stem", new StemBy());
-        wordTypeMap.put("token", new TokenBy());
+        //wordTypeMap.put("letter", new LetterBy());
+        //wordTypeMap.put("stem", new StemBy());
+        //wordTypeMap.put("token", new TokenBy());
         wordType = "token";
 
         vectorTypeMap = new HashMap<>();
-        vectorTypeMap.put("near", new NearBy());
-        vectorTypeMap.put("average", new AverageBy());
+        //vectorTypeMap.put("near", new NearBy());
+        //vectorTypeMap.put("average", new AverageBy());
         vectorType = "average";
 
         similarityMap = new HashMap<>();
@@ -50,10 +50,6 @@ public class UserInterfaceAdmin extends Admin {
         parameterMap.put("threshold", 30);
 
         pathMap = new HashMap<>();
-        pathMap.put("python", "/home/ercan/anaconda2/bin/python");
-        pathMap.put("script", "/home/ercan/ideaprojects/turquas/predict.py");
-        pathMap.put("prediction", "/home/ercan/ideaprojects/turquas/predict.txt");
-        pathMap.put("question", "/home/ercan/ideaprojects/turquas/question.txt");
     }
 
     public UserInterfaceAdmin(CommandSet commandSet) {

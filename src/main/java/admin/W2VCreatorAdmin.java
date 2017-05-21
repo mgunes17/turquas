@@ -25,9 +25,7 @@ public class W2VCreatorAdmin extends Admin {
         filenameMap.put("target_file", "target.txt");
         filenameMap.put("source_file", "source.txt");
         filenameMap.put("input4dl_file", "input4dl.txt");
-        filenameMap.put("pretrained_file", "/home/ercan/BitirmeProjesi/w2v.txt");
         wordVectorMap = new HashMap<>();
-
     }
 
     public W2VCreatorAdmin(CommandSet commandSet){

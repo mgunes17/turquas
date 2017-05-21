@@ -3,6 +3,7 @@ package db.dao;
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
+import com.datastax.driver.core.exceptions.InvalidQueryException;
 import com.datastax.driver.mapping.Result;
 import db.accessor.SourceAccessor;
 import db.configuration.ConnectionConfiguration;
@@ -38,28 +39,18 @@ public class SourceDAO {
         return sourceMap;
     }
 
-    public void insertBatch(List<Source> sourceList){
+    public void insertList(List<Source> sourceList){
         try{
-            BatchStatement batch = new BatchStatement();
-            int count = 1;
             for(Source source: sourceList){
-                Statement statement = sourceAccessor.insertBatch(source.getSourceName(),
+                Statement statement = sourceAccessor.insert(source.getSourceName(),
                         source.getLastUpdatedDate(), source.getWordCountMap());
-                batch.add(statement);
-                if(count % ModelVariables.batchSize == 0){
-                    session.execute(batch);
-                    batch = new BatchStatement();
-                }
-                count++;
+                session.execute(statement);
             }
 
-            session.execute(batch);
-            System.out.println("SourceDAO insertBatch başarıyla tamamlandı.");
+            System.out.println("SourceDAO insert başarıyla tamamlandı.");
         } catch(Exception ex){
             System.out.println(ex.getMessage());
-            ex.printStackTrace();
             System.out.println(("SourceDAO insertBatch hata verdi."));
         }
-
     }
 }
