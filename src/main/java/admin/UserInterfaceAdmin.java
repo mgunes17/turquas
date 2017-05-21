@@ -30,14 +30,14 @@ public class UserInterfaceAdmin extends Admin {
 
     static {
         wordTypeMap = new HashMap<>();
-        //wordTypeMap.put("letter", new LetterBy());
-        //wordTypeMap.put("stem", new StemBy());
-        //wordTypeMap.put("token", new TokenBy());
+        wordTypeMap.put("letter", new LetterBy());
+        wordTypeMap.put("stem", new StemBy());
+        wordTypeMap.put("token", new TokenBy());
         wordType = "token";
 
         vectorTypeMap = new HashMap<>();
-        //vectorTypeMap.put("near", new NearBy());
-        //vectorTypeMap.put("average", new AverageBy());
+        vectorTypeMap.put("near", new NearBy());
+        vectorTypeMap.put("average", new AverageBy());
         vectorType = "average";
 
         similarityMap = new HashMap<>();

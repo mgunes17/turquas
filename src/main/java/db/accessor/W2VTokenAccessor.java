@@ -18,4 +18,10 @@ public interface W2VTokenAccessor {
 
     @Query("select token_name, value from w2v_token WHERE type = ? ")
     Result<W2VToken> getToken(String type);
+
+    @Query("select * from w2v_token WHERE token_name IN ? AND type = ? ")
+    Result<W2VToken> getW2VTokensByType(List<String> words, String type);
+
+    @Query("select * from w2v_token WHERE token_name IN ?")
+    Result<W2VToken> getW2VTokensForAllTypes(List<String> words);
 }

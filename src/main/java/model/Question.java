@@ -15,10 +15,11 @@ public class Question {
     @Column(name = "source_name")
     private String sourceName;
 
-    @ClusteringColumn
+    @ClusteringColumn(1)
     @Column(name = "question")
     private String question;
 
+    @ClusteringColumn(0)
     @Column(name = "noun_clause")
     private boolean nounClause;
 
