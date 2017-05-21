@@ -17,7 +17,7 @@ public class NerQuestion implements QuestionType {
 
     public NerQuestion() {
         nlpService = new ItuNlpService();
-        nameEntityMap = new HashMap<String, NameEntityQuestionType>();
+        nameEntityMap = new HashMap<>();
         nameEntityMap.put("B-PERSON", new PersonQuestion());
         nameEntityMap.put("B-LOCATION", new LocationQuestion());
         nameEntityMap.put("B-ORGANIZATION", new OrganizationQuestion());
@@ -26,7 +26,7 @@ public class NerQuestion implements QuestionType {
         nameEntityMap.put("B-MONEY", new MoneyQuestion());
         nameEntityMap.put("B-PERCENTAGE", new PercentageQuestion());
 
-        nameEntitySet = new HashSet<String>();
+        nameEntitySet = new HashSet<>();
         nameEntitySet.add("B-PERSON");
         nameEntitySet.add("B-LOCATION");
         nameEntitySet.add("B-ORGANIZATION");
@@ -39,11 +39,11 @@ public class NerQuestion implements QuestionType {
     public List<Question> reorganize(String sentence) {
         List<ParsedWord> parsedWords = nlpService.getNameEntities(sentence);
 
-        List<Question> questionList = new ArrayList<Question>();
-        Map<Integer, String> neIndex = new HashMap<Integer, String>();
+        List<Question> questionList = new ArrayList<>();
+        Map<Integer, String> neIndex = new HashMap<>();
 
         //bu yapıdan hangi name entity nerede başlıyor
-        Set<NameEntityQuestionType> existNameEntity = new HashSet<NameEntityQuestionType>();
+        Set<NameEntityQuestionType> existNameEntity = new HashSet<>();
 
         int i = 0;
         for(ParsedWord parsedWord: parsedWords) {

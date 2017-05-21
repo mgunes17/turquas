@@ -17,6 +17,9 @@ public interface SentenceAccessor {
     @Query("SELECT * FROM sentence")
     Result<Sentence> getAll();
 
+    @Query("SELECT original_sentence FROM sentence")
+    Result<String> getAllOnly();
+
     @Query("SELECT * FROM sentence LIMIT ?")
     Result<Sentence> getSentencesByLimit(int limit);
 

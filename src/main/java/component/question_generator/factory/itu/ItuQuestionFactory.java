@@ -2,7 +2,6 @@ package component.question_generator.factory.itu;
 
 import component.question_generator.factory.QuestionFactory;
 import component.question_generator.factory.itu.type.NerQuestion;
-import component.question_generator.word.Sentence;
 import model.Question;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ public class ItuQuestionFactory extends QuestionFactory {
         NerQuestion nerQuestion = new NerQuestion();
         generatedList.addAll(nerQuestion.reorganize(sentence));
 
-        Sentence returnedSentence = new Sentence(sentence);
         System.out.println(generatedList.size() + " soru üretildi. - ITU");
         return generatedList;
     }

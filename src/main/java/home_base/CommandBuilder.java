@@ -60,6 +60,7 @@ public class CommandBuilder {
         commandMap.put("convert", new ConvertCommand());
         commandMap.put("sentence", new Sentence2W2VCommand());
         commandMap.put("load", new LoadCommand());
+        commandMap.put("ne", new NameEntityPrepareCommand());
         return new CommandSet(commandMap);
     }
 

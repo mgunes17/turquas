@@ -41,6 +41,11 @@ public class SentenceDAO {
         return result.all();
     }
 
+    public List<String> getAllSentencesOnly() {
+        Result<String> result = sentenceAccessor.getAllOnly();
+        return result.all();
+    }
+
     /*public void updateQuestions(List<Sentence> sentenceList){
         try {
             BatchStatement batch = new BatchStatement();

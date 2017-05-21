@@ -16,9 +16,6 @@ public class ItuNlpService {
     }
 
     public List<ParsedWord> getNameEntities(String sentence) {
-        //sentence = "Bugün okula gittim .";
-        //String sentenceToken = ituNlp.connect(ToolType.Tokenizer, sentence);
-        //String[] tokenArr = sentenceToken.split("\n");
         String[] tokenArr = sentence.split("[ ]+");
 
         //her bir kelimenin tokenını bul
