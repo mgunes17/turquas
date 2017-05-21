@@ -12,8 +12,8 @@ import java.util.List;
  */
 @Accessor
 public interface QuestionAccessor {
-    @Query("SELECT * FROM question WHERE source_name IN ?")
-    Result<Question> getQuestionsWithInClause(List<String> sources);
+    @Query("SELECT * FROM question WHERE source_name IN ? AND noun_clause = ?")
+    Result<Question> getQuestionsWithInClause(List<String> sources, boolean nounClause);
 
     @Query("SELECT * FROM question")
     Result<Question> getAll();

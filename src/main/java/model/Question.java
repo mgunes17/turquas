@@ -26,12 +26,6 @@ public class Question {
     @Column(name = "question_w2v_value_map")
     private Map<String, List<Double>> questionW2vValueMap;
 
-    @Column(name = "question_word")
-    private String questionWord;
-
-    @Column(name = "word_type_after_question_word")
-    private String wordTypeAfterQuestionWord;
-
     @Column(name = "answer")
     private String answer;
 
@@ -70,22 +64,6 @@ public class Question {
 
     public void setQuestionW2vValueMap(Map<String, List<Double>> questionW2vValueMap) {
         this.questionW2vValueMap = questionW2vValueMap;
-    }
-
-    public String getQuestionWord() {
-        return questionWord;
-    }
-
-    public void setQuestionWord(String questionWord) {
-        this.questionWord = questionWord;
-    }
-
-    public String getWordTypeAfterQuestionWord() {
-        return wordTypeAfterQuestionWord;
-    }
-
-    public void setWordTypeAfterQuestionWord(String wordTypeAfterQuestionWord) {
-        this.wordTypeAfterQuestionWord = wordTypeAfterQuestionWord;
     }
 
     public String getAnswer() {

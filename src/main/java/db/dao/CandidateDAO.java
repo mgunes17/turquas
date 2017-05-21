@@ -25,13 +25,13 @@ public class CandidateDAO {
         session = ConnectionConfiguration.getSession();
     }
 
-    public List<Question> getQuestions(String[] words) {
+    public List<Question> getQuestions(String[] words, boolean nounClause) {
         List<Set<String>> sourceList = findSources(words);
 
-        return findQuestions(sourceList);
+        return findQuestions(sourceList, nounClause);
     }
 
-    private List<Question> findQuestions(List<Set<String>> sourceList){
+    private List<Question> findQuestions(List<Set<String>> sourceList, boolean nounClause){
         List<Question> questionList = new ArrayList<>();
         List<String> sourceNames = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class CandidateDAO {
             sourceNames.addAll(sourceSet);
         }
 
-        Result<Question> result = questionAccessor.getQuestionsWithInClause(sourceNames);
+        Result<Question> result = questionAccessor.getQuestionsWithInClause(sourceNames, nounClause);
         for(Question question: result) {
             questionList.add(question);
         }

@@ -24,6 +24,7 @@ import java.util.Map;
 public class SaveCommand extends AbstractCommand implements Command {
     private MainGenerator mainGenerator;
     private int recordCount;
+    private boolean w2v = false;
 
     public boolean execute(String[] parameter) {
         if(!validateParameter(parameter))
@@ -35,7 +36,6 @@ public class SaveCommand extends AbstractCommand implements Command {
         QuestionDAO questionDAO = new QuestionDAO();
         List<Sentence> sentenceList = dao.readForGenerateQuestions(recordCount);
 
-        //bir cümle seti için factory 1 kere verilsin
         for(int i = 0; i < recordCount; i++) {
             if(sentenceList.size() > i){ // düzeltilecek
                 System.out.println((i + 1) + ". cümle için soru üretiliyor..");
@@ -43,73 +43,19 @@ public class SaveCommand extends AbstractCommand implements Command {
                 Sentence sentence = sentenceList.get(i);
                 //soru listesi gelince tek tek hazırla ve kayıt listesine ekle
 
-                long start_time = System.nanoTime();
                 mainGenerator = new MainGenerator();
                 List<Question>  questionList = mainGenerator.convertQuestions(sentence.getOriginalSentence());
-                long end_time = System.nanoTime();
-                double difference = (end_time - start_time)/1e6;
-                System.out.println("sorular convert edildi:" + difference);
 
-
-                Map<String, List<Double>> w2vMapForSentence = new HashMap<>();
-                StemBy stemBy = new StemBy();
-                LetterBy letterBy = new LetterBy();
-                TokenBy tokenBy = new TokenBy();
-                AverageBy averageBy = new AverageBy();
-                NearBy nearBy = new NearBy();
-
-                start_time = System.nanoTime();
-                String sentenceByStem = stemBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
-                String sentenceByLetter = letterBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
-                String sentenceByToken = tokenBy.rebuildSentence(sentence.getOriginalSentence()).toLowerCase();
-                end_time = System.nanoTime();
-                difference = (end_time - start_time)/1e6;
-                System.out.println("stem-letter-token rebuild sentence başladı bitti:" + difference);
-
-                start_time = System.nanoTime();
-                w2vMapForSentence.put("stem_average",
-                        averageBy.findValue(sentenceByStem, "stem"));
-                w2vMapForSentence.put("letter_average",
-                        averageBy.findValue(sentenceByLetter, "letter"));
-                w2vMapForSentence.put("token_average",
-                        averageBy.findValue(sentenceByToken, "token"));
-                //w2vMapForSentence.put("stem_near", nearBy.findValue(stem, stem));
-                //w2vMapForSentence.put("letter_near", nearBy.findValue(letter, "letter"));
-                end_time = System.nanoTime();
-                difference = (end_time - start_time)/1e6;
-                System.out.println("vektör değerleri hesaplama:" + difference);
-
-
-                for(Question question: questionList) { // her bir soruyu db için hazırla
-                    start_time = System.nanoTime();
-                    sentenceByStem = stemBy.rebuildSentence(question.getQuestion()).toLowerCase();
-                    sentenceByLetter = letterBy.rebuildSentence(question.getQuestion()).toLowerCase();
-                    sentenceByToken = tokenBy.rebuildSentence(question.getQuestion()).toLowerCase();
-
-                    Map<String, List<Double>> w2vMapForQuestion = new HashMap<>();
-                    w2vMapForQuestion.put("stem_average",
-                            averageBy.findValue(sentenceByStem, "stem"));
-                    w2vMapForQuestion.put("letter_average",
-                            averageBy.findValue(sentenceByLetter, "letter"));
-                    w2vMapForQuestion.put("token_average",
-                            averageBy.findValue(sentenceByToken, "token"));
-                    //w2vMapForQuestion.put("stem_near", nearBy.findValue(stem, stem));
-                    //w2vMapForQuestion.put("letter_near", nearBy.findValue(letter, "letter"));
-
-                    question.setQuestionW2vValueMap(w2vMapForQuestion);
-                    question.setAnswerW2vValueMap(w2vMapForSentence);
-                    question.setSourceName(sentence.getSourceName());
-                    question.setAnswer(sentence.getOriginalSentence());
-                    end_time = System.nanoTime();
-                    difference = (end_time - start_time)/1e6;
-                    System.out.println("bir soru için stem-letter-token rebuild + vektörler :" + difference);
+                if(w2v) {
+                    saveWithW2V(sentence.getOriginalSentence(), questionList);
                 }
 
-                start_time = System.nanoTime();
+                for(Question question: questionList) { // her bir soruyu db için hazırla
+                    question.setSourceName(sentence.getSourceName());
+                    question.setAnswer(sentence.getOriginalSentence());
+                }
+
                 questionDAO.saveQuestionList(questionList);
-                end_time = System.nanoTime();
-                difference = (end_time - start_time)/1e6;
-                System.out.println(questionList.size() + "sorunun kaydedilmesi :" + difference);
                 questionList = null;
             }
         }
@@ -117,8 +63,47 @@ public class SaveCommand extends AbstractCommand implements Command {
         return true;
     }
 
+    private void saveWithW2V(String sentence, List<Question> questionList) {
+        Map<String, List<Double>> w2vMapForSentence = new HashMap<>();
+        StemBy stemBy = new StemBy();
+        LetterBy letterBy = new LetterBy();
+        TokenBy tokenBy = new TokenBy();
+        AverageBy averageBy = new AverageBy();
+        NearBy nearBy = new NearBy();
+        String sentenceByStem = stemBy.rebuildSentence(sentence).toLowerCase();
+        String sentenceByLetter = letterBy.rebuildSentence(sentence).toLowerCase();
+        String sentenceByToken = tokenBy.rebuildSentence(sentence).toLowerCase();
+        w2vMapForSentence.put("stem_average",
+                averageBy.findValue(sentenceByStem, "stem"));
+        w2vMapForSentence.put("letter_average",
+                averageBy.findValue(sentenceByLetter, "letter"));
+        w2vMapForSentence.put("token_average",
+                averageBy.findValue(sentenceByToken, "token"));
+        //w2vMapForSentence.put("stem_near", nearBy.findValue(stem, stem));
+        //w2vMapForSentence.put("letter_near", nearBy.findValue(letter, "letter"));
+
+        for(Question question: questionList) { // her bir soruyu db için hazırla
+            sentenceByStem = stemBy.rebuildSentence(question.getQuestion()).toLowerCase();
+            sentenceByLetter = letterBy.rebuildSentence(question.getQuestion()).toLowerCase();
+            sentenceByToken = tokenBy.rebuildSentence(question.getQuestion()).toLowerCase();
+
+            Map<String, List<Double>> w2vMapForQuestion = new HashMap<>();
+            w2vMapForQuestion.put("stem_average",
+                    averageBy.findValue(sentenceByStem, "stem"));
+            w2vMapForQuestion.put("letter_average",
+                    averageBy.findValue(sentenceByLetter, "letter"));
+            w2vMapForQuestion.put("token_average",
+                    averageBy.findValue(sentenceByToken, "token"));
+            //w2vMapForQuestion.put("stem_near", nearBy.findValue(stem, stem));
+            //w2vMapForQuestion.put("letter_near", nearBy.findValue(letter, "letter"));
+
+            question.setQuestionW2vValueMap(w2vMapForQuestion);
+            question.setAnswerW2vValueMap(w2vMapForSentence);
+        }
+    }
+
     protected boolean validateParameter(String[] parameter) {
-        return !(parameter.length != 2 || !parseRecordCount(parameter[1]));
+        return !(!(parameter.length == 2 || (parameter.length == 3 && (w2v = parameter[2].equals("w2v")))) || !parseRecordCount(parameter[1]));
     }
 
     private boolean parseRecordCount(String count) {

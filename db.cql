@@ -46,9 +46,9 @@ CREATE TABLE question (
     question text,
     noun_clause boolean,
     question_w2v_value_map map<text, frozen <list<double>>>,
-    question_word text,
-    word_type_after_question_word text,
     answer text,
     answer_w2v_value_map map<text, frozen <list<double>>>,
     PRIMARY KEY (source_name, question)
 );
+
+CREATE INDEX is_noun_clause ON question (noun_clause);

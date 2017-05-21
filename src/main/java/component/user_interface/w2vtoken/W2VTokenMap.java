@@ -15,9 +15,9 @@ public class W2VTokenMap {
     private static void createW2VTokenMap(){
         W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
         w2VTokens = new HashMap<>();
-        w2VTokens.put("stem", w2VTokenDAO.getTokens("stem"));
+        /*w2VTokens.put("stem", w2VTokenDAO.getTokens("stem"));
         w2VTokens.put("token", w2VTokenDAO.getTokens("token"));
-        w2VTokens.put("letter", w2VTokenDAO.getTokens("letter"));
+        w2VTokens.put("letter", w2VTokenDAO.getTokens("letter"));*/
     }
 
     public static Map<String, Map<String, W2VToken>> getW2VTokenMap() {

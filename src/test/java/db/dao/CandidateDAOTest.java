@@ -17,7 +17,7 @@ public class CandidateDAOTest {
         String[] words = new String[2];
         words[0] = "sokmak";
         words[1] = "kocaman";
-        List<Question> sentenceList = candidateDAO.getQuestions(words);
+        List<Question> sentenceList = candidateDAO.getQuestions(words, true);
 
         assertEquals(137, sentenceList.size());
     }
