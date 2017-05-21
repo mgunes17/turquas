@@ -2,6 +2,7 @@ package db.dao;
 
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Result;
 import db.accessor.W2VTokenAccessor;
 import db.configuration.ConnectionConfiguration;
@@ -36,20 +37,10 @@ public class W2VTokenDAO {
 
     public boolean insertToTable(List<W2VToken> tokens){
         try{
-            BatchStatement batch = new BatchStatement();
-
-            int count = 1;
             for(W2VToken w2VToken: tokens){
-                batch.add(w2VTokenAccessor.insertToTable(w2VToken.getTokenName(), w2VToken.getType(), w2VToken.getValue()));
-
-                if(count % 2 == 0){
-                    session.execute(batch);
-                    batch = new BatchStatement();
-                }
-                count++;
+                Statement statement = w2VTokenAccessor.insert(w2VToken.getTokenName(), w2VToken.getType(), w2VToken.getValue());
+                session.execute(statement);
             }
-
-            session.execute(batch);
         } catch(Exception ex){
             System.out.println(ex.getMessage());
             ex.printStackTrace();

@@ -18,5 +18,5 @@ public interface SourceAccessor {
     Result<Source> getAll();
 
     @Query("INSERT INTO source (source_name, last_updated_date, word_count_map) values (?, ?, ?)")
-    Statement insertBatch(String sourceName, Date updatedDate, Map<String, Integer> wordCountMap);
+    Statement insert(String sourceName, Date updatedDate, Map<String, Integer> wordCountMap);
 }

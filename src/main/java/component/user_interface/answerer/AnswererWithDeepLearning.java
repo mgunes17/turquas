@@ -2,6 +2,8 @@ package component.user_interface.answerer;
 
 import admin.UserInterfaceAdmin;
 import admin.W2VCreatorAdmin;
+import component.user_interface.candidate.FindingCandidate;
+import home_base.SentenceType;
 import model.QuestionForCompare;
 import model.SimilarityValue;
 import org.apache.commons.io.IOUtils;
@@ -9,7 +11,10 @@ import org.apache.commons.io.IOUtils;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ercan on 17.05.2017.
@@ -30,7 +35,8 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
         userQuestion.setAnswerVector(answerVector); // cevaplarla karşılaştırmak için cevap vektörü olarak ata
 
         long start_time = System.nanoTime();
-        List<QuestionForCompare> candidateList = createCandidateList(question);
+        String w2vType = UserInterfaceAdmin.wordType + "_" + UserInterfaceAdmin.vectorType;
+        List<QuestionForCompare> candidateList = findCandidates(question, w2vType, new SentenceType().isNounClause(question));
         candidateList.add(0, userQuestion);
         long end_time = System.nanoTime();
         double difference = (end_time - start_time)/1e6;
@@ -60,6 +66,12 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
             userQuestion.getSimilarityList().add(similarityValue);
         }
         userQuestion.getSimilarityList().sort(new SimilarityComparator());
+    }
+
+    @Override
+    public List<QuestionForCompare> findCandidates(String question, String w2vType, boolean nounClause) {
+
+        return new FindingCandidate(w2vType).findCandidatesForDeepLearning(question, nounClause);
     }
 
     private void writeQuestionVectorToFile(double[] vector){

@@ -37,12 +37,12 @@ public class DBSaver {
             if(source != null){
                 List<Sentence> sentenceBatchList = new ArrayList<>();
                 sentenceBatchList.addAll(source.getSentenceSet());
-                sentenceDAO.insertBatch(sentenceBatchList);
+                sentenceDAO.insertList(sentenceBatchList);
                 sourceBatchList.add(source);
                 updateSourcesOfWords(sourcesOfWords, source);
             }
         }
-        sourceDAO.insertBatch(sourceBatchList);
+        sourceDAO.insertList(sourceBatchList);
         Set<UniqueWord> uniqueWordSet = createUniqueWordSet(sourcesOfWords);
         uniqueWordDAO.updateSources(uniqueWordSet);
     }
