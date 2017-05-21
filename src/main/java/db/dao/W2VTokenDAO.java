@@ -9,6 +9,7 @@ import db.configuration.ConnectionConfiguration;
 import db.configuration.MappingManagerConfiguration;
 import model.W2VToken;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,4 +61,30 @@ public class W2VTokenDAO {
 
         return w2VTokens;
     }
+
+    public Map<String, W2VToken> getW2vTokenForWordsForType(String type, List<String> words){
+        Map<String, W2VToken> w2VTokens = new HashMap<String, W2VToken>();
+        Result<W2VToken> result = w2VTokenAccessor.getW2VTokensByType(words, type);
+
+        for(W2VToken w2VToken: result) {
+            w2VTokens.put(w2VToken.getTokenName(), w2VToken);
+        }
+
+        return w2VTokens;
+    }
+
+    public Map<String, Map<String, W2VToken>> getW2vTokenForWordsForAllTypes(List<String> words){
+        Map<String, Map<String, W2VToken>> w2VTokens = new HashMap<>();
+        Result<W2VToken> result = w2VTokenAccessor.getW2VTokensForAllTypes(words);
+        w2VTokens.put("stem", new HashMap<>());
+        w2VTokens.put("letter", new HashMap<>());
+        w2VTokens.put("token", new HashMap<>());
+
+        for(W2VToken w2VToken: result) {
+            w2VTokens.get(w2VToken.getType()).put(w2VToken.getTokenName(), w2VToken);
+        }
+
+        return w2VTokens;
+    }
+
 }

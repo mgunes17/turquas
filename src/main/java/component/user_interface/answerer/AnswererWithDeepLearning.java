@@ -29,7 +29,6 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
     @Override
     public void answer(String question){
         userQuestion = createUserQuestionForCompare(question);
-        writeQuestionVectorToFile(userQuestion.getQuestionVector()); // DL için input
 
         double[] answerVector = predictWithDeepLearning(); // DL tahminini al
         userQuestion.setAnswerVector(answerVector); // cevaplarla karşılaştırmak için cevap vektörü olarak ata
@@ -74,19 +73,6 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
         return new FindingCandidate(w2vType).findCandidatesForDeepLearning(question, nounClause);
     }
 
-    private void writeQuestionVectorToFile(double[] vector){
-        try {
-            PrintWriter printWriter = new PrintWriter(UserInterfaceAdmin.pathMap.get("question"));
-            for(double value: vector) {
-                printWriter.print(value + " ");
-            }
-            printWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private double[] predictWithDeepLearning(){
         try {
             PythonSocketServer server = new PythonSocketServer();
@@ -102,7 +88,6 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
     }
 
     private double[] predict(String prediction){
-        //String prediction = readRawPredictedVector();
         double[] vector = new double[W2VCreatorAdmin.w2vParameterMap.get("layer_size")];
 
         if(prediction != null){
@@ -119,19 +104,4 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
 
         return vector;
     }
-
-    private String readRawPredictedVector(){
-        FileInputStream inputStream;
-        try {
-            inputStream = new FileInputStream(UserInterfaceAdmin.pathMap.get("prediction"));
-
-            return IOUtils.toString(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-
 }

@@ -2,11 +2,12 @@ package component.user_interface.answerer;
 
 import admin.UserInterfaceAdmin;
 import component.user_interface.similarity.SimilarityType;
+import db.dao.W2VTokenDAO;
 import model.QuestionForCompare;
 import model.SimilarityValue;
+import model.W2VToken;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ercan on 17.05.2017.
@@ -45,10 +46,20 @@ public abstract class QuestionAnswerer {
 
     private double[] getUserQuestionVector(String userQuestion){
         String vecType = UserInterfaceAdmin.vectorType;
-        String tokenType = UserInterfaceAdmin.wordType;
-        List<Double> vector = UserInterfaceAdmin.vectorTypeMap.get(vecType).findValue(userQuestion, tokenType);
+        String wordType = UserInterfaceAdmin.wordType;
+        W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
+        Map<String, W2VToken> w2VTokenMap = w2VTokenDAO.getW2vTokenForWordsForType(wordType, sentenceToList(userQuestion));
+        List<Double> vector = UserInterfaceAdmin.vectorTypeMap.get(vecType).findValue(userQuestion, wordType, w2VTokenMap);
 
         return vector.stream().mapToDouble(Double::doubleValue).toArray();
+    }
+
+    private List<String> sentenceToList(String sentence){
+        String[] words = sentence.split(" ");
+        List<String> wordList = new ArrayList<>();
+        Collections.addAll(wordList, words);
+
+        return wordList;
     }
 
     private void printInfo(int answerShown, int answersBelowThreshold){

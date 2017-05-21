@@ -42,8 +42,23 @@ public class SentenceDAO {
     }
 
     public List<String> getAllSentencesOnly() {
-        Result<String> result = sentenceAccessor.getAllOnly();
-        return result.all();
+        Result<Sentence> result = sentenceAccessor.getAllOnly();
+        List<String> sentences = new ArrayList<>();
+        for(Sentence sentence: result){
+            sentences.add(sentence.getOriginalSentence());
+        }
+
+        return sentences;
+    }
+
+    public List<String> getSentencesOnlyWithLimit(int limit) {
+        Result<Sentence> result = sentenceAccessor.getOnlySentenceWithLimit(limit);
+        List<String> sentences = new ArrayList<>();
+        for(Sentence sentence: result){
+            sentences.add(sentence.getOriginalSentence());
+        }
+
+        return sentences;
     }
 
     /*public void updateQuestions(List<Sentence> sentenceList){

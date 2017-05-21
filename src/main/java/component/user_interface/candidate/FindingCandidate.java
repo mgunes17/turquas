@@ -1,6 +1,7 @@
 package component.user_interface.candidate;
 
 import db.dao.CandidateDAO;
+import db.dao.W2VTokenDAO;
 import model.Question;
 import model.QuestionForCompare;
 
@@ -17,6 +18,7 @@ public class FindingCandidate {
     private String w2vType;
 
     public FindingCandidate(String type) {
+        W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
         candidateDAO = new CandidateDAO();
         w2vType = type;
     }

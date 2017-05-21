@@ -18,7 +18,7 @@ public class PythonSocketServer {
             String message = prepareMessage(questionVector);
             pw.println(message);
             String prediction = bufferedReader.readLine();
-            //System.out.println(prediction);
+            System.out.println(prediction);
 
             return prediction;
         } catch(Exception ex){
