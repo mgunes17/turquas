@@ -41,7 +41,7 @@ public class AnswerCommand extends AbstractCommand implements Command {
         return true;
     }
 
-    private boolean validateQuestion(String question){
+    public boolean validateQuestion(String question){
         try{
             LanguageIdentifier languageIdentifier = LanguageIdentifier.fromInternalModelGroup("tr_group");
             String[] words = question.split(" ");

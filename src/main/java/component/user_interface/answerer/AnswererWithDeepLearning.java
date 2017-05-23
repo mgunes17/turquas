@@ -104,4 +104,8 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
 
         return vector;
     }
+
+    public QuestionForCompare getUserQuestion() {
+        return userQuestion;
+    }
 }

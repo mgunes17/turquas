@@ -16,7 +16,7 @@ public class TurquasProperties {
     public boolean loadProperties(){
         try {
             Properties properties = new Properties();
-            String fileName = "/home/ercan/ideaprojects/turquas/src/main/resources/turquas.properties";
+            String fileName = "src/main/resources/turquas.properties";
             InputStream inputStream = new FileInputStream(fileName);
             properties.load(inputStream);
             String pretrained = properties.getProperty("pretrained");

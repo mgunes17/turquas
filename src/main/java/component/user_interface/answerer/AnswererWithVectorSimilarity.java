@@ -61,4 +61,8 @@ public class AnswererWithVectorSimilarity extends QuestionAnswerer{
 
         return new FindingCandidate(w2vType).findCandidatesForVecSim(question, nounClause);
     }
+
+    public QuestionForCompare getUserQuestion() {
+        return userQuestion;
+    }
 }
