@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -99,7 +100,7 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
                 vector[i] = Double.parseDouble(values[i]);
             }
         } else {
-            System.out.println("Cevap vektörü dosyadan okunamadı.");
+            System.out.println("Cevap vektörü yok.");
         }
 
         return vector;
