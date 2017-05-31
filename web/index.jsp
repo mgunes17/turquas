@@ -17,21 +17,27 @@
     <body>
     <div class="jumbotron container-fluid">
         <div class="row">
-            <div class="col-md-4"></div>
+            <div class="col-md-4" align="left">
+                <img src="bird.png" width="200px" height="200px"/>
+            </div>
             <div class="col-md-4">
-                <h2>TURQUAS</h2>
-                <h4>Türkçe İçerikleri İçin Soru Cevaplama Sistemi</h4>
+                <h2 class="text-center">TURQUAS</h2>
+                <h4 class="text-center">Türkçe İçerikleri İçin Soru Cevaplama Sistemi</h4>
+            </div>
+            <div class="col-md-4" align="right">
+                <img src="bird.png" width="200px" height="200px"/>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4"></div>
+            <div class="col-md-4">
+            </div>
             <div class="col-md-4">
                 <form method="POST" action="/findinganswers">
                     <div class="form-group">
                         <label for="question">Sor bakalım..</label>
-                        <input type="text" id="question" class="form-control" name="question">
+                        <input type="text" id="question" class="form-control" name="question" value="${question}">
+                        <input type="submit" class="btn btn-primary center-block" value="Cevapla"/>
                     </div>
-                    <input type="submit" class="btn btn-primary" value="Cevapla"/>
                 </form>
             </div>
         </div>
@@ -43,40 +49,41 @@
             </c:when>
             <c:when test="${state eq 1}">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <table class="table table-hover">
                             <thead>
                             <tr>
+                                <th>Benzerlik Oranı</th>
                                 <th>Soruların W2V Benzerliği</th>
                             </tr>
                             </thead>
                             <tbody>
                             <c:forEach var="item" items="${similarityList}">
                                 <tr>
+                                    <td>${item.value}</td>
                                     <td>${item.questionForCompare.answer}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <table class="table table-hover">
                             <thead>
                             <tr>
+                                <th>Benzerlik Oranı</th>
                                 <th>Soru-Cevap Çiftleri(Derin Öğrenme)</th>
                             </tr>
                             </thead>
                             <tbody>
                             <c:forEach var="item" items="${learningList}">
                                 <tr>
+                                    <td>${item.value}</td>
                                     <td>${item.questionForCompare.answer}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>Named Entity(Derin Öğrenme)</h4>
                     </div>
                 </div>
             </c:when>

@@ -6,6 +6,7 @@
         version="3.0">
 
     <welcome-file-list>
-        <welcome-file>/turquas/index.jsp</welcome-file>
+        <welcome-file>init</welcome-file>
     </welcome-file-list>
+
 </web-app>
