@@ -58,9 +58,9 @@ public class NameEntityPrepareCommand extends AbstractCommand implements Command
     private void prepareListForSave(Map<String, String> sentenceNePair) {
         W2VTokenDAO w2VTokenDAO = new W2VTokenDAO();
         for(String sentence: sentenceNePair.keySet()) {
-            Map<String, W2VToken> w2VTokens = w2VTokenDAO.getW2vTokenForWordsForType("stem", getWordList(sentence));
+            Map<String, W2VToken> w2VTokens = w2VTokenDAO.getW2vTokenForWordsForType("token", getWordList(sentence));
             String stem = new StemBy().rebuildSentence(sentence).toLowerCase();
-            List<Double> w2v = new AverageBy().findValue(stem, "stem", w2VTokens);
+            List<Double> w2v = new AverageBy().findValue(stem, "token", w2VTokens);
             w2vList.add(w2v);
 
             if(namedEntityMap.containsKey(sentenceNePair.get(sentence))) {

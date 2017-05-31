@@ -31,7 +31,10 @@ public class PreparingForNamedEntity {
                     }
 
                     String sentenceWithoutNamedEntity = subtractNamedEntity(parsedWords, i ,j);
+                    System.out.println("Cümle: " + sentenceWithoutNamedEntity);
                     String namedEntity = sumNamedEntity(parsedWords, i, j);
+                    System.out.println("NE: " + namedEntity);
+                    System.out.println();
                     pair.put(sentenceWithoutNamedEntity, namedEntity);
                 }
             }
