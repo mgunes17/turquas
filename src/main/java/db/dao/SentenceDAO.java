@@ -1,13 +1,11 @@
 package db.dao;
 
-import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Result;
 import db.accessor.SentenceAccessor;
 import db.configuration.ConnectionConfiguration;
 import db.configuration.MappingManagerConfiguration;
-import db.configuration.ModelVariables;
 import model.Sentence;
 
 import java.util.ArrayList;

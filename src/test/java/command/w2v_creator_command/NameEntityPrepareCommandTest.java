@@ -3,7 +3,7 @@ package command.w2v_creator_command;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by mustafa on 21.05.2017.

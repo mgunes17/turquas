@@ -6,8 +6,6 @@ import command.CommandSet;
 import command.turquas_command.TurquasGetNSCommand;
 import command.turquas_command.TurquasHelpCommand;
 import command.turquas_command.TurquasSetNSCommand;
-import component.user_interface.w2vtoken.W2VTokenMap;
-import model.W2VToken;
 import properties.TurquasProperties;
 
 import java.io.IOException;
@@ -84,7 +82,8 @@ public class Turquas {
     private void startPythonScript(){
         try {
             String command = UserInterfaceAdmin.pathMap.get("python") + " " + UserInterfaceAdmin.pathMap.get("script");
-            Process p = Runtime.getRuntime().exec(command);
+            Runtime.getRuntime().exec(command);
+            //Process p = Runtime.getRuntime().exec(command);
             //p.waitFor();
             //p.destroy();
 

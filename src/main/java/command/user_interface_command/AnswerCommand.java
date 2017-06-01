@@ -4,10 +4,9 @@ import command.AbstractCommand;
 import command.Command;
 import component.user_interface.answerer.AnswererWithDeepLearning;
 import component.user_interface.answerer.AnswererWithVectorSimilarity;
-import home_base.Turquas;
 import zemberek.langid.LanguageIdentifier;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**

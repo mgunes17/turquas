@@ -3,7 +3,6 @@ package component.user_interface.web;
 import command.user_interface_command.AnswerCommand;
 import component.user_interface.answerer.AnswererWithDeepLearning;
 import component.user_interface.answerer.AnswererWithVectorSimilarity;
-import home_base.Turquas;
 import model.QuestionForCompare;
 import model.SimilarityValue;
 
@@ -14,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mustafa on 22.05.2017.

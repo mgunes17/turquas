@@ -14,6 +14,7 @@ import command.question_generator_command.AskCommand;
 import command.question_generator_command.ChangeCommand;
 import command.question_generator_command.SaveCommand;
 import command.user_interface_command.AnswerCommand;
+import command.user_interface_command.EvaluateCommand;
 import command.user_interface_command.SetParameterCommand;
 import command.w2v_creator_command.*;
 import db.dao.TokenDAO;
@@ -68,6 +69,7 @@ public class CommandBuilder {
         Map<String, Command> commandMap = new HashMap<String, Command>();
         commandMap.put("answer", new AnswerCommand());
         commandMap.put("set", new SetParameterCommand());
+        commandMap.put("evaluate", new EvaluateCommand());
         return new CommandSet(commandMap);
     }
 
