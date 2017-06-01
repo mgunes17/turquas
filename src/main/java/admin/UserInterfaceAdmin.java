@@ -48,6 +48,7 @@ public class UserInterfaceAdmin extends Admin {
         parameterMap = new HashMap<>();
         parameterMap.put("max_answer_count", 10);
         parameterMap.put("threshold", 30);
+        parameterMap.put("evaluate_count", 10);
 
         pathMap = new HashMap<>();
     }

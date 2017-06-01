@@ -1,6 +1,5 @@
 package db.dao;
 
-import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Result;
@@ -9,7 +8,6 @@ import db.configuration.ConnectionConfiguration;
 import db.configuration.MappingManagerConfiguration;
 import model.W2VToken;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

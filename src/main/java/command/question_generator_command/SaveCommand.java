@@ -1,6 +1,5 @@
 package command.question_generator_command;
 
-import admin.QuestionGeneratorAdmin;
 import command.AbstractCommand;
 import command.Command;
 import component.question_generator.generate.MainGenerator;

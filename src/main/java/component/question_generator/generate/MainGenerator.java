@@ -1,12 +1,9 @@
 package component.question_generator.generate;
 
 import component.question_generator.factory.QuestionFactory;
-import component.question_generator.factory.itu.ItuQuestionFactory;
 import component.question_generator.factory.zemberek.ZemberekQuestionFactory;
 import home_base.SentenceType;
 import model.Question;
-import zemberek.morphology.analysis.SentenceAnalysis;
-import zemberek.morphology.analysis.WordAnalysis;
 
 import java.util.ArrayList;
 import java.util.List;

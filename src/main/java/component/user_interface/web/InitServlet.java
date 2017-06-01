@@ -1,16 +1,11 @@
 package component.user_interface.web;
 
-import home_base.Turquas;
-
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 /**
  * Created by ercan on 24.05.2017.

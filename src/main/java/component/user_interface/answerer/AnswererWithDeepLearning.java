@@ -6,22 +6,15 @@ import component.user_interface.candidate.FindingCandidate;
 import home_base.SentenceType;
 import model.QuestionForCompare;
 import model.SimilarityValue;
-import org.apache.commons.io.IOUtils;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by ercan on 17.05.2017.
  */
 public class AnswererWithDeepLearning extends QuestionAnswerer{
     private QuestionForCompare userQuestion;
+    private PythonSocketServer server = new PythonSocketServer();
 
     public AnswererWithDeepLearning(){
         super();
@@ -31,9 +24,11 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
     public void answer(String question){
         userQuestion = createUserQuestionForCompare(question);
 
+        System.out.println("soru üretildi.");
         double[] answerVector = predictWithDeepLearning(); // DL tahminini al
         userQuestion.setAnswerVector(answerVector); // cevaplarla karşılaştırmak için cevap vektörü olarak ata
 
+        System.out.println("cevap alındı.");
         long start_time = System.nanoTime();
         String w2vType = UserInterfaceAdmin.wordType + "_" + UserInterfaceAdmin.vectorType;
         List<QuestionForCompare> candidateList = findCandidates(question, w2vType, new SentenceType().isNounClause(question));
@@ -76,7 +71,6 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
 
     private double[] predictWithDeepLearning(){
         try {
-            PythonSocketServer server = new PythonSocketServer();
             String prediction = server.askForPrediction(userQuestion.getQuestionVector());
 
             return predict(prediction);

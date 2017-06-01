@@ -7,7 +7,10 @@ import model.QuestionForCompare;
 import model.SimilarityValue;
 import model.W2VToken;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ercan on 17.05.2017.
@@ -54,10 +57,14 @@ public abstract class QuestionAnswerer {
         return vector.stream().mapToDouble(Double::doubleValue).toArray();
     }
 
-    private List<String> sentenceToList(String sentence){
+    private List<String> sentenceToList(String sentence){ // burada alınmayacak kelimeleri alma (stop word vb.)
         String[] words = sentence.split(" ");
         List<String> wordList = new ArrayList<>();
-        Collections.addAll(wordList, words);
+        for(String word: words){
+            if(!word.equals("")){
+                wordList.add(word);
+            }
+        }
 
         return wordList;
     }
