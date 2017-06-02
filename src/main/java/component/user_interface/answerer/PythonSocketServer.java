@@ -19,9 +19,7 @@ public class PythonSocketServer {
 
             String message = prepareMessage(questionVector);
             printWriter.println(message);
-            System.out.println("mesaj gönderildi");
             String prediction = bufferedReader.readLine();
-            System.out.println("cevap geldi");
             //System.out.println(prediction);
 
             return prediction;

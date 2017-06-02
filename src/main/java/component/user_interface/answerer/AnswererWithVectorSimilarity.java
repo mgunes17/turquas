@@ -39,7 +39,7 @@ public class AnswererWithVectorSimilarity extends QuestionAnswerer{
         int candidateCount = candidateList.size();
         int answerCount = findAnswerCount(candidateCount);
         System.out.println("\n\n...BASİT VEKTÖR BENZERLİĞİ ILE CEVAP VERILIYOR...\n\n");
-        printAnswers(userQuestion, answerCount);
+        //printAnswers(userQuestion, answerCount);
     }
 
     @Override

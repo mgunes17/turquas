@@ -24,9 +24,12 @@ public class EvaluateCommand extends AbstractCommand implements Command {
             DeepLearningEvaluator deepLearningEvaluator = new DeepLearningEvaluator();
             W2VSimilarityEvaluator w2VSimilarityEvaluator = new W2VSimilarityEvaluator();
 
-            List<Question> questionList = questionDAO.getQuestionsByLimit(20);
-            double w2vScore = w2VSimilarityEvaluator.evaluate(questionList);
+            int limit = parseLimitCount(parameter[1]);
+
+            List<Question> questionList = questionDAO.getQuestionsByLimit(limit);
             double dlScore = deepLearningEvaluator.evaluate(questionList);
+            double w2vScore = w2VSimilarityEvaluator.evaluate(questionList);
+
 
             System.out.println("Deep Learning score:" + dlScore);
             System.out.println("W2V Similarity score:" + w2vScore);
@@ -41,6 +44,20 @@ public class EvaluateCommand extends AbstractCommand implements Command {
 
     @Override
     protected boolean validateParameter(String[] parameter) {
-        return parameter.length == 1;
+        return parameter.length == 2;
+    }
+
+    private int parseLimitCount(String parameter){
+        try {
+            return Integer.parseInt(parameter);
+        } catch (NumberFormatException ex){
+            System.out.println("Lütfen sayısal bir değer giriniz.");
+            ex.printStackTrace();
+            return -1;
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+            return -1;
+        }
     }
 }
