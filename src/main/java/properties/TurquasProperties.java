@@ -15,21 +15,26 @@ public class TurquasProperties {
 
     public boolean loadProperties(){
         try {
-            Properties properties = new Properties();
+            /*Properties properties = new Properties();
             String fileName = "src/main/resources/turquas.properties";
-            InputStream inputStream = new FileInputStream(fileName);
+            InputStream inputStream = TurquasProperties.class
+                    .getResourceAsStream(fileName);
             properties.load(inputStream);
             String pretrained = properties.getProperty("pretrained");
             String python = properties.getProperty("python");
-            String script = properties.getProperty("script");
+            String script = properties.getProperty("script");*/
 
-            W2VCreatorAdmin.filenameMap.put("pretrained", pretrained);
-            UserInterfaceAdmin.pathMap.put("python", python);
-            UserInterfaceAdmin.pathMap.put("script", script);
+            W2VCreatorAdmin.filenameMap.put("pretrained", "/home/student_1/Documents/proje/wiki.tr.vec");
+            UserInterfaceAdmin.pathMap.put("python", "/root/miniconda2/bin/python");
+            UserInterfaceAdmin.pathMap.put("script", "/home/student_1/predict.py");
 
             return true;
-        } catch (IOException ex) {
+        } /*catch (IOException ex) {
             System.out.println("properties okunamadı" + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }*/ catch (Exception ex) {
+            System.out.println(ex.getMessage());
             ex.printStackTrace();
             return false;
         }

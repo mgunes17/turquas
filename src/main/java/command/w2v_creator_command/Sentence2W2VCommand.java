@@ -20,6 +20,7 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
 
     public boolean execute(String[] parameter) {
         if(!validateParameter(parameter)) {
+            System.out.println("Eksik/Fazla parametre");
             return false;
         }
         String wordType = parameter[1];
