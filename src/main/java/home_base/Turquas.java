@@ -51,7 +51,7 @@ public class Turquas {
                 }
             }
         }).start();
-        startPythonScript();
+        //startPythonScript();
         System.out.println("python-java iletişimi kuruldu.");
     }
 

@@ -24,11 +24,9 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
     public void answer(String question){
         userQuestion = createUserQuestionForCompare(question);
 
-        System.out.println("soru üretildi.");
         double[] answerVector = predictWithDeepLearning(); // DL tahminini al
         userQuestion.setAnswerVector(answerVector); // cevaplarla karşılaştırmak için cevap vektörü olarak ata
 
-        System.out.println("cevap alındı.");
         long start_time = System.nanoTime();
         String w2vType = UserInterfaceAdmin.wordType + "_" + UserInterfaceAdmin.vectorType;
         List<QuestionForCompare> candidateList = findCandidates(question, w2vType, new SentenceType().isNounClause(question));
@@ -46,7 +44,7 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
         int candidateCount = candidateList.size();
         int answerCount = findAnswerCount(candidateCount);
         System.out.println("\n\n...DEEP LEARNING ILE CEVAP VERILIYOR...\n\n");
-        printAnswers(userQuestion, answerCount);
+        //printAnswers(userQuestion, answerCount);
     }
 
     @Override

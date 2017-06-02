@@ -15,10 +15,16 @@ public abstract class Evaluator {
 
     double findScore(String answer, QuestionForCompare userQuestion){
         int maxCount = UserInterfaceAdmin.parameterMap.get("evaluate_count");
+        int size = userQuestion.getSimilarityList().size();
 
+        maxCount = maxCount >= size ? size : maxCount;
         for(int i = 0; i < maxCount; i++){
-            if(answer.equals(userQuestion.getSimilarityList().get(i).getQuestionForCompare().getAnswer())){
-                return (maxCount - i) / maxCount;
+            QuestionForCompare qfc = userQuestion.getSimilarityList().get(i).getQuestionForCompare();
+            //System.out.println("----" + answer.toLowerCase());
+            //System.out.println("++++" + qfc.getAnswer().toLowerCase());
+            if(answer.toLowerCase().equals(qfc.getAnswer().toLowerCase())){
+                System.out.println("found " + (i+1));
+                return 1.0 / (i+1);
             }
         }
 

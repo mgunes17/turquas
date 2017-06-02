@@ -4,6 +4,10 @@ import db.dao.CandidateDAO;
 import db.dao.W2VTokenDAO;
 import model.Question;
 import model.QuestionForCompare;
+import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
+import zemberek.morphology.analysis.SentenceAnalysis;
+import zemberek.morphology.analysis.WordAnalysis;
+import zemberek.morphology.analysis.tr.TurkishSentenceAnalyzer;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,7 +40,16 @@ public class FindingCandidate {
     }
 
     private List<Question> getQuestionsFromDatabase(String userQuestion, boolean nounClause){
-        String[] words = userQuestion.split(" ");
+        TurkishSentenceAnalyzer analyzer = ZemberekSentenceAnalyzer.getSentenceAnalyzer();
+        SentenceAnalysis analysis = analyzer.analyze(userQuestion);
+        analyzer.disambiguate(analysis);
+
+        List<String> wordList = new ArrayList<>();
+        for (SentenceAnalysis.Entry entry : analysis) {
+            WordAnalysis wordAnalysis = entry.parses.get(0);
+            wordList.add(wordAnalysis.dictionaryItem.lemma);
+        }
+        String[] words = wordList.toArray(new String[wordList.size()]);
 
         return candidateDAO.getQuestions(words, nounClause);
     }

@@ -13,7 +13,7 @@ public class DeepLearningEvaluator extends Evaluator {
 
     @Override
     public double evaluate(List<Question> questionList) {
-        double score = 0.0;
+        double score = 0.0d;
         AnswererWithDeepLearning answererWithDeepLearning = new AnswererWithDeepLearning();
 
         for(Question question: questionList){
