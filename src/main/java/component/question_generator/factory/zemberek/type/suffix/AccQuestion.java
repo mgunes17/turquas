@@ -40,13 +40,15 @@ public class AccQuestion extends SuffixQuestion implements QuestionType {
         if(word.getPrimaryPos().equals("Numeral")) {
             if(word.getLog().contains("Gen"))
                 return KACININ;
-            else if(word.getLog().contains("P2sg") || word.getLog().contains("P3sg"))
-                return KACINI;
+            /*else if(word.getLog().contains("P2sg") || word.getLog().contains("P3sg"))
+                return KACINI;*/
             else
                 return KACI;
         }
-        else if(word.getLog().contains("P2sg") || word.getLog().contains("P3sg"))
+        /*else if(word.getLog().contains("P2sg") || word.getLog().contains("P3sg"))
             return NEYINI;
+        else
+            return NEYI;*/
         else
             return NEYI;
     }
