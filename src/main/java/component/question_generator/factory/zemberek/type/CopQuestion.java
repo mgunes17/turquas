@@ -32,7 +32,7 @@ public class CopQuestion implements QuestionType {
         }
 
         List<Question> questions = new ArrayList<>();
-        questions.add(new Question(sentence.toString() , answer.toString()));
+        questions.add(new Question(sentence.toString() , answer.toString(), "cop"));
 
         return questions;
     }

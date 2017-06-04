@@ -54,7 +54,7 @@ public class InstQuestion implements QuestionType {
         //answer.deleteCharAt(answer.length() - 1); // son boşluk silindi
         sentence.append(wordList.get(wordList.size() - 1).getWord());
         List<Question> questions = new ArrayList<Question>();
-        questions.add(new Question(sentence.toString(), null));
+        questions.add(new Question(sentence.toString(), null, "inst"));
 
         return questions;
     }

@@ -28,7 +28,7 @@ public class DatQuestion extends SuffixQuestion implements QuestionType {
             i++;
         }
 
-        return super.reorganize(wordList, changeMap, Suffix.DATIVE);
+        return super.reorganize(wordList, changeMap, "dat");
     }
 
     protected String chooseQuestionWord(Word word) {

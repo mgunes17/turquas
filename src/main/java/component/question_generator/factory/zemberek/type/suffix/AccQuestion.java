@@ -33,7 +33,7 @@ public class AccQuestion extends SuffixQuestion implements QuestionType {
             i++;
         }
 
-        return super.reorganize(wordList, changeMap, Suffix.ACCUSATIVE);
+        return super.reorganize(wordList, changeMap, "acc");
     }
 
     protected String chooseQuestionWord(Word word) {

@@ -29,7 +29,7 @@ public class AblQuestion extends SuffixQuestion implements QuestionType {
 
         }
 
-        return super.reorganize(wordList, changeMap, Suffix.ABLATIVE);    }
+        return super.reorganize(wordList, changeMap, "abl");    }
 
     protected String chooseQuestionWord(Word word) {
         return NEREDEN;

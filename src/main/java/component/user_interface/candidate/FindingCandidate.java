@@ -2,6 +2,7 @@ package component.user_interface.candidate;
 
 import db.dao.CandidateDAO;
 import db.dao.W2VTokenDAO;
+import home_base.Turquas;
 import model.Question;
 import model.QuestionForCompare;
 import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
@@ -51,7 +52,8 @@ public class FindingCandidate {
         }
         String[] words = wordList.toArray(new String[wordList.size()]);
 
-        return candidateDAO.getQuestions(words, nounClause);
+        String questionType = Turquas.findQuestionType(userQuestion);
+        return candidateDAO.getQuestions(words, nounClause, questionType);
     }
 
     private List<QuestionForCompare> prepareListForVecSim(List<Question> questionList){

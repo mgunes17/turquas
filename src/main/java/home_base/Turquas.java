@@ -23,6 +23,23 @@ public class Turquas {
     public static Socket pythonSocket;
     private CommandSet commandSet;
     public static String namespace = "crawler";
+    public static final Map<String, String> QUESTION_TYPE = new HashMap<>();
+
+    static {
+        QUESTION_TYPE.put("nereden", "abl");
+        QUESTION_TYPE.put("neyi", "acc");
+        QUESTION_TYPE.put("kaçı", "acc");
+        QUESTION_TYPE.put("kaçının", "cc");
+        QUESTION_TYPE.put("nereye", "dat");
+        QUESTION_TYPE.put("nerede", "loc");
+        QUESTION_TYPE.put("kaçta", "loc");
+        QUESTION_TYPE.put("nedir", "cop");
+        QUESTION_TYPE.put("neyin", "gen");
+        QUESTION_TYPE.put("nasıl", "inst");
+        QUESTION_TYPE.put("ne", "inst");
+        QUESTION_TYPE.put("kim", "inst");
+        QUESTION_TYPE.put("ne zaman", "time");
+    }
 
     private Turquas() {
         adminMap = new HashMap<String, Admin>();
@@ -90,5 +107,16 @@ public class Turquas {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String findQuestionType(String question) {
+        String questionType = "inst"; //nasıl - ne - kim
+
+        for(String questionWord: Turquas.QUESTION_TYPE.keySet()) {
+            if(question.contains(questionWord))
+                questionType = Turquas.QUESTION_TYPE.get(questionWord);
+        }
+
+        return questionType;
     }
 }
