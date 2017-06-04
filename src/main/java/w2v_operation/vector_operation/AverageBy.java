@@ -18,14 +18,15 @@ public class AverageBy extends VectorType {
         List<List<Double>> wordValues = new ArrayList<List<Double>>();
         //Map<String, W2VToken> w2VTokens = super.w2VTokens.get(tokenType);
 
+        int count = 0;
         for(String word : words) {
             if (w2VTokens.containsKey(word)) {
                 wordValues.add(w2VTokens.get(word).getValue());
+                count++;
             }
         }
 
         int layerSize = W2VCreatorAdmin.w2vParameterMap.get("layer_size");
-        int wordValuesSize = wordValues.size();
 
         for(int i = 0; i < layerSize; i++) {
             Double sum = 0.0d;
@@ -34,7 +35,7 @@ public class AverageBy extends VectorType {
                 sum += xx.get(i);
             }
 
-            values.add(sum / wordValuesSize);
+            values.add(sum / count);
         }
 
         return values;

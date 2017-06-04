@@ -52,7 +52,7 @@ public class CandidateDAO {
                 UniqueWord uniqueWord = MappingManagerConfiguration.getUniqueWordMapper().get(word);
                 if(uniqueWord != null) {
                     for(String sourceName: uniqueWord.getValueMap().keySet()) {
-                        if(uniqueWord.getValueMap().get(sourceName) > 0) {
+                        if(uniqueWord.getValueMap().get(sourceName) > 2) {
                            if(sourceCount.containsKey(sourceName))
                                sourceCount.put(sourceName, sourceCount.get(sourceName) + 1);
                            else
@@ -68,7 +68,8 @@ public class CandidateDAO {
         }
 
         for(String source: sourceCount.keySet()) {
-            if(sourceCount.get(source) >= words.length - i)
+            //if(sourceCount.get(source) == words.length - i)
+            if(sourceCount.get(source) >= words.length / 3)
                 sourceList.add(source);
         }
 
