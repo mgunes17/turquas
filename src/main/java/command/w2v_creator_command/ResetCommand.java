@@ -15,7 +15,7 @@ public class ResetCommand implements Command {
         int count = 0;
         int size = 1000;
         QuestionDAO questionDAO = new QuestionDAO();
-        List<Question> questionList = questionDAO.getUnprocessedQuestions(size);
+        List<Question> questionList = questionDAO.getProcessedQuestionsByLimit(size);
         while(questionList.size() > 0){
             questionList = questionDAO.getProcessedQuestionsByLimit(size);
             questionDAO.updateQuestionProcessed(questionList, false);
