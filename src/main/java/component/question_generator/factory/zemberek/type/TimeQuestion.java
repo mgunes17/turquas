@@ -39,7 +39,7 @@ public class TimeQuestion implements QuestionType {
         }
 
         List<Question> questions = new ArrayList<Question>();
-        questions.add(new Question(builder.toString() + " ?", answer.toString()));
+        questions.add(new Question(builder.toString(), answer.toString()));
         return questions;
     }
 }

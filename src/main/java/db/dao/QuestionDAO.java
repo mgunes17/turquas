@@ -37,7 +37,14 @@ public class QuestionDAO {
     }
 
     public List<Question> getQuestionsByLimit(int limit) {
-        Result<Question> result = questionAccessor.getQuestionsByLimit(limit);
-        return result.all();
+        try {
+            Result<Question> result = questionAccessor.getQuestionsByLimit(limit);
+            return result.all();
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        return null;
     }
 }

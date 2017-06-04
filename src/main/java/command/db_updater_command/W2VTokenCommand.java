@@ -26,7 +26,7 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
         List<W2VToken> w2VTokenList = new ArrayList<W2VToken>();
 
         SentenceLoader sentenceLoader = new SentenceLoader(0); //tüm cümleleri çek
-        StemmedSentenceFileCreator stemmedCreator = new StemmedSentenceFileCreator(sentenceLoader);
+        /*StemmedSentenceFileCreator stemmedCreator = new StemmedSentenceFileCreator(sentenceLoader);
         stemmedCreator.createFile(); // stem hallerini al
 
         Word2Vec word2Vec = new Word2Vec();
@@ -36,11 +36,13 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
             e.printStackTrace();
         }
 
-        readW2VFromFile(w2VTokenList, "stem");
+        readW2VFromFile(w2VTokenList, "stem");*/
 
+        Word2Vec word2Vec = new Word2Vec();
         LetterLimitedSentenceFileCreator letterLimitedCreator = new LetterLimitedSentenceFileCreator(sentenceLoader, 5);
         letterLimitedCreator.createFile(); //kelimelerin ilk 5 harfini al
 
+        System.out.println("letter başladı.");
         try {
             word2Vec.run(); //w2v değerlerini hesapla
         } catch (Exception e) {
@@ -49,10 +51,16 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
 
         //dosyadan değerleri oku
         readW2VFromFile(w2VTokenList, "letter");
+        System.out.println("letter bitti.");
+
+        w2VTokenDAO.insertToTable(w2VTokenList);
+        w2VTokenList = new ArrayList<>();
+        System.out.println("letter kaydetti");
 
         DefaultSentenceFileCreator defaultSentenceFileCreator = new DefaultSentenceFileCreator(sentenceLoader);
         defaultSentenceFileCreator.createFile(); // token olarak kaydet
 
+        System.out.println("token başladı");
         try {
             word2Vec.run(); //w2v değerlerini hesapla
         } catch (Exception e) {
@@ -61,9 +69,10 @@ public class W2VTokenCommand extends AbstractCommand implements Command {
 
         //dosyadan değerleri oku
         readW2VFromFile(w2VTokenList, "token");
-
+        System.out.println("token bitti.");
         //kaydet
-        w2VTokenDAO.updateTable(w2VTokenList);
+        w2VTokenDAO.insertToTable(w2VTokenList);
+        System.out.println("vtye kaydedildi.");
         return true;
     }
 

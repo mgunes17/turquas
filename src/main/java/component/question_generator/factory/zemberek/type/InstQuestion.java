@@ -21,24 +21,24 @@ public class InstQuestion implements QuestionType {
     public List<Question> reorganize(List<Word> wordList) {
 
         StringBuilder sentence = new StringBuilder();
-        StringBuilder answer = new StringBuilder();
+        //StringBuilder answer = new StringBuilder();
 
         int size = wordList.size();
         for (int i = 0; i < size - 2; i++) {
             Word word = wordList.get(i);
 
             if(!word.isInstQuestion()) {
-                sentence.append(word.getWord() + " ");
+                sentence.append(word.getWord()).append(" ");
             } else if(wordList.get(i+1).getPrimaryPos().equals("Verb")){
                 sentence.append(NASIL + " ");
-                answer.append(word.getWord() + " ");
+                //answer.append(word.getWord() + " ");
             } else if(wordList.get(i+1).getSecondaryPos().equals("ProperNoun")){
                 if(wordList.get(i+1).getSuffix() == Suffix.ACCUSATIVE){
                     sentence.append(word.getWord() + " " + KIM +"i ");
                 } else {
                     sentence.append(word.getWord() + " " + KIM +" ");
                 }
-                answer.append(wordList.get(i+1).getWord() + " ");
+                //answer.append(wordList.get(i+1).getWord() + " ");
                 i++;
             } else if(wordList.get(i+1).getPrimaryPos().equals("Noun") &&
                     wordList.get(i+1).getSecondaryPos().equals("None")){
@@ -47,13 +47,14 @@ public class InstQuestion implements QuestionType {
                 } else {
                     sentence.append(word.getWord() + " " + NE +" ");
                 }
-                answer.append(wordList.get(i+1).getWord() + " ");
+                //answer.append(wordList.get(i+1).getWord() + " ");
                 i++;
             }
         }
-
+        //answer.deleteCharAt(answer.length() - 1); // son boşluk silindi
+        sentence.append(wordList.get(wordList.size() - 1).getWord());
         List<Question> questions = new ArrayList<Question>();
-        questions.add(new Question(sentence.toString() + " ?", answer.toString()));
+        questions.add(new Question(sentence.toString(), null));
 
         return questions;
     }

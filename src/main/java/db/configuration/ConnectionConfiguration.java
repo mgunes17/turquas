@@ -1,6 +1,7 @@
 package db.configuration;
 
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.QueryOptions;
 import com.datastax.driver.core.Session;
 
 /**
@@ -11,7 +12,10 @@ public class ConnectionConfiguration {
 
     public static Session getSession() {
         if(session == null)
-            session = Cluster.builder().addContactPoint("127.0.0.1").build().connect(ModelVariables.KEYSPACE);
+            session = Cluster.builder()
+                    .addContactPoint("127.0.0.1")
+                    .withQueryOptions(new QueryOptions().setFetchSize(5000))
+                    .build().connect(ModelVariables.KEYSPACE);
 
         return session;
     }
