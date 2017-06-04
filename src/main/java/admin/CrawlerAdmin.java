@@ -22,7 +22,7 @@ public class CrawlerAdmin extends Admin {
         processor = new Processor(dbSaver);
         crawler = new WebCrawler(processor);
         crawlerParameterMap = new HashMap<String, Integer>();
-        crawlerParameterMap.put("session_size", 5);
+        crawlerParameterMap.put("session_size", 25);
         crawlerParameterMap.put("max_word_size", 20);
 
         //ilklendirmeleri yap

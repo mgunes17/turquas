@@ -38,9 +38,15 @@ public class TfidfCommand extends AbstractCommand implements Command {
             Map<String, Double> valueMap = new HashMap<String, Double>();
             for(String sourceName: word.getDocumentSet()) {
                 Source source = sourceMap.get(sourceName);
-                int tf = source.getWordCountMap().get(word.getWord()); // kelimenin o dokümanda bulunma sayısı
-                double idf = Math.log10(sourceMap.size() + 1) / Math.log10(word.getDocumentSet().size() + 1);
-                valueMap.put(source.getSourceName(), tf*idf);
+
+                if(source.getWordCountMap().containsKey(word.getWord())) {//kelime dokümanda varsa
+                    int tf = source.getWordCountMap().get(word.getWord()); // kelimenin o dokümanda bulunma sayısı
+                    double idf = Math.log10(sourceMap.size() + 1) / Math.log10(word.getDocumentSet().size() + 1);
+                    valueMap.put(source.getSourceName(), tf*idf);
+                } else {
+                    valueMap.put(source.getSourceName(), 0.0d);
+                }
+
             }
 
             word.setValueMap(valueMap);

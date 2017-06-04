@@ -59,6 +59,12 @@ public class SentenceDAO {
         return sentences;
     }
 
+    public boolean isExist(String sentence){
+        Result<Sentence> result = sentenceAccessor.getSentence(sentence);
+
+        return result.all().size() != 0;
+    }
+
     /*public void updateQuestions(List<Sentence> sentenceList){
         try {
             BatchStatement batch = new BatchStatement();

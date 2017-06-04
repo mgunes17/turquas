@@ -20,8 +20,8 @@ public abstract class Evaluator {
         maxCount = maxCount >= size ? size : maxCount;
         for(int i = 0; i < maxCount; i++){
             QuestionForCompare qfc = userQuestion.getSimilarityList().get(i).getQuestionForCompare();
-            //System.out.println("----" + answer.toLowerCase());
-            //System.out.println("++++" + qfc.getAnswer().toLowerCase());
+            //System.out.println(i + "gerçek----" + answer.toLowerCase());
+            //System.out.println(i + "tahmin++++" + qfc.getAnswer().toLowerCase());
             if(answer.toLowerCase().equals(qfc.getAnswer().toLowerCase())){
                 System.out.println("found " + (i+1));
                 return 1.0 / (i+1);

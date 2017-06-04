@@ -30,21 +30,39 @@ public class Sentence2W2VCommand extends AbstractCommand implements Command {
         int limit = parseLimitCount(parameter[3]);
 
         QuestionDAO questionDAO = new QuestionDAO();
-        List<Question> questionList = new ArrayList<>();
+        List<Question> questionList;
 
-        if(limit == 0){
+        int count = 0;
+        int size = 500;
+        while(count < limit){
+            w2vValues = new HashMap<>();
+            questionList = questionDAO.getUnprocessedQuestions(size);
+            for(Question question: questionList) {
+                w2vValues.put(question.getQuestionW2vValueMap().get(valueType),
+                        question.getAnswerW2vValueMap().get(valueType));
+            }
+            //input-output dosyalarını oluştur
+            if(w2vValues.size() > 0) {
+                W2V4Sentence.writeToFileSentence2W2V(w2vValues);
+            }
+            count = count + size;
+            System.out.println(count + " tane bitti.");
+            questionDAO.updateQuestionProcessed(questionList, true);
+        }
+
+        /*if(limit == 0){
             questionList = questionDAO.getAllQuestions();
         } else if(limit > 0){
             questionList = questionDAO.getQuestionsByLimit(limit);
-        }
+        }*/
 
-        for(Question question: questionList) {
+        /*for(Question question: questionList) {
             w2vValues.put(question.getQuestionW2vValueMap().get(valueType),
                     question.getAnswerW2vValueMap().get(valueType));
         }
         //input-output dosyalarını oluştur
         if(w2vValues.size() > 0)
-            W2V4Sentence.writeToFileSentence2W2V(w2vValues);
+            W2V4Sentence.writeToFileSentence2W2V(w2vValues);*/
 
         return true;
     }

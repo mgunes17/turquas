@@ -6,14 +6,13 @@ import component.crawler.page.Page;
 import component.crawler.processor.preprocess.PreprocessHandler;
 import component.crawler.processor.preprocess.PreprocessedSentence;
 import component.crawler.processor.validation.ValidationHandler;
+import db.dao.SentenceDAO;
 import model.Sentence;
 import model.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by mustafa on 23.04.2017.
@@ -24,6 +23,7 @@ public class Processor {
     private Queue<Source> dataToSaveQueue;
     private ContentHandler contentHandler;
     private ValidationHandler validationHandler;
+    private Set<String> uniqueSentences = new HashSet<>();
 
     public Processor(DBSaver dbSaver) {
         this.dbSaver = dbSaver;
@@ -60,6 +60,7 @@ public class Processor {
     private Source buildSource(String sourceName, String content){
         Source source = new Source(sourceName);
         List<String> sentences = contentHandler.getSentencesFromParagraph(content);
+        sentences = cleanSentences(sentences);
 
         for(String sentence: sentences) {
             if(validationHandler.validate(sentence)){
@@ -75,6 +76,20 @@ public class Processor {
 
         return source;
     }
+
+    private List<String> cleanSentences(List<String> sentences){
+        List<String> sentenceList = new ArrayList<>();
+        SentenceDAO sentenceDAO = new SentenceDAO();
+        for(String sentence: sentences){
+            if(!uniqueSentences.contains(sentence) && !sentenceDAO.isExist(sentence)){
+                uniqueSentences.add(sentence);
+                sentenceList.add(sentence);
+            }
+        }
+
+        return sentenceList;
+    }
+
 
     private Sentence buildSentenceObject(PreprocessedSentence preprocessedSentence){
         Sentence newSentence = new Sentence(preprocessedSentence.getOriginalSentence());

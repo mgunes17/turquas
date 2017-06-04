@@ -1,6 +1,7 @@
 package db.dao;
 
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.Result;
 import db.accessor.QuestionAccessor;
@@ -36,6 +37,11 @@ public class QuestionDAO {
         return result.all();
     }
 
+    public List<Question> getUnprocessedQuestions(int limit) {
+        Result<Question> result = questionAccessor.getUnprocessedQuestionsByLimit(limit);
+        return result.all();
+    }
+
     public List<Question> getQuestionsByLimit(int limit) {
         try {
             Result<Question> result = questionAccessor.getQuestionsByLimit(limit);
@@ -46,5 +52,23 @@ public class QuestionDAO {
         }
 
         return null;
+    }
+
+    public void updateQuestionProcessed(List<Question> questionList, boolean isProcessed) {
+        try {
+            for(Question question: questionList){
+                Statement statement = questionAccessor.updateQuestionProcessed(isProcessed, question.getSourceName(),
+                        question.isNounClause(), question.getQuestion());
+                session.execute(statement);
+            }
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    public List<Question> getProcessedQuestionsByLimit(int limit){
+        Result<Question> result = questionAccessor.getProcessedQuestionsByLimit(limit);
+        return result.all();
     }
 }
