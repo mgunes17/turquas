@@ -23,6 +23,9 @@ public class Question {
     @Column(name = "noun_clause")
     private boolean nounClause;
 
+    @Column(name = "processed")
+    private boolean processed;
+
     @FrozenValue
     @Column(name = "question_w2v_value_map")
     private Map<String, List<Double>> questionW2vValueMap;
@@ -69,6 +72,14 @@ public class Question {
 
     public String getAnswer() {
         return answer;
+    }
+
+    public boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(boolean processed) {
+        this.processed = processed;
     }
 
     public void setAnswer(String answer) {

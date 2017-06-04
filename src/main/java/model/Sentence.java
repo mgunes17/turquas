@@ -15,12 +15,11 @@ import java.util.Set;
 @Table(keyspace = ModelVariables.KEYSPACE, name = ModelVariables.SENTENCE_TABLE_NAME)
 public class Sentence {
     @PartitionKey
-    @Column(name = "source_name")
-    private String sourceName;
-
-    @ClusteringColumn
     @Column(name = "original_sentence")
     private String originalSentence;
+
+    @Column(name = "source_name")
+    private String sourceName;
 
     @Column(name = "stemmed_words_list")
     private List<String> stemmedWordsList;

@@ -76,6 +76,7 @@ public class SaveCommand extends AbstractCommand implements Command {
             Map<String, List<Double>> questionW2vValueMap = createW2vMapForSentence(w2vTokens, questionMapByWordType);
             question.setQuestionW2vValueMap(questionW2vValueMap);
             question.setAnswerW2vValueMap(answerW2vValueMap);
+            question.setProcessed(false);
         }
     }
 

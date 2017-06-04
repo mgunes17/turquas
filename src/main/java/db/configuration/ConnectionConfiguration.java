@@ -14,7 +14,7 @@ public class ConnectionConfiguration {
         if(session == null)
             session = Cluster.builder()
                     .addContactPoint("127.0.0.1")
-                    .withQueryOptions(new QueryOptions().setFetchSize(5000))
+                    .withQueryOptions(new QueryOptions().setFetchSize(500))
                     .build().connect(ModelVariables.KEYSPACE);
 
         return session;

@@ -8,9 +8,7 @@ import db.configuration.MappingManagerConfiguration;
 import model.Question;
 import model.UniqueWord;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by mustafa on 11.05.2017.
@@ -26,18 +24,16 @@ public class CandidateDAO {
     }
 
     public List<Question> getQuestions(String[] words, boolean nounClause) {
-        List<Set<String>> sourceList = findSources(words);
+        List<String> sourceList = findSources(words);
 
         return findQuestions(sourceList, nounClause);
     }
 
-    private List<Question> findQuestions(List<Set<String>> sourceList, boolean nounClause){
+    private List<Question> findQuestions(List<String> sourceList, boolean nounClause){
         List<Question> questionList = new ArrayList<>();
         List<String> sourceNames = new ArrayList<>();
 
-        for(Set<String> sourceSet: sourceList) {
-            sourceNames.addAll(sourceSet);
-        }
+        sourceNames.addAll(sourceList);
 
         Result<Question> result = questionAccessor.getQuestionsWithInClause(sourceNames, nounClause);
         for(Question question: result) {
@@ -47,15 +43,33 @@ public class CandidateDAO {
         return questionList;
     }
 
-    private List<Set<String>> findSources(String[] words){
-        List<Set<String>> sourceList = new ArrayList<>();
-
+    private List<String> findSources(String[] words){
+        List<String> sourceList = new ArrayList<>();
+        Map<String, Integer> sourceCount = new HashMap<>();
+        int i = 0;
         for(String word: words) {
             if(!word.equals("")){
                 UniqueWord uniqueWord = MappingManagerConfiguration.getUniqueWordMapper().get(word);
-                if(uniqueWord != null)
-                    sourceList.add(uniqueWord.getDocumentSet());
+                if(uniqueWord != null) {
+                    for(String sourceName: uniqueWord.getValueMap().keySet()) {
+                        if(uniqueWord.getValueMap().get(sourceName) > 0) {
+                           if(sourceCount.containsKey(sourceName))
+                               sourceCount.put(sourceName, sourceCount.get(sourceName) + 1);
+                           else
+                               sourceCount.put(sourceName, 1);
+                        }
+                    }
+                } else {
+                   i++;
+                }
+            } else {
+                i++;
             }
+        }
+
+        for(String source: sourceCount.keySet()) {
+            if(sourceCount.get(source) >= words.length - i)
+                sourceList.add(source);
         }
 
         return sourceList;

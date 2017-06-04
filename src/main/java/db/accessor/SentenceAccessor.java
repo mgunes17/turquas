@@ -20,6 +20,9 @@ public interface SentenceAccessor {
     @Query("SELECT original_sentence FROM sentence")
     Result<Sentence> getAllOnly();
 
+    @Query("SELECT original_sentence FROM sentence where original_sentence = ?")
+    Result<Sentence> getSentence(String originalSentence);
+
     @Query("SELECT original_sentence FROM sentence LIMIT ?")
     Result<Sentence> getOnlySentenceWithLimit(int limit);
 

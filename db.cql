@@ -38,13 +38,16 @@ CREATE TABLE sentence (
 	stemmed_words_list list<text>,
 	tags set<text>,     
 	token_list list<text>,     
-	PRIMARY KEY (source_name, original_sentence)
+	PRIMARY KEY (original_sentence)
 );
+
+CREATE INDEX source_name ON sentence (source_name);
 
 CREATE TABLE question (
     source_name text,
     question text,
     noun_clause boolean,
+    processed boolean,
     question_w2v_value_map map<text, frozen <list<double>>>,
     answer text,
     answer_w2v_value_map map<text, frozen <list<double>>>,
@@ -52,3 +55,4 @@ CREATE TABLE question (
 );
 
 CREATE INDEX is_noun_clause ON question (noun_clause);
+CREATE INDEX is_processed ON question (processed);

@@ -62,6 +62,7 @@ public class CommandBuilder {
         commandMap.put("sentence", new Sentence2W2VCommand());
         commandMap.put("load", new LoadCommand());
         commandMap.put("ne", new NameEntityPrepareCommand());
+        commandMap.put("reset", new ResetCommand());
         return new CommandSet(commandMap);
     }
 
