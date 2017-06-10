@@ -29,7 +29,7 @@ public class PlainQuestion implements QuestionType {
         }
 
         List<Question> questions = new ArrayList<Question>();
-        questions.add(new Question(sentence.toString(), answer.toString()));
+        questions.add(new Question(sentence.toString(), answer.toString(), "inst")); //aynı soru kelimesi
 
         return questions;
     }

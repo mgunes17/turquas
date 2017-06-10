@@ -37,6 +37,9 @@ public class Question {
     @Column(name = "answer_w2v_value_map")
     private Map<String, List<Double>> answerW2vValueMap;
 
+    @Column(name = "question_type")
+    private String questionType;
+
     public Question() {
         //non - arg
     }
@@ -44,6 +47,12 @@ public class Question {
     public Question(String question, String answer) {
         this.question = question;
         this.answer = answer;
+    }
+
+    public Question(String question, String answer, String questionType) {
+        this.question = question;
+        this.answer = answer;
+        this.questionType = questionType;
     }
 
     public String getSourceName() {
@@ -100,5 +109,13 @@ public class Question {
 
     public void setNounClause(boolean nounClause) {
         this.nounClause = nounClause;
+    }
+
+    public String getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
     }
 }

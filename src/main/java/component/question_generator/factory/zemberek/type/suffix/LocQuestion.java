@@ -28,7 +28,7 @@ public class LocQuestion extends SuffixQuestion implements QuestionType {
             i++;
         }
 
-        return super.reorganize(wordList, changeMap, Suffix.LOCATIVE);
+        return super.reorganize(wordList, changeMap, "loc");
     }
 
     public String chooseQuestionWord(Word word) {

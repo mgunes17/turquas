@@ -13,7 +13,7 @@ import java.util.Map;
 public abstract class SuffixQuestion {
     protected abstract String chooseQuestionWord(Word word);
 
-    public List<Question> reorganize(List<Word> wordList, Map<Integer, String> changeMap, Suffix suffix) {
+    public List<Question> reorganize(List<Word> wordList, Map<Integer, String> changeMap, String type) {
         StringBuilder sentence;
         StringBuilder answer;
         List<Question> questions = new ArrayList<Question>();
@@ -41,7 +41,7 @@ public abstract class SuffixQuestion {
                 i++;
             }
 
-            questions.add(new Question(sentence.toString(), answer.toString()));
+            questions.add(new Question(sentence.toString(), answer.toString(), type));
         }
 
         return questions;

@@ -23,19 +23,18 @@ public class CandidateDAO {
         session = ConnectionConfiguration.getSession();
     }
 
-    public List<Question> getQuestions(String[] words, boolean nounClause) {
+    public List<Question> getQuestions(String[] words, boolean nounClause, String questionType) {
         List<String> sourceList = findSources(words);
-
-        return findQuestions(sourceList, nounClause);
+        return findQuestions(sourceList, nounClause, questionType);
     }
 
-    private List<Question> findQuestions(List<String> sourceList, boolean nounClause){
+    private List<Question> findQuestions(List<String> sourceList, boolean nounClause, String questionType){
         List<Question> questionList = new ArrayList<>();
         List<String> sourceNames = new ArrayList<>();
 
         sourceNames.addAll(sourceList);
 
-        Result<Question> result = questionAccessor.getQuestionsWithInClause(sourceNames, nounClause);
+        Result<Question> result = questionAccessor.getQuestionsWithInClause(sourceNames, nounClause, questionType);
         for(Question question: result) {
             questionList.add(question);
         }
