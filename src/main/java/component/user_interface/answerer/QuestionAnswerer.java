@@ -16,6 +16,7 @@ import java.util.Map;
  * Created by ercan on 17.05.2017.
  */
 public abstract class QuestionAnswerer {
+    private QuestionForCompare userQuestion;
     final SimilarityType similarityType = UserInterfaceAdmin.similarityMap.get(UserInterfaceAdmin.similarityType);
 
     public abstract void answer(String question);
@@ -97,5 +98,9 @@ public abstract class QuestionAnswerer {
         public int compare(SimilarityValue s1, SimilarityValue s2){
             return s1.compareTo(s2);
         }
+    }
+
+    public QuestionForCompare getUserQuestion() {
+        return userQuestion;
     }
 }

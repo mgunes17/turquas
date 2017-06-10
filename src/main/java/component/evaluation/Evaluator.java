@@ -1,6 +1,7 @@
 package component.evaluation;
 
 import admin.UserInterfaceAdmin;
+import component.user_interface.answerer.QuestionAnswerer;
 import model.Question;
 import model.QuestionForCompare;
 
@@ -29,5 +30,25 @@ public abstract class Evaluator {
         }
 
         return 0;
+    }
+
+    public double processQuestions(QuestionAnswerer questionAnswerer, List<Question> questionList){
+        double score = 0.0;
+        int unansweredQuestions = 0;
+
+        for(Question question: questionList){
+            questionAnswerer.answer(question.getQuestion());
+            QuestionForCompare userQuestion = questionAnswerer.getUserQuestion();
+            double questionScore = findScore(question.getAnswer(), userQuestion);
+            if(questionScore == 0){
+                unansweredQuestions++;
+            } else {
+                score += questionScore;
+            }
+
+        }
+        System.out.println("BULUNAMAYIN SORU SAYISI  " + unansweredQuestions + "/" + questionList.size());
+
+        return score / questionList.size();
     }
 }

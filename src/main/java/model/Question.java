@@ -15,7 +15,7 @@ public class Question {
     @Column(name = "source_name")
     private String sourceName;
 
-    @ClusteringColumn(1)
+    @ClusteringColumn(2)
     @Column(name = "question")
     private String question;
 
@@ -37,6 +37,7 @@ public class Question {
     @Column(name = "answer_w2v_value_map")
     private Map<String, List<Double>> answerW2vValueMap;
 
+    @ClusteringColumn(1)
     @Column(name = "question_type")
     private String questionType;
 

@@ -52,9 +52,8 @@ CREATE TABLE question (
     question_w2v_value_map map<text, frozen <list<double>>>,
     answer text,
     answer_w2v_value_map map<text, frozen <list<double>>>,
-    PRIMARY KEY (source_name, noun_clause, question)
+    PRIMARY KEY (source_name, noun_clause, question_type, question)
 );
 
 CREATE INDEX is_noun_clause ON question (noun_clause);
 CREATE INDEX is_processed ON question (processed);
-CREATE INDEX question_type ON question (question_type);

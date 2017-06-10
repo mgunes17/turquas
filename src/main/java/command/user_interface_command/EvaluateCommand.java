@@ -25,9 +25,15 @@ public class EvaluateCommand extends AbstractCommand implements Command {
             W2VSimilarityEvaluator w2VSimilarityEvaluator = new W2VSimilarityEvaluator();
 
             int limit = parseLimitCount(parameter[1]);
-            List<Question> questionList = questionDAO.getQuestionsByLimit(limit);
+            List<Question> questionList = questionDAO.getUnprocessedQuestions(limit);
             double dlScore = deepLearningEvaluator.evaluate(questionList);
             double w2vScore = w2VSimilarityEvaluator.evaluate(questionList);
+
+            System.out.println("W2V SIMILARITY ortalama cevaplama süresi: " +
+                    w2VSimilarityEvaluator.answererWithVectorSimilarity.totalTime / questionList.size());
+
+            System.out.println("DEEP LEARNNIG ortalama cevaplama süresi: " +
+                    deepLearningEvaluator.answererWithDeepLearning.totalTime / questionList.size());
 
             System.out.println("Deep Learning score:" + dlScore);
             System.out.println("W2V Similarity score:" + w2vScore);

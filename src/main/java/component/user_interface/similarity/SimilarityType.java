@@ -5,13 +5,15 @@ package component.user_interface.similarity;
  */
 public abstract class SimilarityType {
     public abstract double findSimilarity(double vec1[], double vec2[]);
+    private int length;
 
     double dotVector(double[] vec1, double[] vec2) {
         double sum = 0.0d;
+        length = vec1.length;
 
         //karşılıklı elemanları çarpıp topla
-        for(int i = 0 ; i < vec1.length; i++) {
-            if(i < vec2.length)
+        for(int i = 0 ; i < length; i++) {
+            if(i < length)
                 sum += vec1[i] * vec2[i];
         }
 
@@ -22,7 +24,7 @@ public abstract class SimilarityType {
     double vectorMagnitude(double[] vec) {
         double sum = 0.0d;
 
-        for(int i = 0; i < vec.length; i++) {
+        for(int i = 0; i < length; i++) {
             sum += vec[i] * vec[i];
         }
 

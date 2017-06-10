@@ -58,7 +58,7 @@ public class QuestionDAO {
         try {
             for(Question question: questionList){
                 Statement statement = questionAccessor.updateQuestionProcessed(isProcessed, question.getSourceName(),
-                        question.isNounClause(), question.getQuestion());
+                        question.isNounClause(), question.getQuestionType(), question.getQuestion());
                 session.execute(statement);
             }
         } catch(Exception ex){
