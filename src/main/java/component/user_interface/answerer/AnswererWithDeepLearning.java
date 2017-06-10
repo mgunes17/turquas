@@ -13,6 +13,7 @@ import java.util.List;
  * Created by ercan on 17.05.2017.
  */
 public class AnswererWithDeepLearning extends QuestionAnswerer{
+    public double totalTime = 0.0;
     private QuestionForCompare userQuestion;
     private PythonSocketServer server = new PythonSocketServer();
 
@@ -22,24 +23,37 @@ public class AnswererWithDeepLearning extends QuestionAnswerer{
 
     @Override
     public void answer(String question){
-        userQuestion = createUserQuestionForCompare(question);
+        long start_time = System.nanoTime(); // soru cevaplama başlangıç
 
+        userQuestion = createUserQuestionForCompare(question);
         double[] answerVector = predictWithDeepLearning(); // DL tahminini al
         userQuestion.setAnswerVector(answerVector); // cevaplarla karşılaştırmak için cevap vektörü olarak ata
-
-        long start_time = System.nanoTime();
+        //long start_time = System.nanoTime();
         String w2vType = UserInterfaceAdmin.wordType + "_" + UserInterfaceAdmin.vectorType;
+
+        start_time = System.nanoTime();
         List<QuestionForCompare> candidateList = findCandidates(question, w2vType, new SentenceType().isNounClause(question));
         candidateList.add(0, userQuestion);
         long end_time = System.nanoTime();
         double difference = (end_time - start_time)/1e6;
         System.out.println("candidate çekilmesi:" + difference);
 
+
         start_time = System.nanoTime();
         calculateSimilarityList(candidateList);
         end_time = System.nanoTime();
         difference = (end_time - start_time)/1e6;
-        System.out.println("benzerlik hesabı:" + difference);
+        System.out.println("benzerliklerin hesaplanması:" + difference);
+
+        //long end_time = System.nanoTime(); // soru cevaplama bitiş
+        //double difference = (end_time - start_time)/1e6;
+        totalTime = totalTime + difference;
+
+        //long end_time = System.nanoTime();
+        //double difference = (end_time - start_time)/1e6;
+        //System.out.println("candidate çekilmesi:" + difference);
+        //start_time = System.nanoTime();
+        //System.out.println("cevap süresi:" + difference);
 
         int candidateCount = candidateList.size();
         int answerCount = findAnswerCount(candidateCount);

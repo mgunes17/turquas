@@ -111,11 +111,23 @@ public class Turquas {
 
     public static String findQuestionType(String question) {
         String questionType = "inst"; //nasıl - ne - kim
+        String[] words = question.split("( )+");
 
-        for(String questionWord: Turquas.QUESTION_TYPE.keySet()) {
+
+        for(String word: words){
+            if(Turquas.QUESTION_TYPE.containsKey(word)){
+                questionType = Turquas.QUESTION_TYPE.get(word);
+            }
+        }
+
+        if(question.contains("ne zaman")){
+            questionType = Turquas.QUESTION_TYPE.get("ne zaman");
+        }
+
+        /*for(String questionWord: Turquas.QUESTION_TYPE.keySet()) {
             if(question.contains(questionWord))
                 questionType = Turquas.QUESTION_TYPE.get(questionWord);
-        }
+        }*/
 
         return questionType;
     }

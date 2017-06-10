@@ -2,6 +2,7 @@ package admin;
 
 import command.CommandSet;
 import component.user_interface.similarity.CosineSimilarity;
+import component.user_interface.similarity.EuclidianSimilarity;
 import component.user_interface.similarity.GesdSimilarity;
 import component.user_interface.similarity.SimilarityType;
 import w2v_operation.vector_operation.AverageBy;
@@ -43,7 +44,8 @@ public class UserInterfaceAdmin extends Admin {
         similarityMap = new HashMap<>();
         similarityMap.put("cosine", new CosineSimilarity());
         similarityMap.put("gesd", new GesdSimilarity());
-        similarityType = "cosine";
+        similarityMap.put("euclid", new EuclidianSimilarity());
+        similarityType = "gesd";
 
         parameterMap = new HashMap<>();
         parameterMap.put("max_answer_count", 10);

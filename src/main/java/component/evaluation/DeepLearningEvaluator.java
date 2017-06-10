@@ -10,18 +10,11 @@ import java.util.List;
  * Created by ercan on 01.06.2017.
  */
 public class DeepLearningEvaluator extends Evaluator {
+    public AnswererWithDeepLearning answererWithDeepLearning = new AnswererWithDeepLearning();
 
     @Override
     public double evaluate(List<Question> questionList) {
-        double score = 0.0d;
-        AnswererWithDeepLearning answererWithDeepLearning = new AnswererWithDeepLearning();
 
-        for(Question question: questionList){
-            answererWithDeepLearning.answer(question.getQuestion());
-            QuestionForCompare userQuestion = answererWithDeepLearning.getUserQuestion();
-            score += findScore(question.getAnswer(), userQuestion);
-        }
-
-        return score / questionList.size();
+        return processQuestions(answererWithDeepLearning, questionList);
     }
 }

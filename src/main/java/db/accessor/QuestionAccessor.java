@@ -28,6 +28,9 @@ public interface QuestionAccessor {
     @Query("SELECT * FROM question where processed = true LIMIT ?")
     Result<Question> getProcessedQuestionsByLimit(int limit);
 
-    @Query("UPDATE question SET processed = ? where source_name = ? and noun_clause = ? and question = ?")
-    Statement updateQuestionProcessed(boolean isProcessed, String sourceName, boolean nounClause, String question);
+    @Query("UPDATE question " +
+            "SET processed = ? " +
+            "WHERE source_name = ? AND noun_clause = ? AND question_type = ? AND question = ?")
+    Statement updateQuestionProcessed(boolean isProcessed, String sourceName, boolean nounClause,
+                                      String questionType, String question);
 }
