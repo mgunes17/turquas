@@ -89,6 +89,7 @@ public class FindingCandidate {
         qfc.setAnswer(question.getAnswer());
         qfc.setAnswerVector(question.getAnswerW2vValueMap().get(w2vType).
                 stream().mapToDouble(Double::doubleValue).toArray());
+        qfc.setSourceName(question.getSourceName());
 
         return qfc;
     }

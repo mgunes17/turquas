@@ -12,6 +12,7 @@ public class QuestionForCompare {
     private double[] questionVector; // sorunun vektör değeri
     private double[] answerVector; // cevabın vektör değeri
     private List<SimilarityValue> similarityList;
+    private String sourceName;
 
     public QuestionForCompare() {
         similarityList = new ArrayList<SimilarityValue>();
@@ -55,5 +56,13 @@ public class QuestionForCompare {
 
     public void setSimilarityList(List<SimilarityValue> similarityList) {
         this.similarityList = similarityList;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
     }
 }
